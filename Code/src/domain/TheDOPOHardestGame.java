@@ -51,7 +51,7 @@ public class TheDOPOHardestGame {
 		this.gameMode = gameMode;
 		players = new ArrayList<>(gameMode.createPlayers());
 		this.numCurrentLevel = numCurrentLevel; 
-		this.currentLevel = new Level1(cChecker);
+		this.currentLevel = new Level2(cChecker);
 		this.numCurrentLevel = numCurrentLevel;
 		currentLevel.spawnPlayers(players);
 		currentLevel.setPlayers(players);

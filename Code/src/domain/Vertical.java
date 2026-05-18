@@ -28,8 +28,17 @@ public class Vertical extends EnemyCollision implements AutomaticMovement {
 	
 	@Override
 	public void move() {
-		// TODO Auto-generated method stub
-		
+		int nextX = enemy.getPosX();
+	    int nextY = enemy.getPosY();
+	   
+		if (!cCheker.canMove(enemy, nextX, nextY, context)) {
+			if (enemy.getDirection() == 'r' || enemy.getDirection() == 'l') {
+				enemy.setDirection((enemy.getDirection() == 'r') ? 'l' : 'r');
+			}
+			if (enemy.getDirection() == 'u' || enemy.getDirection() == 'd') {
+				enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
+			}
+		enemy.move(enemy.getDirection());
+		}
 	}
-
 }

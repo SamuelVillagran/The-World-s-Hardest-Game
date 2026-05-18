@@ -14,17 +14,7 @@ public abstract class Level implements CollisionContext {
 	protected CollisionChecker cCheker;
 	protected List<Player> players;
 
-	/*
-	 * elements = new HashMap<>();
-	 * 
-	 * elements.put(elements.size()+1, new Obstacle());
-	 * elements.put(elements.size()+1, new Coin());
-	 * elements.put(elements.size()+1, new Floor());
-	 * elements.put(0, new Player());
-	 * 
-	 */
 	public Level() {
-		numCoin = 0;
 		elements = new LinkedHashMap<>();
 		players = new ArrayList<>();
 	}
@@ -62,11 +52,9 @@ public abstract class Level implements CollisionContext {
 		for (Tile tile : map.getTiles()) {
 			elements.put(elements.size() + 1, tile);
 		}
-
 		for (AutomaticMovement am : getElementsAutomaticMovement()) {
 			am.move();
 		}
-
 	}
 
 	public void setPlayers(List<Player> players) {
@@ -74,12 +62,19 @@ public abstract class Level implements CollisionContext {
 	}
 
 	public void removeElement(Element element) {
-
+		elements.entrySet().stream()
+        	.filter(entry -> entry.getValue().equals(element))
+        	.map(entry -> entry.getKey())
+        	.findFirst()
+        	.ifPresent(key -> elements.remove(key));
 	}
 
 	public void update(CollisionChecker checker) {
 		for (Player player : players) {
 			checker.checkContactsWithInteractable(player, this, this);
+		}
+		for (Enemy e : getEnemies()) {
+			e.move();
 		}
 	}
 
@@ -125,7 +120,7 @@ public abstract class Level implements CollisionContext {
 	            .collect(Collectors.toList());
 	}
 	
-	protected void addPointToListMovement(int row, int col, List<Point> movement) {
-	    movement.add(new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT ));
+	protected void addPointToList(int row, int col, List<Point> list) {
+		list.add(new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT ));
 	}
 }

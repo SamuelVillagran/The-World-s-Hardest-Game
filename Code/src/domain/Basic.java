@@ -40,7 +40,6 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 		enemy.setSpeed(5);
 	}
 
-
 	public void move() { 
 		int nextX = enemy.getPosX();
 	    int nextY = enemy.getPosY();
@@ -52,7 +51,7 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 			if (enemy.getDirection() == 'u' || enemy.getDirection() == 'd') {
 				enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
 			}
-		}
 		enemy.move(enemy.getDirection());
+		}
 	}
 }
