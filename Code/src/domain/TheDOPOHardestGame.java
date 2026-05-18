@@ -121,4 +121,25 @@ public class TheDOPOHardestGame {
 	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
 	}
+
+	public PlayerType getPlayerType(String type) {
+		switch (type) {
+			case "red": return PlayerType.RED;
+			case "blue": return PlayerType.BLUE;
+			case "green": return PlayerType.GREEN;
+			default: return PlayerType.RED;
+		}
+	}
+
+	public int getScreenWidth() {
+		return DimensionGame.getScreenWidth();
+	}
+	
+	public int getScreenHeight() {
+		return DimensionGame.getScreenHeight();
+	}
+
+	public int getTileSizeHeight() {
+		return DimensionGame.getTileSizeHeight();
+	}
 }

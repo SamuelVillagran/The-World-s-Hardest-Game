@@ -10,6 +10,7 @@ public abstract class Player extends Entity implements HitBox, Movable {
 	private PlayerType playerType;
 	private int respawnX, respawnY;
 	private boolean goalCompleted = false;
+	protected StateEntity state;
 	
 	/**
 	 * 
@@ -140,6 +141,7 @@ public abstract class Player extends Entity implements HitBox, Movable {
 	public int getBaseSpeed() {
 		return baseSpeed;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -204,5 +206,13 @@ public abstract class Player extends Entity implements HitBox, Movable {
 		posX = x;
 		posY = y;
 	}
+	
+	public String getNameState() {
+		return state.getClass().getSimpleName().toLowerCase();
+	}
 
+	public String getPathImage() {
+		return "/"+getNameClass()+"/"+getNameState()+".png";		
+	}
+	
 }

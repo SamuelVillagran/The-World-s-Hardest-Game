@@ -43,7 +43,6 @@ public class PlayerConfig extends JPanel{
 		prepareElements(container);
 	}
 	
-	
 	private void loadImage() {
 		try {
 			backgroundImage = ImageIO.read(getClass().getResourceAsStream("/background/playerConfig.png"));
@@ -51,6 +50,7 @@ public class PlayerConfig extends JPanel{
 			backgroundImage = null;
 		}
 	}
+	
 	private void prepareElements(GameContainer container) {
 		// Paneles para rellenar laterales y parte superior
 		add(spacerH(175),  BorderLayout.NORTH);
@@ -219,10 +219,8 @@ public class PlayerConfig extends JPanel{
 			try {
 				container.onPlayerConfigConfirmed(selectedType, name);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (HardestGameException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 
 			}

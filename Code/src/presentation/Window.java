@@ -1,11 +1,12 @@
 package presentation;
 
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import domain.HardestGameException;
 
 public class Window extends JFrame {
 
@@ -14,7 +15,7 @@ public class Window extends JFrame {
     private JMenu menu;
     private JMenuItem optionOpen, optionSaveAs, optionImport, optionExportAs, optionNew, optionExit;
 	
-    public Window() {
+    public Window() throws HardestGameException {
     	setScreen();
     	prepareElements();
     	prepareActions();
@@ -53,7 +54,7 @@ public class Window extends JFrame {
     	setJMenuBar(menuBar);
 	}
 	
-	private void setScreen() {
+	private void setScreen() throws HardestGameException {
 		setResizable(false);
 		setTitle("The DOPO Hardest Game");
 		prepareElementsMenu();
@@ -68,7 +69,7 @@ public class Window extends JFrame {
     }
     
     
-	public static void main(String[] args) {
+	public static void main(String[] args) throws HardestGameException {
 		window  = new Window();
 		window.setVisible(true);
 	}

@@ -15,6 +15,7 @@ import domain.DimensionGame;
 import domain.GameMode;
 import domain.HardestGameException;
 import domain.PlayerType;
+import domain.TheDOPOHardestGame;
 
 public class GameContainer extends JPanel{
 
@@ -29,15 +30,15 @@ public class GameContainer extends JPanel{
 	public static final String PLAYER_CONFIG_MODE = "playerConfig";
 	public static final String GAME_MODE = "game";
 	
-	public GameContainer() {
+	public GameContainer() throws HardestGameException {
 		prepareElements();
 	}
 
-	private void prepareElements(){
+	private void prepareElements() throws HardestGameException{
 		setup = new GameSetup();
 		loadImages();
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.SCREENHEIGHT));
+		setPreferredSize(new Dimension(TheDOPOHardestGame.getGame().getScreenWidth(), TheDOPOHardestGame.getGame().getScreenHeight()));
 		
 		/*tittlePanel = buildTittlePanel();
 		add(tittlePanel, BorderLayout.NORTH);*/
@@ -65,10 +66,10 @@ public class GameContainer extends JPanel{
 		}
 	}
 	
-	private JPanel buildTittlePanel() {
+	private JPanel buildTittlePanel() throws HardestGameException {
 		JPanel tittle = new JPanel();
 		tittle.setOpaque(false);
-		tittle.setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.TILESIZEHEIGHT));
+		tittle.setPreferredSize(new Dimension(TheDOPOHardestGame.getGame().getScreenWidth(), TheDOPOHardestGame.getGame().getTileSizeHeight()));
 		return tittle;
 	}
 	

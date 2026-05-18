@@ -2,7 +2,7 @@ package domain;
 
 import java.awt.Point;
 
-public class Acelerate extends EnemyCollision implements AutomaticMovement {
+public class Acelerate extends ColliderEnemy implements AutomaticMovement {
 
 	
 	public Acelerate(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
