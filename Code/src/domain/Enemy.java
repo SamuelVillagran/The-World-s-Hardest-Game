@@ -3,7 +3,7 @@ package domain;
 import java.awt.Point;
 import java.util.List;
 
-public class Enemy extends Entity implements Interactable {
+public class Enemy extends Entity implements Interactable, AutomaticMovement {
 
 	private AutomaticMovement strategyMovement;
 	protected List<Point> movement;

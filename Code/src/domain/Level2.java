@@ -39,11 +39,4 @@ public class Level2 extends Level {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	@Override
-	public void spawnPlayers(List<Player> pys) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

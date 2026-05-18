@@ -11,15 +11,13 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 		
 		this.cCheker = cCheker;
 		this.context = context;
-		int dx2 = 0, dy2 = 0;
 		Point point1 = enemy.getMovement().get(0);
 		Point point2 = enemy.getMovement().get(1);
 		int px1 = (int) point1.getX();
 		int py1 = (int) point1.getY();
 		int px2 = (int) point2.getX();
 		int py2 = (int) point2.getY();
-		dx2 = (enemy.getPosX() - px2); 
-		dy2 = (enemy.getPosY() - py2); // Las condicionales y código de para abajo fue perfeccionado con Gemini IA 2026
+		
 		// 1. Si las Y son iguales, el camino es horizontal (Izquierda a Derecha)
 		if (py1 == py2) {
 		    if (px1 < px2) {
@@ -40,18 +38,25 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 		enemy.setSpeed(5);
 	}
 
-	public void move() { 
+	public void move() {
+		int speed = (int) enemy.getSpeed();
+		char direction = enemy.getDirection();
 		int nextX = enemy.getPosX();
 	    int nextY = enemy.getPosY();
-	   
-		if (!cCheker.canMove(enemy, nextX, nextY, context)) {
-			if (enemy.getDirection() == 'r' || enemy.getDirection() == 'l') {
-				enemy.setDirection((enemy.getDirection() == 'r') ? 'l' : 'r');
-			}
-			if (enemy.getDirection() == 'u' || enemy.getDirection() == 'd') {
-				enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
-			}
-		enemy.move(enemy.getDirection());
-		}
+	    
+	    switch (direction) {
+		case 'r' -> nextX += speed;
+		case 'l' -> nextX -= speed;
+		case 'd' -> nextY += speed;
+		case 'u' -> nextY -= speed;
+	}
+	if (cCheker.canMove(enemy, nextX, nextY, context)) {
+		enemy.move(direction);
+	} else {
+		if (direction == 'r') enemy.setDirection('l');
+		else if (direction == 'l') enemy.setDirection('r');
+		else if (direction == 'd') enemy.setDirection('u');
+		else if (direction == 'u') enemy.setDirection('d');
+	}
 	}
 }

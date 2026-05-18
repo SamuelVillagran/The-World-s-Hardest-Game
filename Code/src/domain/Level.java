@@ -38,7 +38,18 @@ public abstract class Level implements CollisionContext {
 
 	public abstract boolean isCompleted();
 
-	public abstract void spawnPlayers(List<Player> pys);
+	/**
+	 * Put at the correct position the players of level1
+	 * @param pys pys are the list of players that are at the level
+	 */
+	
+	public void spawnPlayers(List<Player> pys) {	
+		Zone zone = getInitialZone();
+	    for (Player player : players) {
+	        player.setPosition(zone.getSpawnX(), zone.getSpawnY());
+	        player.setRespawnPoint(zone.getSpawnX(), zone.getSpawnY());
+	    }
+	}
 
 	public HashMap<String, String> getElementsToDraw() {
 		HashMap<String, String> pathsElements;
@@ -63,9 +74,6 @@ public abstract class Level implements CollisionContext {
 		for (Tile tile : map.getTiles()) {
 			elements.put(elements.size() + 1, tile);
 		}
-		for (AutomaticMovement am : getElementsAutomaticMovement()) {
-			am.move();
-		}
 	}
 
 	public void setPlayers(List<Player> players) {
@@ -84,12 +92,17 @@ public abstract class Level implements CollisionContext {
 	}
 	
 	public void update(CollisionChecker checker) throws HardestGameException {
+		for(AutomaticMovement am : getElementsAutomaticMovement()) {
+			am.move();
+		}
+		
 		for(Player player : players) {
 			checker.checkContactsWithInteractable(player, this, this);
 			if(player.isDead()) {
 				player.respawn();
 			}
 		}
+		
 		checkZones();
 	}
 
@@ -151,5 +164,14 @@ public abstract class Level implements CollisionContext {
 	
 	protected void addPointToList(int row, int col, List<Point> list) {
 		list.add(new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT ));
+	}
+	
+	public Zone getInitialZone() {
+		for(Zone zone : zones) {
+			if(zone instanceof InitialZone) {
+				return zone;
+			}
+		}
+		return null;
 	}
 }

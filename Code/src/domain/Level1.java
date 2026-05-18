@@ -41,10 +41,6 @@ public class Level1 extends Level {
 	    addPointToList(11, 24, movementEnemy4); // Inicio (Derecha)
 	    addPointToList(11, 7, movementEnemy4);  // Destino (Izquierda)
 	    putEnemy(movementEnemy4, "basic");
-	    
-	    addPointToList(11, 24, movementEnemy4); // Inicio (Derecha)
-	    addPointToList(11, 7, movementEnemy4);  // Destino (Izquierda)
-	    putEnemy(movementEnemy4, "basic");
 
 		 zones.add(new InitialZone(new Figure(new ArrayList<Point>(List.of(
 	    		new Point(2*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
@@ -64,28 +60,5 @@ public class Level1 extends Level {
 	public boolean isCompleted() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-	
-	
-	/**
-	 * Put at the correct position the players of level1
-	 * @param pys pys are the list of players that are at the level
-	 */
-	@Override
-	public void spawnPlayers(List<Player> pys) {	
-		Zone zone = getInitialZone();
-	    for (Player player : players) {
-	        player.setPosition(zone.getSpawnX(), zone.getSpawnY());
-	        player.setRespawnPoint(zone.getSpawnX(), zone.getSpawnY());
-	    }
-	}
-	
-	public Zone getInitialZone() {
-		for(Zone zone : zones) {
-			if(zone instanceof InitialZone) {
-				return zone;
-			}
-		}
-		return null;
 	}
 }
