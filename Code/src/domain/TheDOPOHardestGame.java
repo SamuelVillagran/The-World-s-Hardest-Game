@@ -124,7 +124,7 @@ public class TheDOPOHardestGame {
 		numCurrentLevel = numLevel;
 	}
 	
-	public void update() {
+	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
 	}
 }

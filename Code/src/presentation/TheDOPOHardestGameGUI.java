@@ -182,8 +182,8 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
             BufferedImage img = cachedImages.get(e.getNameClass());
             if (img != null) {
                 g2.drawImage(img, e.getPosX(), e.getPosY(),
-                    (int)(e.getWidth() * 1.2),
-                    (int)(e.getHeight() * 1.2), 
+                    (int)(e.getWidth()),
+                    (int)(e.getHeight()),
                     null);
             }
         }

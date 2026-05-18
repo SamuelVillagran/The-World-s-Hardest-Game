@@ -38,9 +38,9 @@ public class Level1 extends Level {
 
 	    // Enemigo 4: Fila 11, empieza a la derecha (col 25) y va a la izquierda (col 9)
 	    List<Point> movementEnemy4 = new LinkedList<>();
-	    addPointToListMovement(11, 24, movementEnemy4); // Inicio (Derecha)
-	    addPointToListMovement(11, 7, movementEnemy4);  // Destino (Izquierda)
-	    putEnemy(movementEnemy4);
+	    addPointToList(11, 24, movementEnemy4); // Inicio (Derecha)
+	    addPointToList(11, 7, movementEnemy4);  // Destino (Izquierda)
+	    putEnemy(movementEnemy4, "basic");
 	    
 	    addPointToList(11, 24, movementEnemy4); // Inicio (Derecha)
 	    addPointToList(11, 7, movementEnemy4);  // Destino (Izquierda)
