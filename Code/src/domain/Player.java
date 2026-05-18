@@ -7,6 +7,8 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	private int lifes;
 	protected String name;
 	protected int baseSpeed;
+	private PlayerType playerType;
+	private int respawnX, respawnY;
 	
 	/**
 	 * 
@@ -23,6 +25,7 @@ public abstract class Player extends Entity implements HitBox, Movable{
 		baseSpeed = 3;
 		size = 0.5f;
 		lifes = 1;
+		playerType = type;
 	} 
 	
 	private PlayerState createInitialState(PlayerType type) throws HardestGameException {
@@ -43,6 +46,12 @@ public abstract class Player extends Entity implements HitBox, Movable{
 		size = 0.5f;
 	}
 	
+
+	public void setRespawnPoint(int x, int y) {
+		respawnX = x;
+		respawnY = y;
+	}
+	
 	public float getSpeed() {
 		return speed;
 	}
@@ -50,7 +59,6 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	public void setAttributesPlayer(int x, int y) {
 		posX = x;
 		posY = y;
-		
 	}
 	
 	/**
@@ -156,6 +164,18 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	
 	public void substractLife() {
 		lifes --;
+	}
+	
+	public PlayerType getPlayerType() {
+		return playerType;
+	}
+
+	public int getDeaths() {
+		return deaths;
+	}
+
+	public int getCountCoins() {
+		return countCoins;
 	}
 
 }

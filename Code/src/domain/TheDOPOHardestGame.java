@@ -51,7 +51,7 @@ public class TheDOPOHardestGame {
 		this.gameMode = gameMode;
 		players = new ArrayList<>(gameMode.createPlayers());
 		this.numCurrentLevel = numCurrentLevel; 
-		this.currentLevel = new Level1(cChecker);
+		this.currentLevel = new Level2(cChecker);
 		this.numCurrentLevel = numCurrentLevel;
 		currentLevel.spawnPlayers(players);
 		//currentLevel.setPlayers(players);
@@ -63,8 +63,7 @@ public class TheDOPOHardestGame {
 	 * @throws IOException
 	 */
 	public HashMap<String, String> getElementsToDraw() throws IOException{
-		HashMap<String, String> elementsPath = new HashMap();
-		elementsPath = currentLevel.getElementsToDraw();
+		HashMap<String, String> elementsPath = this.currentLevel.getElementsToDraw();
 		return elementsPath;
 	}
 
@@ -114,16 +113,7 @@ public class TheDOPOHardestGame {
 		numCurrentLevel = numLevel;
 	}
 	
-	public List<Enemy> getEnemies() {
-		return currentLevel.getEnemies();
-	}
-	
 	public void update() {
-		for (Enemy e : getEnemies()) {
-			e.move();
-		}
-		
 		currentLevel.update(cChecker);
 	}
-	
 }

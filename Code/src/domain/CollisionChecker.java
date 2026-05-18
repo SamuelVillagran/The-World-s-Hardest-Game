@@ -1,11 +1,16 @@
 package domain;
 
+import java.util.List;
+
 public class CollisionChecker {
 	
 	public boolean canMove(HitBox mover, int px, int py, CollisionContext context) {
-		for (Solid solid : context.getSolidElements()) {
+		List<Solid> solidElements = context.getSolidElements();
+		boolean isOverlaps = false;
+		for (Solid solid : solidElements) {
             if (solid == mover) continue;
-            if (overlaps(px, py, mover, solid)) return false;
+            isOverlaps = overlaps(px, py, mover, solid);
+            if (isOverlaps) return false;
         }
         return true;
 	}
