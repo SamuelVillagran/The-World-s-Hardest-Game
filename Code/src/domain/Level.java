@@ -153,6 +153,15 @@ public abstract class Level implements CollisionContext {
 		elements.put(elements.size()+1, coin);
 	}
 	
+	protected void putZone( ArrayList<Point> figure, String type) {
+		
+		switch (type) {
+			case "goal" ->  zones.add(new GoalZone(new Figure(figure)));
+			case "initial" -> zones.add(new InitialZone(new Figure(figure)));
+		}
+		
+	}
+	
 	public List<Solid> getSolidElements() {
 		return elements.values().stream()
 	            .filter(e -> e instanceof Solid)

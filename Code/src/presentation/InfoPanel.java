@@ -10,10 +10,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import domain.DimensionGame;
+import domain.HardestGameException;
 import domain.Player;
 import domain.PlayerType;
+import domain.TheDOPOHardestGame;
 
-public class InfoPanel extends JPanel{
+public class InfoPanel extends JPanel {
 	private static final Font INFO_FONT = new Font("Arial", Font.BOLD, 15);
 	private JLabel colorChoosed;
 	private JLabel typeLabel;
@@ -53,23 +55,22 @@ public class InfoPanel extends JPanel{
 		return label;
 	}
 	
-	public void refresh(Player player, int secondsRemaining) {
-		PlayerType type = player.getPlayerType();
+	public void refresh(Player player, int secondsRemaining) throws HardestGameException {
 
-		if (type == PlayerType.RED) {
+		if (TheDOPOHardestGame.getGame().getPlayer1().getPlayerType() == PlayerType.RED) {
 			colorChoosed.setBackground(Color.RED);
 			typeLabel.setText("Tipo: Red");
-		} else if (type == PlayerType.BLUE) {
+		} else if (TheDOPOHardestGame.getGame().getPlayer1().getPlayerType() == PlayerType.BLUE) {
 			colorChoosed.setBackground(new Color(60, 120, 255));
 			typeLabel.setText("Tipo: Blue");
-		} else if (type == PlayerType.GREEN) {
+		} else if (TheDOPOHardestGame.getGame().getPlayer1().getPlayerType() == PlayerType.GREEN) {
 			colorChoosed.setBackground(new Color(50, 200, 50));
 			typeLabel.setText("Tipo: Green");
 		}
 
-		nameLabel.setText("Nombre: " + player.getName());
-		deathsLabel.setText("Muertes: " + player.getDeaths());
-		coinsLabel.setText("Monedas: " + player.getCollectedCoins());
+		nameLabel.setText("Nombre: " + TheDOPOHardestGame.getGame().getPlayer1().getName());
+		deathsLabel.setText("Muertes: " + TheDOPOHardestGame.getGame().getPlayer1().getDeaths());
+		coinsLabel.setText("Monedas: " + TheDOPOHardestGame.getGame().getPlayer1().getCollectedCoins());
 		timeLabel.setText("Tiempo: " + secondsRemaining + "s");
 	}
 }

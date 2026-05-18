@@ -1,15 +1,8 @@
 package domain;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class TheDOPOHardestGame {
 
@@ -58,6 +51,7 @@ public class TheDOPOHardestGame {
 	private Level buildLevel(int num) throws HardestGameException {
 		switch(num){
 			case 1: return new Level1(cChecker);
+			case 2: return new Level2(cChecker);
 			default : throw new HardestGameException("Nivel no existe");
 		}
 	}

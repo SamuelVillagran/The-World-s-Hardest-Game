@@ -42,19 +42,20 @@ public class Level1 extends Level {
 	    addPointToList(11, 7, movementEnemy4);  // Destino (Izquierda)
 	    putEnemy(movementEnemy4, "basic");
 
-		 zones.add(new InitialZone(new Figure(new ArrayList<Point>(List.of(
-	    		new Point(2*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(5*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(2*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE),
-		    	new Point(5*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE))))));
-	    
-	    zones.add(new GoalZone(new Figure(new ArrayList<Point>(List.of(
-	    		new Point(26*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(29*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(26*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE),
-		    	new Point(29*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE))))));
+	    List<Point> zoneInitial = new ArrayList<>();
+		addPointToList(6, 2, zoneInitial);
+		addPointToList(6, 5, zoneInitial);
+		addPointToList(13, 2, zoneInitial);
+		addPointToList(13, 5, zoneInitial);
+		putZone((ArrayList<Point>) zoneInitial, "initial");
+		
+		List<Point> zoneGoal = new ArrayList<>();
+			addPointToList(6, 26, zoneInitial);
+			addPointToList(6, 29, zoneInitial);
+			addPointToList(13, 26, zoneInitial);
+			addPointToList(13, 29, zoneInitial);
+			putZone((ArrayList<Point>) zoneInitial, "goal");
 	}
-	
 	
 	@Override
 	public boolean isCompleted() {

@@ -1,6 +1,7 @@
 package domain;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +37,20 @@ public class Level2 extends Level {
 		putCoin(13, 6);
 		putCoin(4, 23);
 		putCoin(13, 23);
+		
+		List<Point> zoneInitial = new ArrayList<>();
+		addPointToList(7, 2, zoneInitial);
+		addPointToList(7, 5, zoneInitial);
+		addPointToList(13, 2, zoneInitial);
+		addPointToList(13, 5, zoneInitial);
+		putZone((ArrayList<Point>) zoneInitial, "initial");
+		List<Point> zoneGoal = new ArrayList<>();
+		addPointToList(7, 26, zoneGoal);
+		addPointToList(7, 29, zoneGoal);
+		addPointToList(13, 26, zoneGoal);
+		addPointToList(13, 29, zoneGoal);
+		putZone((ArrayList<Point>) zoneGoal, "goal");
+		
 	}
 
 	@Override
