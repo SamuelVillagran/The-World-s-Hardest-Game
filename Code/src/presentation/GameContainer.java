@@ -75,7 +75,9 @@ public class GameContainer extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (backgroundImage != null) {
+		// Solo dibujar el fondo si NO estamos jugando (infoPanel.isVisible() == true cuando jugamos)
+		// Dibujar una imagen de fondo 60 veces por segundo ralentiza mucho el juego.
+		if (backgroundImage != null && !infoPanel.isVisible()) {
 			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
 		}
 	}

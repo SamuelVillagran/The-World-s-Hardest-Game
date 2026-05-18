@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import domain.DimensionGame;
 import domain.Element;
@@ -129,11 +130,13 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 			if (timer >= 1000000000) {
 				timer -= 1000000000;
 				if(secondsRemaining > 0) secondsRemaining--;
-				try {
-					infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), secondsRemaining);
-				}catch (HardestGameException e) {
-					e.printStackTrace();
-				}
+				SwingUtilities.invokeLater(() -> {
+					try {
+						infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), secondsRemaining);
+					} catch (HardestGameException e) {
+						e.printStackTrace();
+					}
+				});
 			}
 			try { // No ahogar la CPU 
 				Thread.sleep(2);
