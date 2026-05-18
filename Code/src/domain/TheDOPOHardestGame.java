@@ -39,7 +39,6 @@ public class TheDOPOHardestGame {
 		}
 		return game;
 	}
-
 	
 	/**
 	 * Start the game with a specific characteristics.
@@ -75,8 +74,7 @@ public class TheDOPOHardestGame {
 	 * @throws IOException
 	 */
 	public HashMap<String, String> getElementsToDraw() throws IOException{
-		HashMap<String, String> elementsPath = new HashMap();
-		elementsPath = currentLevel.getElementsToDraw();
+		HashMap<String, String> elementsPath = this.currentLevel.getElementsToDraw();
 		return elementsPath;
 	}
 
@@ -126,16 +124,7 @@ public class TheDOPOHardestGame {
 		numCurrentLevel = numLevel;
 	}
 	
-	public List<Enemy> getEnemies() {
-		return currentLevel.getEnemies();
-	}
-	
-	public void update() throws HardestGameException {
-		for (Enemy e : getEnemies()) {
-			e.move();
-		}
-		
+	public void update() {
 		currentLevel.update(cChecker);
 	}
-	
 }

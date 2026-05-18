@@ -48,6 +48,7 @@ public abstract class Player extends Entity implements HitBox, Movable{
 		setRespawnPoint(x,y);
 	}
 	
+
 	public void setRespawnPoint(int x, int y) {
 		respawnX = x;
 		respawnY = y;

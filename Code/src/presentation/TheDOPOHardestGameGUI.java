@@ -1,21 +1,21 @@
 package presentation;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import domain.DimensionGame; //Procurar importar solo el principal y el Dimension
 import domain.Element;
@@ -52,9 +52,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	
 	private void prepareActions() {
 		
-		keyH = new KeyHandler() {
-			
-		};
+		keyH = new KeyHandler();
 			
 			
 		this.addKeyListener(keyH);
@@ -127,11 +125,13 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 			if (timer >= 1000000000) {
 				timer -= 1000000000;
 				if(secondsRemaining > 0) secondsRemaining--;
-				try {
-					infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), secondsRemaining);
-				}catch (HardestGameException e) {
-					e.printStackTrace();
-				}
+				SwingUtilities.invokeLater(() -> {
+					try {
+						infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), secondsRemaining);
+					} catch (HardestGameException e) {
+						e.printStackTrace();
+					}
+				});
 			}
 			try { // No ahogar la CPU 
 				Thread.sleep(2);
@@ -177,7 +177,6 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	 * @throws HardestGameException 
 	 */
 	public void draw(Graphics2D g2) throws HardestGameException {
-
         // Dibujar; Tiles, obstáculos, monedas 
         for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
