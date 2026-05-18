@@ -32,6 +32,10 @@ public class Level2 extends Level {
 			    putEnemy(movementEnemy, "vertical");
 			}
 		}
+		putCoin(4, 6);
+		putCoin(13, 6);
+		putCoin(4, 23);
+		putCoin(13, 23);
 	}
 
 	@Override

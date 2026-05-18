@@ -1,6 +1,6 @@
 package domain;
 
-public abstract class Player extends Entity implements HitBox, Movable{
+public abstract class Player extends Entity implements HitBox, Movable {
 
 	private int collectedCoins;
 	private int deaths;
@@ -22,7 +22,6 @@ public abstract class Player extends Entity implements HitBox, Movable{
 		setAttributesPlayer(75, 75);
 		this.state = createInitialState(type);
 		this.name = name;
-		//((PlayerState) state).setPlayer(this);
 		baseSpeed = 3;
 		size = 0.5f;
 		lifes = 1;
@@ -43,7 +42,6 @@ public abstract class Player extends Entity implements HitBox, Movable{
 		collectedCoins = 0;
 		setAttributesPlayer(x, y);
 		state = new Red(this);
-		//((PlayerState) state).setPlayer(this);
 		size = 0.5f;
 		setRespawnPoint(x,y);
 	}

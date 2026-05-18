@@ -147,6 +147,11 @@ public abstract class Level implements CollisionContext {
 		elements.put(unIdAlto, enemy);
 	}
 	
+	protected void putCoin(int row, int col) {
+		int desface = DimensionGame.TILESIZE/4;
+		Coin coin = new Coin(col*DimensionGame.TILESIZEHEIGHT+desface, row*DimensionGame.TILESIZEWIDTH+desface);
+		elements.put(elements.size()+1, coin);
+	}
 	
 	public List<Solid> getSolidElements() {
 		return elements.values().stream()
