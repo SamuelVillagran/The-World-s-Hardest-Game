@@ -4,16 +4,16 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Level1 extends Level {
-	private CollisionChecker cCheker;
+	
 
 	public Level1() {
 		numCoin = 3;
 		map = new Map(1);
 		registerTiles();
 		initialize();
-		
 	}
 	
 	public Level1(CollisionChecker cCheker) {
@@ -31,37 +31,28 @@ public class Level1 extends Level {
 	    List<Point> movementEnemy1 = new LinkedList<>();
 	    addPointToListMovement(8, 7, movementEnemy1);  // Inicio (Izquierda)
 	    addPointToListMovement(8, 24, movementEnemy1); // Destino (Derecha)
-	    putEnemy(movementEnemy1);
+	    putEnemy(movementEnemy1, "basic");
 
 	    // Enemigo 2: Fila 9, empieza a la derecha (col 25) y va a la izquierda (col 9)
 	    List<Point> movementEnemy2 = new LinkedList<>();
 	    addPointToListMovement(9, 24, movementEnemy2); // Inicio (Derecha)
 	    addPointToListMovement(9, 7, movementEnemy2);  // Destino (Izquierda)
-	    putEnemy(movementEnemy2);
+	    putEnemy(movementEnemy2, "basic");
 
 	    // Enemigo 3: Fila 10, empieza a la izquierda (col 9) y va a la derecha (col 25)
 	    List<Point> movementEnemy3 = new LinkedList<>();
 	    addPointToListMovement(10, 7, movementEnemy3);  // Inicio (Izquierda)
 	    addPointToListMovement(10, 24, movementEnemy3); // Destino (Derecha)
-	    putEnemy(movementEnemy3);
+	    putEnemy(movementEnemy3, "basic");
 
 	    // Enemigo 4: Fila 11, empieza a la derecha (col 25) y va a la izquierda (col 9)
 	    List<Point> movementEnemy4 = new LinkedList<>();
 	    addPointToListMovement(11, 24, movementEnemy4); // Inicio (Derecha)
 	    addPointToListMovement(11, 7, movementEnemy4);  // Destino (Izquierda)
-	    putEnemy(movementEnemy4);
+	    putEnemy(movementEnemy4, "basic");
 	}
 	
-	private void addPointToListMovement(int row, int col, List<Point> movement) {
-	    movement.add(new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT ));
-	}
 	
-	private void putEnemy(List<Point> movement) {
-	    // Al sumarle 1000, los enemigos se guardan lejos de los índices de las baldosas
-	    // Esto hace que se dibujen SIEMPRE por encima del suelo y no queden invisibles
-	    int unIdAlto = elements.size() + 1000;
-	    elements.put(unIdAlto, new Basic(movement, cCheker, this));
-	}
 
 	@Override
 	public boolean isCompleted() {
@@ -69,27 +60,7 @@ public class Level1 extends Level {
 		return false;
 	}
 
-	@Override
-	public List<Solid> getSolidElements() {
-		List<Solid> solids = new ArrayList<>();
-		for(Element element : elements.values()) {
-			if(element instanceof Solid) {
-				solids.add((Solid) element);
-			}
-		}
-		return solids;
-	}
 	
-	@Override 
-	public List<Interactable> getInteractableElements(){
-		List<Interactable> interactable = new ArrayList<>();
-		for(Element element : elements.values()) {
-			if(element instanceof Interactable) {
-				interactable.add((Interactable)element);
-			}
-		}
-		return interactable;
-	}
 	
 	/**
 	 * Put at the correct position the players of level1

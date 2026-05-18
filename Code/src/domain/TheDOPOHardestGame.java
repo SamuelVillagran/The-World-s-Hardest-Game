@@ -113,15 +113,7 @@ public class TheDOPOHardestGame {
 		numCurrentLevel = numLevel;
 	}
 	
-	public List<Enemy> getEnemies() {
-		return currentLevel.getEnemies();
-	}
-	
 	public void update() {
-		for (Enemy e : getEnemies()) {
-			e.move();
-		}
-		
 		currentLevel.update(cChecker);
 	}
 }

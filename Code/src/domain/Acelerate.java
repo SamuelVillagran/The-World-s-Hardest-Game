@@ -1,12 +1,11 @@
 package domain;
 
 import java.awt.Point;
-import java.util.List;
 
-public class Basic extends EnemyCollision implements AutomaticMovement {
+public class Acelerate extends EnemyCollision implements AutomaticMovement {
 
 	
-	public Basic(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
+	public Acelerate(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
 		this.enemy = enemy;
 		
 		this.cCheker = cCheker;
@@ -37,7 +36,7 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 		    	enemy.setDirection('u'); // Va hacia arriba
 		    }
 		}
-		enemy.setSpeed(5);
+		enemy.setSpeed(enemy.getSpeed()*2);
 	}
 
 
@@ -51,6 +50,7 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 			}
 			if (enemy.getDirection() == 'u' || enemy.getDirection() == 'd') {
 				enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
+				
 			}
 		}
 		enemy.move(enemy.getDirection());

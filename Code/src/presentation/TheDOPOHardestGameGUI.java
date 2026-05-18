@@ -1,16 +1,15 @@
 package presentation;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -20,11 +19,9 @@ import javax.swing.SwingUtilities;
 
 import domain.DimensionGame;
 import domain.Element;
-import domain.Enemy;
 import domain.GameMode;
 import domain.HardestGameException;
 import domain.TheDOPOHardestGame;
-import domain.Tile;
 
 public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 
@@ -55,9 +52,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	
 	private void prepareActions() {
 		
-		keyH = new KeyHandler() {
-			
-		};
+		keyH = new KeyHandler();
 			
 			
 		this.addKeyListener(keyH);
@@ -182,10 +177,8 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	 * @throws HardestGameException 
 	 */
 	public void draw(Graphics2D g2) throws HardestGameException {
-        HashMap<Integer, Element> elements = TheDOPOHardestGame.getGame().getElements();
-
         // Dibujar; Tiles, obstáculos, monedas 
-        for (Element e : elements.values()) {
+        for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
             if (img != null) {
                 g2.drawImage(img, e.getPosX(), e.getPosY(),
