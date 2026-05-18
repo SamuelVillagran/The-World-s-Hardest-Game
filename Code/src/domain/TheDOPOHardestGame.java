@@ -52,12 +52,14 @@ public class TheDOPOHardestGame {
 		switch(num){
 			case 1: return new Level1(cChecker);
 			case 2: return new Level2(cChecker);
+			case 3: return new Level3(cChecker);
 			default : throw new HardestGameException("Nivel no existe");
 		}
 	}
 	
 	public void loadLevel(Level level) {
 		this.currentLevel = level;
+		currentLevel.initialize();
 		currentLevel.setPlayers(players);
 		currentLevel.spawnPlayers(players);
 	}

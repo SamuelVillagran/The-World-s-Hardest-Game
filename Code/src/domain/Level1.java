@@ -4,14 +4,13 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Level1 extends Level {
 	
-	public Level1(CollisionChecker cCheker) {
+	public Level1(CollisionChecker cChecker) {
 	    map = new Map(1);
 	    registerTiles();        // 1. Las baldosas toman los índices bajos (0, 1, 2...)
-	    this.cCheker = cCheker; // 2. Asignas el checker antes de crear los enemigos
+	    this.cChecker = cChecker; // 2. Asignas el checker antes de crear los enemigos
 	    initialize();           // 3. Creas los enemigos al final
 	}
 

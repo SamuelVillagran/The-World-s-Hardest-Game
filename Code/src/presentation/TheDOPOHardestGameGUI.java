@@ -42,7 +42,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
 		secondsRemaining = LEVEL_TIME_SECONDS;
-		TheDOPOHardestGame.getGame().startGame(gameMode, 1);
+		TheDOPOHardestGame.getGame().startGame(gameMode, 3);
 		cachedImages = new HashMap<>();
 		prepareElements();
 		prepareActions();
@@ -156,9 +156,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		if (keyH.getRigth() == true) {
 			TheDOPOHardestGame.getGame().movePlayers('r');	
 		}
-		
 		TheDOPOHardestGame.getGame().update();
-	
 	}
 
 	/**
