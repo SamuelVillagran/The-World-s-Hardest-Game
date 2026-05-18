@@ -50,6 +50,18 @@ public class Level1 extends Level {
 	    addPointToListMovement(11, 24, movementEnemy4); // Inicio (Derecha)
 	    addPointToListMovement(11, 7, movementEnemy4);  // Destino (Izquierda)
 	    putEnemy(movementEnemy4);
+	    
+	    zones.add(new InitialZone(new Figure(new ArrayList<Point>(List.of(
+	    		new Point(2*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
+		    	new Point(5*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
+		    	new Point(2*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE),
+		    	new Point(5*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE))))));
+	    
+	    zones.add(new GoalZone(new Figure(new ArrayList<Point>(List.of(
+	    		new Point(26*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
+		    	new Point(29*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
+		    	new Point(26*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE),
+		    	new Point(29*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE))))));
 	}
 	
 	private void addPointToListMovement(int row, int col, List<Point> movement) {
@@ -62,13 +74,13 @@ public class Level1 extends Level {
 	    int unIdAlto = elements.size() + 1000;
 	    elements.put(unIdAlto, new Basic(movement, cCheker, this));
 	}
-
+	
 	@Override
 	public boolean isCompleted() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 	@Override
 	public List<Solid> getSolidElements() {
 		List<Solid> solids = new ArrayList<>();
@@ -96,19 +108,20 @@ public class Level1 extends Level {
 	 * @param pys pys are the list of players that are at the level
 	 */
 	@Override
-	public void spawnPlayers(List<Player> pys) {
-		int desface = DimensionGame.TILESIZE/2, sizePys = pys.size();
-		if (sizePys == 1) {
-			pys.get(0).setAttributesPlayer(4*DimensionGame.TILESIZEWIDTH-desface, 8*DimensionGame.TILESIZEHEIGHT-desface);
-		}
-		if (sizePys > 1) {
-			for (Player py : pys) {
-				py.setAttributesPlayer(4*DimensionGame.TILESIZEWIDTH-desface, 8*DimensionGame.TILESIZEHEIGHT-desface);
+	public void spawnPlayers(List<Player> pys) {	
+		Zone zone = getInitialZone();
+	    for (Player player : players) {
+	        player.setPosition(zone.getSpawnX(), zone.getSpawnY());
+	        player.setRespawnPoint(zone.getSpawnX(), zone.getSpawnY());
+	    }
+	}
+	
+	public Zone getInitialZone() {
+		for(Zone zone : zones) {
+			if(zone instanceof InitialZone) {
+				return zone;
 			}
 		}
-		for(Player py : pys) {
-			elements.put(elements.size() + 1, py);
-		}
-		
+		return null;
 	}
 }

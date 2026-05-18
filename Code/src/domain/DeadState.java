@@ -4,6 +4,7 @@ public class DeadState extends PlayerState {
 
 	public DeadState(Player py) {
 		super(py);
+		py.addDeaths();
 	}
 
 	@Override

@@ -50,12 +50,23 @@ public class TheDOPOHardestGame {
 	 */
 	public void startGame(GameMode gameMode, int numCurrentLevel) throws HardestGameException {
 		this.gameMode = gameMode;
-		players = new ArrayList<>(gameMode.createPlayers());
 		this.numCurrentLevel = numCurrentLevel; 
-		this.currentLevel = new Level1(cChecker);
-		this.numCurrentLevel = numCurrentLevel;
-		currentLevel.spawnPlayers(players);
+		players = new ArrayList<>(gameMode.createPlayers());
+		loadLevel(buildLevel(numCurrentLevel));
+		
+	}
+	
+	private Level buildLevel(int num) throws HardestGameException {
+		switch(num){
+			case 1: return new Level1(cChecker);
+			default : throw new HardestGameException("Nivel no existe");
+		}
+	}
+	
+	public void loadLevel(Level level) {
+		this.currentLevel = level;
 		currentLevel.setPlayers(players);
+		currentLevel.spawnPlayers(players);
 	}
 	
 	/**
@@ -119,7 +130,7 @@ public class TheDOPOHardestGame {
 		return currentLevel.getEnemies();
 	}
 	
-	public void update() {
+	public void update() throws HardestGameException {
 		for (Enemy e : getEnemies()) {
 			e.move();
 		}

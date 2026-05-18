@@ -69,7 +69,7 @@ public class InfoPanel extends JPanel{
 
 		nameLabel.setText("Nombre: " + player.getName());
 		deathsLabel.setText("Muertes: " + player.getDeaths());
-		coinsLabel.setText("Monedas: " + player.getCountCoins());
+		coinsLabel.setText("Monedas: " + player.getCollectedCoins());
 		timeLabel.setText("Tiempo: " + secondsRemaining + "s");
 	}
 }

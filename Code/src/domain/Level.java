@@ -13,6 +13,7 @@ public abstract class Level implements CollisionContext{
 	protected LinkedHashMap<Integer, Element> elements;
 	protected static Map map;
 	protected List<Player> players;
+	protected List<Zone> zones;
 	
 	/* 
 	 * elements = new HashMap<>();
@@ -27,6 +28,7 @@ public abstract class Level implements CollisionContext{
 		numCoin = 0;
 		elements = new LinkedHashMap<>();
 		players = new ArrayList<>();
+		zones = new ArrayList<>();
 	}
 	
 	public abstract void initialize();
@@ -66,16 +68,23 @@ public abstract class Level implements CollisionContext{
 	
 	public void setPlayers(List<Player> players) {
 		this.players = players;
+		for(Player py : players) {
+			elements.put(elements.size() + 1, py);
+		}
 	}
 
 	public void removeElement(Element element) {
 		
 	}
 	
-	public void update(CollisionChecker checker) {
+	public void update(CollisionChecker checker) throws HardestGameException {
 		for(Player player : players) {
 			checker.checkContactsWithInteractable(player, this, this);
+			if(player.isDead()) {
+				player.respawn();
+			}
 		}
+		checkZones();
 	}
 
 	protected List<Enemy> getEnemies() {
@@ -85,5 +94,17 @@ public abstract class Level implements CollisionContext{
 	            .toList();
 	}
 
-	
+	public boolean playerHasAllCoins(Player player) {
+		return player.getCollectedCoins() >= numCoin ;
+	}
+
+	public void checkZones() {
+		for(Player player : players) {
+			for(Zone zone : zones) {
+				if(zone.contains(player.getPosX(), player.getPosY())) {
+					zone.whenPlayerEnter(player, this);
+				}
+			}
+		}
+	}
 }

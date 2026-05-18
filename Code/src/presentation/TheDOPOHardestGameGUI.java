@@ -17,13 +17,11 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import domain.DimensionGame;
+import domain.DimensionGame; //Procurar importar solo el principal y el Dimension
 import domain.Element;
-import domain.Enemy;
 import domain.GameMode;
 import domain.HardestGameException;
 import domain.TheDOPOHardestGame;
-import domain.Tile;
 
 public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 
@@ -179,15 +177,14 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	 * @throws HardestGameException 
 	 */
 	public void draw(Graphics2D g2) throws HardestGameException {
-        HashMap<Integer, Element> elements = TheDOPOHardestGame.getGame().getElements();
 
         // Dibujar; Tiles, obstáculos, monedas 
-        for (Element e : elements.values()) {
+        for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
             if (img != null) {
                 g2.drawImage(img, e.getPosX(), e.getPosY(),
-                    (int)(e.getWidth()),
-                    (int)(e.getHeight()), 
+                    (int)(e.getWidth() * 1.2),
+                    (int)(e.getHeight() * 1.2), 
                     null);
             }
         }

@@ -2,13 +2,14 @@ package domain;
 
 public abstract class Player extends Entity implements HitBox, Movable{
 
-	private int countCoins;
+	private int collectedCoins;
 	private int deaths;
 	private int lifes;
 	protected String name;
 	protected int baseSpeed;
 	private PlayerType playerType;
 	private int respawnX, respawnY;
+	private boolean goalCompleted = false;
 	
 	/**
 	 * 
@@ -17,7 +18,7 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	 */
 	public Player(PlayerType type, String name) throws HardestGameException {
 		deaths = 0;
-		countCoins = 0;
+		collectedCoins = 0;
 		setAttributesPlayer(75, 75);
 		this.state = createInitialState(type);
 		this.name = name;
@@ -39,16 +40,23 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	
 	public Player(int x, int y) {
 		deaths = 0;
-		countCoins = 0;
+		collectedCoins = 0;
 		setAttributesPlayer(x, y);
 		state = new Red(this);
 		//((PlayerState) state).setPlayer(this);
 		size = 0.5f;
+		setRespawnPoint(x,y);
 	}
 	
 	public void setRespawnPoint(int x, int y) {
 		respawnX = x;
 		respawnY = y;
+	}
+	
+	public void respawn() throws HardestGameException {
+		this.posX = respawnX;
+		this.posY = respawnY;
+		this.state = createInitialState(playerType);
 	}
 	
 	public float getSpeed() {
@@ -146,7 +154,7 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	}
 
 	public void addCoin() {
-		countCoins ++;
+		collectedCoins ++;
 	}
 
 	public void destroy() {
@@ -168,13 +176,34 @@ public abstract class Player extends Entity implements HitBox, Movable{
 	public PlayerType getPlayerType() {
 		return playerType;
 	}
+	
+	public void addDeaths() {
+		deaths ++;
+	}
+	
+	public void substractDeaths() {
+		deaths --;
+	}
 
 	public int getDeaths() {
 		return deaths;
 	}
 
-	public int getCountCoins() {
-		return countCoins;
+	public int getCollectedCoins() {
+		return collectedCoins;
+	}
+	
+	public void markGoalCompleted() {
+		goalCompleted = true;
+	}
+	
+	public boolean hasGoalCompleted() {
+		return goalCompleted;
+	}
+	
+	public void setPosition(int x, int y) {
+		posX = x;
+		posY = y;
 	}
 
 }
