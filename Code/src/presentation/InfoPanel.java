@@ -23,7 +23,7 @@ public class InfoPanel extends JPanel{
 	private JLabel timeLabel;
 	
 	public InfoPanel() {
-		setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.TITTLE_HEIGHT));
+		setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.TILESIZEHEIGHT));
 		setBackground(new Color(20, 20, 20));
 		setLayout(new FlowLayout(FlowLayout.LEFT, 22, 18));
 

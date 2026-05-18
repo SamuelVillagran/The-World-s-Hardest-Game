@@ -16,7 +16,7 @@ public class Coin extends SuperObject {
 	
 	@Override
 	public String getPathImage() {
-		return "/"+ getClass().getSuperclass().getSimpleName().toLowerCase()+"/"+getNameClass()+".png";
+		return "/"+ super.getName()+"/"+getNameClass()+".png";
 	}
 
 	@Override

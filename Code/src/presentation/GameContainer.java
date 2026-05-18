@@ -68,7 +68,7 @@ public class GameContainer extends JPanel{
 	private JPanel buildTittlePanel() {
 		JPanel tittle = new JPanel();
 		tittle.setOpaque(false);
-		tittle.setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.TITTLE_HEIGHT));
+		tittle.setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.TILESIZEHEIGHT));
 		return tittle;
 	}
 	
