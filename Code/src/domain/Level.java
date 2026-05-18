@@ -13,7 +13,7 @@ public abstract class Level implements CollisionContext{
 	protected LinkedHashMap<Integer, Element> elements;
 	protected static Map map;
 	protected CollisionChecker cCheker;
-	
+
 	/* 
 	 * elements = new HashMap<>();
 		
