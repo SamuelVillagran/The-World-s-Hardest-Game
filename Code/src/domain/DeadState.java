@@ -7,18 +7,18 @@ public class DeadState extends PlayerState {
 	}
 
 	@Override
-	public int getSpeed() {
+	public float getSpeed() {
 		return 0;
 	}
 
 	@Override
 	public int getWidth() {
-		return 0;
+		return 18;
 	}
 
 	@Override
 	public int getHeight() {
-		return 0;
+		return 18;
 	}
 
 	@Override

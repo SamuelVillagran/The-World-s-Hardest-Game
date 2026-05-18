@@ -32,6 +32,13 @@ public class LifeSource extends DinamicObject {
 		return 25;
 	}
 
+
+	@Override
+	public void onContact(Player player, Level level) {
+		player.addLife();
+		level.removeElement(this);
+	}
+
 	
 	
 }

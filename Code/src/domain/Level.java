@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,12 +9,11 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public abstract class Level implements CollisionContext{
-
 	protected static int numCoin; 
 	protected LinkedHashMap<Integer, Element> elements;
 	protected static Map map;
 	protected CollisionChecker cCheker;
-
+	protected List<Player> players;
 	/* 
 	 * elements = new HashMap<>();
 		
@@ -26,6 +26,7 @@ public abstract class Level implements CollisionContext{
 	public Level() {
 		numCoin = 0;
 		elements = new LinkedHashMap<>();
+		players = new ArrayList<>();
 	}
 	
 	public abstract void initialize();
@@ -59,6 +60,20 @@ public abstract class Level implements CollisionContext{
 	protected void registerTiles() {
 		for(Tile tile : map.getTiles()) {
 			elements.put(elements.size() +1, tile);
+		}
+	}
+	
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
+	public void removeElement(Element element) {
+		
+	}
+	
+	public void update(CollisionChecker checker) {
+		for(Player player : players) {
+			checker.checkContactsWithInteractable(player, this, this);
 		}
 	}
 

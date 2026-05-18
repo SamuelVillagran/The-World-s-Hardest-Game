@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Level1 extends Level {
+	private CollisionChecker cCheker;
 
 	public Level1() {
 		numCoin = 3;
@@ -77,6 +78,17 @@ public class Level1 extends Level {
 			}
 		}
 		return solids;
+	}
+	
+	@Override 
+	public List<Interactable> getInteractableElements(){
+		List<Interactable> interactable = new ArrayList<>();
+		for(Element element : elements.values()) {
+			if(element instanceof Interactable) {
+				interactable.add((Interactable)element);
+			}
+		}
+		return interactable;
 	}
 	
 	/**

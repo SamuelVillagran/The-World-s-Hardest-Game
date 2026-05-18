@@ -7,7 +7,7 @@ public abstract class PlayerState implements StateEntity {
 		py = player;
 	}
 	
-	public abstract int getSpeed();
+	public abstract float getSpeed();
 	public abstract int getWidth();
 	public abstract int getHeight();
 	public abstract void onEnemyContact();

@@ -1,12 +1,14 @@
 package domain;
 
-public class Player extends Entity implements HitBox, Movable{
+public abstract class Player extends Entity implements HitBox, Movable{
 
-	private int countBall;
+	private int countCoins;
 	private int deaths;
+	private int lifes;
 	protected String name;
 	protected int baseSpeed;
-	//protected PlayerState state;
+	private PlayerType playerType;
+	private int respawnX, respawnY;
 	
 	/**
 	 * 
@@ -15,13 +17,15 @@ public class Player extends Entity implements HitBox, Movable{
 	 */
 	public Player(PlayerType type, String name) throws HardestGameException {
 		deaths = 0;
-		countBall = 0;
+		countCoins = 0;
 		setAttributesPlayer(75, 75);
 		this.state = createInitialState(type);
 		this.name = name;
 		//((PlayerState) state).setPlayer(this);
 		baseSpeed = 3;
 		size = 0.5f;
+		lifes = 1;
+		playerType = type;
 	} 
 	
 	private PlayerState createInitialState(PlayerType type) throws HardestGameException {
@@ -35,21 +39,26 @@ public class Player extends Entity implements HitBox, Movable{
 	
 	public Player(int x, int y) {
 		deaths = 0;
-		countBall = 0;
+		countCoins = 0;
 		setAttributesPlayer(x, y);
 		state = new Red(this);
 		//((PlayerState) state).setPlayer(this);
 		size = 0.5f;
 	}
 	
-	public int getSpeed() {
+
+	public void setRespawnPoint(int x, int y) {
+		respawnX = x;
+		respawnY = y;
+	}
+	
+	public float getSpeed() {
 		return speed;
 	}
 
 	public void setAttributesPlayer(int x, int y) {
 		posX = x;
 		posY = y;
-		
 	}
 	
 	/**
@@ -65,7 +74,7 @@ public class Player extends Entity implements HitBox, Movable{
 	 * @param direction direction is where going to move the player
 	 */
 	public void move(char direction) {
-		int speed = getPlayerState().getSpeed();
+		float speed = getPlayerState().getSpeed();
 		switch (direction) {
 			case 'u': posY -= speed;
 				break;
@@ -79,7 +88,7 @@ public class Player extends Entity implements HitBox, Movable{
 	}
 	
 	public void move(char direction, CollisionContext context, CollisionChecker checker) {
-		int speed = getPlayerState().getSpeed();;
+		float speed = getPlayerState().getSpeed();;
 		
 		int nextX = posX;
 		int nextY = posY;
@@ -131,6 +140,42 @@ public class Player extends Entity implements HitBox, Movable{
 	
 	public PlayerState getPlayerState() {
 		return (PlayerState) state;
+	}
+	
+	public void onEnemyContact() {
+		getPlayerState().onEnemyContact();
+	}
+
+	public void addCoin() {
+		countCoins ++;
+	}
+
+	public void destroy() {
+		setState(new DeadState(this));
+	}
+
+	public void addLife() {
+		lifes++;
+	}
+
+	public int getLifes() {
+		return lifes;
+	}
+	
+	public void substractLife() {
+		lifes --;
+	}
+	
+	public PlayerType getPlayerType() {
+		return playerType;
+	}
+
+	public int getDeaths() {
+		return deaths;
+	}
+
+	public int getCountCoins() {
+		return countCoins;
 	}
 
 }

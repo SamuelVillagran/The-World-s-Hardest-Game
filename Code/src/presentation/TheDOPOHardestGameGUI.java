@@ -32,16 +32,20 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	private KeyHandler keyH;
 	private Thread gameThread;
 	private HashMap<String, BufferedImage> cachedImages;
+	private InfoPanel infoPanel;
+	private int secondsRemaining;
 	
 	public static final int FPS = 60;
+	public static final int LEVEL_TIME_SECONDS = 90;
 	
 	/**
 	 * Inicializate the game panel
 	 * @throws IOException 
 	 * @throws HardestGameException 
 	 */
-	public TheDOPOHardestGameGUI(GameMode gameMode) throws IOException, HardestGameException {
-		
+	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
+		this.infoPanel = infoPanel;
+		secondsRemaining = LEVEL_TIME_SECONDS;
 		TheDOPOHardestGame.getGame().startGame(gameMode, 1);
 		cachedImages = new HashMap<>();
 		prepareElements();
@@ -123,7 +127,13 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 			}
 
 			if (timer >= 1000000000) {
-				timer -= 0;
+				timer -= 1000000000;
+				if(secondsRemaining > 0) secondsRemaining--;
+				try {
+					infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), secondsRemaining);
+				}catch (HardestGameException e) {
+					e.printStackTrace();
+				}
 			}
 			try { // No ahogar la CPU 
 				Thread.sleep(2);
@@ -150,7 +160,9 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		if (keyH.getRigth() == true) {
 			TheDOPOHardestGame.getGame().movePlayers('r');	
 		}
+		
 		TheDOPOHardestGame.getGame().update();
+	
 	}
 
 	/**
@@ -169,7 +181,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	public void draw(Graphics2D g2) throws HardestGameException {
         HashMap<Integer, Element> elements = TheDOPOHardestGame.getGame().getElements();
 
-        // Dibujar; Tiles, obstáculos, monedas //Ayudado por claude sonnet 4.6 IA a poner el player encima
+        // Dibujar; Tiles, obstáculos, monedas 
         for (Element e : elements.values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
             if (img != null) {

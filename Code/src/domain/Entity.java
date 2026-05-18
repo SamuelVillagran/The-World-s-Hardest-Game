@@ -2,7 +2,7 @@ package domain;
 
 public abstract class Entity extends Element {
 
-	protected int speed;
+	protected float speed;
 	protected StateEntity state;
 	
 	

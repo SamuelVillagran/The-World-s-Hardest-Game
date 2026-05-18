@@ -31,5 +31,11 @@ public class Bomb extends DinamicObject {
 	public int getHeight() {
 		return 15;
 	}
+	
+	@Override
+	public void onContact(Player player, Level level) {
+		player.destroy();
+		level.removeElement(this);
+	}
 
 }

@@ -23,6 +23,7 @@ public class GameContainer extends JPanel{
 	private JPanel cardPanel;
 	private TheDOPOHardestGameGUI playerModePanel;
 	private GameSetup setup;
+	private InfoPanel infoPanel;
 	
 	public static final String MENU_MODE = "menu";
 	public static final String PLAYER_CONFIG_MODE = "playerConfig";
@@ -47,6 +48,10 @@ public class GameContainer extends JPanel{
 		
 		cardPanel.add(new MenuPanel(this), MENU_MODE);
 		cardPanel.add(new PlayerConfig(this), PLAYER_CONFIG_MODE);
+		
+		infoPanel = new InfoPanel();
+		infoPanel.setVisible(false);
+		add(infoPanel, BorderLayout.NORTH);
 		
 		cardLayout.show(cardPanel, MENU_MODE);
 		add(cardPanel, BorderLayout.CENTER);
@@ -76,14 +81,10 @@ public class GameContainer extends JPanel{
 	}
 	
 	public void showMode(String mode) {
-		boolean isMenu = MENU_MODE.equals(mode);
-		//tittlePanel.setVisible(isMenu);
+		infoPanel.setVisible(GAME_MODE.equals(mode));;
 		cardLayout.show(cardPanel, mode);
 		revalidate();
 		repaint();
-//		if (PLAYER_MODE.equals(mode)) {
-//			playerModePanel.requestFocusInWindow();
-//		}
 	}
 
 	public TheDOPOHardestGameGUI getPlayerModePanel() {
@@ -103,7 +104,7 @@ public class GameContainer extends JPanel{
 	public void startGame() throws IOException, HardestGameException {
 		GameMode gameMode = setup.build();
 		try {
-			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(gameMode);
+			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(gameMode, infoPanel);
 			cardPanel.add(gamePanel, GAME_MODE);
 			showMode(GAME_MODE);
 			gamePanel.startGameThread();

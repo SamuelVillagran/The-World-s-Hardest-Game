@@ -1,5 +1,5 @@
 package domain;
 
-public abstract class SuperObject extends Element {
+public abstract class SuperObject extends Element implements Interactable{
 
 }

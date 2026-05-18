@@ -54,6 +54,7 @@ public class TheDOPOHardestGame {
 		this.currentLevel = new Level1(cChecker);
 		this.numCurrentLevel = numCurrentLevel;
 		currentLevel.spawnPlayers(players);
+		currentLevel.setPlayers(players);
 	}
 	
 	/**
@@ -65,7 +66,6 @@ public class TheDOPOHardestGame {
 		HashMap<String, String> elementsPath = this.currentLevel.getElementsToDraw();
 		return elementsPath;
 	}
-
 
 	public Player getPlayer1() {
 		return players.get(0);
@@ -116,10 +116,12 @@ public class TheDOPOHardestGame {
 	public List<Enemy> getEnemies() {
 		return currentLevel.getEnemies();
 	}
-
+	
 	public void update() {
 		for (Enemy e : getEnemies()) {
 			e.move();
 		}
+		
+		currentLevel.update(cChecker);
 	}
 }

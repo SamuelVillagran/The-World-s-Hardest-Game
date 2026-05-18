@@ -3,7 +3,7 @@ package domain;
 import java.awt.Point;
 import java.util.List;
 
-public abstract class Enemy extends Entity {
+public abstract class Enemy extends Entity implements Interactable{
 
 	protected List<Point> movement;
 	protected char direction;
@@ -12,7 +12,7 @@ public abstract class Enemy extends Entity {
 		posX = 210;
 		posY = 210;
 		size = 0.5f;
-		speed = 3;
+		speed = 3.0f;
 	}
 	
 	public Enemy(int x, int y) {
@@ -26,7 +26,7 @@ public abstract class Enemy extends Entity {
 		posX = (int) firstPoint.getX();
 		posY = (int) firstPoint.getY();
 		size = 0.5f;
-		speed = 3;
+		speed = 3.0f;
 	}
 	
 	/**
@@ -66,7 +66,12 @@ public abstract class Enemy extends Entity {
 	public void setPoints(List<Point> points) {
 		movement = points;
 	}
-
 	
+	@Override
+	public void onContact(Player player, Level level) {
+		player.onEnemyContact();
+		
+	}
+
 	
 }

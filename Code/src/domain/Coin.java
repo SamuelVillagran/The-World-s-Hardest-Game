@@ -33,4 +33,10 @@ public class Coin extends SuperObject {
 	public int getHeight() {
 		return 15;
 	}
+
+	@Override
+	public void onContact(Player player, Level level) {
+		player.addCoin();
+		level.removeElement(this);
+	}
 }

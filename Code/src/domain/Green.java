@@ -1,13 +1,15 @@
 package domain;
 
 public class Green extends PlayerState{
+	private double timeToChange = 0;
 
 	public Green(Player py) {
 		super(py);
+		py.addLife();
 	}
 
 	@Override
-	public int getSpeed() {
+	public float getSpeed() {
 		return py.getBaseSpeed();
 	}
 
@@ -23,8 +25,11 @@ public class Green extends PlayerState{
 
 	@Override
 	public void onEnemyContact() {
-		py.setState(new SlowedState(py));
-		
+		timeToChange += 1.0 / 60.0;
+		if(timeToChange >= 0.18) {
+			py.substractLife();
+			py.setState(new SlowedState(py));
+		}
 	}
 
 }
