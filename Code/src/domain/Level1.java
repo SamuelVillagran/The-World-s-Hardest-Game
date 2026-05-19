@@ -4,14 +4,13 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Level1 extends Level {
 	
-	public Level1(CollisionChecker cCheker) {
+	public Level1(CollisionChecker cChecker) {
 	    map = new Map(1);
 	    registerTiles();        // 1. Las baldosas toman los índices bajos (0, 1, 2...)
-	    this.cCheker = cCheker; // 2. Asignas el checker antes de crear los enemigos
+	    this.cChecker = cChecker; // 2. Asignas el checker antes de crear los enemigos
 	    initialize();           // 3. Creas los enemigos al final
 	}
 
@@ -42,19 +41,20 @@ public class Level1 extends Level {
 	    addPointToList(11, 7, movementEnemy4);  // Destino (Izquierda)
 	    putEnemy(movementEnemy4, "basic");
 
-		 zones.add(new InitialZone(new Figure(new ArrayList<Point>(List.of(
-	    		new Point(2*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(5*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(2*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE),
-		    	new Point(5*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE))))));
-	    
-	    zones.add(new GoalZone(new Figure(new ArrayList<Point>(List.of(
-	    		new Point(26*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(29*DimensionGame.TILESIZE, 6*DimensionGame.TILESIZE),
-		    	new Point(26*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE),
-		    	new Point(29*DimensionGame.TILESIZE,13*DimensionGame.TILESIZE))))));
+	    List<Point> zoneInitial = new ArrayList<>();
+		addPointToList(6, 2, zoneInitial);
+		addPointToList(6, 5, zoneInitial);
+		addPointToList(13, 2, zoneInitial);
+		addPointToList(13, 5, zoneInitial);
+		putZone((ArrayList<Point>) zoneInitial, "initial");
+		
+		List<Point> zoneGoal = new ArrayList<>();
+			addPointToList(6, 26, zoneInitial);
+			addPointToList(6, 29, zoneInitial);
+			addPointToList(13, 26, zoneInitial);
+			addPointToList(13, 29, zoneInitial);
+			putZone((ArrayList<Point>) zoneInitial, "goal");
 	}
-	
 	
 	@Override
 	public boolean isCompleted() {

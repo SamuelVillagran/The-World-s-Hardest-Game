@@ -2,9 +2,7 @@ package domain;
 
 import java.awt.Point;
 
-public class Vertical extends EnemyCollision implements AutomaticMovement {
-
-	
+public class Vertical extends ColliderEnemy implements AutomaticMovement {
 	
 	public Vertical(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
 		this.enemy = enemy;
@@ -23,7 +21,7 @@ public class Vertical extends EnemyCollision implements AutomaticMovement {
 		} else {
 		  	enemy.setDirection('u'); // Va hacia arriba
 		}
-		enemy.setSpeed(3);
+		enemy.setSpeed(3.0f);
 	}
 	
 	@Override
@@ -32,13 +30,8 @@ public class Vertical extends EnemyCollision implements AutomaticMovement {
 	    int nextY = enemy.getPosY();
 	   
 		if (!cCheker.canMove(enemy, nextX, nextY, context)) {
-			if (enemy.getDirection() == 'r' || enemy.getDirection() == 'l') {
-				enemy.setDirection((enemy.getDirection() == 'r') ? 'l' : 'r');
-			}
-			if (enemy.getDirection() == 'u' || enemy.getDirection() == 'd') {
-				enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
-			}
-		enemy.move(enemy.getDirection());
+			enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
 		}
+		enemy.move(enemy.getDirection());
 	}
 }

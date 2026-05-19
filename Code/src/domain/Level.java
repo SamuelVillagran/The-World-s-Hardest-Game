@@ -11,7 +11,7 @@ public abstract class Level implements CollisionContext {
 	protected static int numCoin;
 	protected LinkedHashMap<Integer, Element> elements;
 	protected static Map map;
-	protected CollisionChecker cCheker;
+	protected CollisionChecker cChecker;
 	protected List<Player> players;
 	protected List<Zone> zones;
 	
@@ -140,9 +140,9 @@ public abstract class Level implements CollisionContext {
 		Enemy enemy = new Enemy(movement);
 		int unIdAlto = elements.size() + 1000;
 		switch (type) {
-			case "basic" -> enemy.setStrategyMovement(new Basic(enemy, cCheker, this));
-			case "vertical" -> enemy.setStrategyMovement(new Vertical(enemy, cCheker, this));
-			case "acelerate" -> enemy.setStrategyMovement(new Acelerate(enemy, cCheker, this));
+			case "basic" -> enemy.setStrategyMovement(new Basic(enemy, cChecker, this));
+			case "vertical" -> enemy.setStrategyMovement(new Vertical(enemy, cChecker, this));
+			case "acelerate" -> enemy.setStrategyMovement(new Acelerate(enemy, cChecker, this));
 		}
 		elements.put(unIdAlto, enemy);
 	}
@@ -151,6 +151,13 @@ public abstract class Level implements CollisionContext {
 		int desface = DimensionGame.TILESIZE/4;
 		Coin coin = new Coin(col*DimensionGame.TILESIZEHEIGHT+desface, row*DimensionGame.TILESIZEWIDTH+desface);
 		elements.put(elements.size()+1, coin);
+	}
+	
+	protected void putZone(ArrayList<Point> figure, String type) {
+		switch (type) {
+			case "goal" ->  zones.add(new GoalZone(new Figure(figure)));
+			case "initial" -> zones.add(new InitialZone(new Figure(figure)));
+		}
 	}
 	
 	public List<Solid> getSolidElements() {
@@ -168,7 +175,7 @@ public abstract class Level implements CollisionContext {
 	}
 	
 	protected void addPointToList(int row, int col, List<Point> list) {
-		list.add(new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT ));
+		list.add(new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT));
 	}
 	
 	public Zone getInitialZone() {
@@ -178,5 +185,12 @@ public abstract class Level implements CollisionContext {
 			}
 		}
 		return null;
+	}
+	
+	public void putBomb(int row, int col) {
+		int desface = DimensionGame.TILESIZE/4;
+		Bomb bomb =  new Bomb(col * DimensionGame.TILESIZEWIDTH+desface, row * DimensionGame.TILESIZEHEIGHT+desface);
+		elements.put(elements.size()+1, bomb);
+		
 	}
 }

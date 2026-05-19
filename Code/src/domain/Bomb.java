@@ -8,13 +8,10 @@ public class Bomb extends DinamicObject {
 		this.posY = posY;
 	}
 	
-	public Bomb() {
-		
-	}
 
 	@Override
 	public String getPathImage() {
-		return "/tile/"+getNameClass()+".png";
+		return "/superobject/"+getNameClass()+".png";
 	}
 
 	@Override
@@ -24,12 +21,12 @@ public class Bomb extends DinamicObject {
 
 	@Override
 	public int getWidth() {
-		return 15;
+		return 32;
 	}
 
 	@Override
 	public int getHeight() {
-		return 15;
+		return 32;
 	}
 	
 	@Override

@@ -3,7 +3,7 @@ package domain;
 import java.awt.Point;
 import java.util.List;
 
-public class Basic extends EnemyCollision implements AutomaticMovement {
+public class Basic extends ColliderEnemy implements AutomaticMovement {
 
 	
 	public Basic(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
@@ -49,14 +49,14 @@ public class Basic extends EnemyCollision implements AutomaticMovement {
 		case 'l' -> nextX -= speed;
 		case 'd' -> nextY += speed;
 		case 'u' -> nextY -= speed;
-	}
-	if (cCheker.canMove(enemy, nextX, nextY, context)) {
-		enemy.move(direction);
-	} else {
-		if (direction == 'r') enemy.setDirection('l');
-		else if (direction == 'l') enemy.setDirection('r');
-		else if (direction == 'd') enemy.setDirection('u');
-		else if (direction == 'u') enemy.setDirection('d');
-	}
+	    }
+		if (cCheker.canMove(enemy, nextX, nextY, context)) {
+			enemy.move(direction);
+		} else {
+			if (direction == 'r') enemy.setDirection('l');
+			else if (direction == 'l') enemy.setDirection('r');
+			else if (direction == 'd') enemy.setDirection('u');
+			else if (direction == 'u') enemy.setDirection('d');
+		}
 	}
 }

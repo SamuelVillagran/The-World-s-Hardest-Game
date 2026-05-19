@@ -6,8 +6,8 @@ import java.util.List;
 public class Enemy extends Entity implements Interactable, AutomaticMovement {
 
 	private AutomaticMovement strategyMovement;
-	protected List<Point> movement;
-	protected char direction;
+	private List<Point> movement;
+	private char direction;
 
 	public Enemy(List<Point> movement) {
 		this.movement = movement;

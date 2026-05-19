@@ -16,7 +16,6 @@ public class GameSetup {
     private String nameP1;
     private PlayerType typeP2;
     private String nameP2;
-    private MachineBehavior machineBehavior;
     
     public GameSetup setMode(ModeType mode){
     	this.modeType = mode;
@@ -34,11 +33,6 @@ public class GameSetup {
         this.nameP2 = name;
         return this;
     }
-    public GameSetup setMachineBehavior(MachineBehavior behavior) {
-        this.machineBehavior = behavior;
-        return this;
-    }
-    
     
     /**
      * Build the game mode with the specific type players and their names.

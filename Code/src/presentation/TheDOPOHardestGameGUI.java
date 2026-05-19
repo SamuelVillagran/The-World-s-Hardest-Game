@@ -16,8 +16,6 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import domain.DimensionGame; //Procurar importar solo el principal y el Dimension
 import domain.Element;
 import domain.GameMode;
 import domain.HardestGameException;
@@ -44,7 +42,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
 		secondsRemaining = LEVEL_TIME_SECONDS;
-		TheDOPOHardestGame.getGame().startGame(gameMode, 1);
+		TheDOPOHardestGame.getGame().startGame(gameMode, 3);
 		cachedImages = new HashMap<>();
 		prepareElements();
 		prepareActions();
@@ -85,8 +83,8 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
         }
     }
     
-	private void setScreen() {
-		this.setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.SCREENHEIGHT));
+	private void setScreen() throws HardestGameException {
+		this.setPreferredSize(new Dimension(TheDOPOHardestGame.getGame().getScreenWidth(), TheDOPOHardestGame.getGame().getScreenHeight()));
 		this.setBackground(Color.BLACK);
 		this.setDoubleBuffered(true);
 		this.setFocusable(true);
@@ -127,7 +125,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 				if(secondsRemaining > 0) secondsRemaining--;
 				SwingUtilities.invokeLater(() -> {
 					try {
-						infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), secondsRemaining);
+						infoPanel.refresh(secondsRemaining);
 					} catch (HardestGameException e) {
 						e.printStackTrace();
 					}
@@ -158,9 +156,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		if (keyH.getRigth() == true) {
 			TheDOPOHardestGame.getGame().movePlayers('r');	
 		}
-		
-		//TheDOPOHardestGame.getGame().update();
-	
+		TheDOPOHardestGame.getGame().update();
 	}
 
 	/**
@@ -199,7 +195,6 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	    try {
 			draw(g2);
 		} catch (HardestGameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    g2.dispose();

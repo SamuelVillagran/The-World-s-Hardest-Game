@@ -1,15 +1,8 @@
 package domain;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class TheDOPOHardestGame implements Runnable{
 
@@ -106,12 +99,14 @@ public class TheDOPOHardestGame implements Runnable{
 		switch(num){
 			case 1: return new Level1(cChecker);
 			case 2: return new Level2(cChecker);
+			case 3: return new Level3(cChecker);
 			default : throw new HardestGameException("Nivel no existe");
 		}
 	}
 	
 	public void loadLevel(Level level) {
 		this.currentLevel = level;
+		currentLevel.initialize();
 		currentLevel.setPlayers(players);
 		currentLevel.spawnPlayers(players);
 	}
@@ -174,5 +169,26 @@ public class TheDOPOHardestGame implements Runnable{
 	
 	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
+	}
+
+	public PlayerType getPlayerType(String type) {
+		switch (type) {
+			case "red": return PlayerType.RED;
+			case "blue": return PlayerType.BLUE;
+			case "green": return PlayerType.GREEN;
+			default: return PlayerType.RED;
+		}
+	}
+
+	public int getScreenWidth() {
+		return DimensionGame.getScreenWidth();
+	}
+	
+	public int getScreenHeight() {
+		return DimensionGame.getScreenHeight();
+	}
+
+	public int getTileSizeHeight() {
+		return DimensionGame.getTileSizeHeight();
 	}
 }
