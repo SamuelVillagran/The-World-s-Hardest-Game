@@ -11,8 +11,13 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class TheDOPOHardestGame {
+public class TheDOPOHardestGame implements Runnable{
 
+	private static final int FPS = 60;
+	private static final double NS_INTERVAL = 1000000000.0 / FPS;
+	private Thread gameThread;
+	private boolean running;
+	
 	private static Level currentLevel;
 	private ArrayList<Player> players;
 	private static int numCurrentLevel;
@@ -52,12 +57,55 @@ public class TheDOPOHardestGame {
 		this.numCurrentLevel = numCurrentLevel; 
 		players = new ArrayList<>(gameMode.createPlayers());
 		loadLevel(buildLevel(numCurrentLevel));
+		startLoop();
 		
 	}
+	
+	private void startLoop() {
+		running = true;
+		gameThread = new Thread(this);
+		gameThread.start();
+	}
+	
+	private void stopGame() {
+		running = false;
+		gameThread = null;
+	}
+	
+	// Inicio loop del juego
+	// Complementado con AI - ChatGPT
+	@Override
+	public void run(){
+		double delta = 0;
+		long lastTime = System.nanoTime();
+		
+		while(running) {
+			long currentTime = System.nanoTime();
+			delta += (currentTime - lastTime) / NS_INTERVAL;
+			lastTime = currentTime;
+			
+			if(delta >= 1) {
+				float deltaSeconds = (float) (delta * (1.0 / FPS)); //Tiempo en segundos
+				try {
+					update();
+				} catch (HardestGameException e) {
+					e.printStackTrace();
+				}
+				delta--;
+			}
+		}
+	}
+	
+	private void endGame() {
+		running = false;
+	}
+	
+	
 	
 	private Level buildLevel(int num) throws HardestGameException {
 		switch(num){
 			case 1: return new Level1(cChecker);
+			case 2: return new Level2(cChecker);
 			default : throw new HardestGameException("Nivel no existe");
 		}
 	}

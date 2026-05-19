@@ -159,7 +159,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 			TheDOPOHardestGame.getGame().movePlayers('r');	
 		}
 		
-		TheDOPOHardestGame.getGame().update();
+		//TheDOPOHardestGame.getGame().update();
 	
 	}
 
