@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class Player extends Entity implements HitBox, Movable {
+import java.io.Serializable;
+
+public abstract class Player extends Entity implements HitBox, Movable, Serializable {
 
 	private int collectedCoins;
 	private int deaths;

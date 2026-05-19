@@ -1,8 +1,9 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Acelerate extends ColliderEnemy implements AutomaticMovement {
+public class Acelerate extends ColliderEnemy implements AutomaticMovement, Serializable {
 
 	
 	public Acelerate(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {

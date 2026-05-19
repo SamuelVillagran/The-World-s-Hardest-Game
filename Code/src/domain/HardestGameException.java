@@ -1,6 +1,8 @@
 package domain;
 
-public class HardestGameException extends Exception{
+import java.io.Serializable;
+
+public class HardestGameException extends Exception implements Serializable {
 	public static final String PLAYER_TYPE_UNKNOWN = "Tipo de jugador desconocido.";
 	
 	

@@ -1,6 +1,8 @@
 package domain;
 
-public class Coin extends SuperObject {
+import java.io.Serializable;
+
+public class Coin extends SuperObject implements Serializable {
 
 	public Coin() {
 		posX = 150;

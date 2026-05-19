@@ -1,9 +1,11 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Concrete creator of TileFactory class
  */
-public class DefaultTileFactory extends TileFactory{
+public class DefaultTileFactory extends TileFactory implements Serializable {
 
 	@Override
 	public Tile createTile(int tileNum, int posX, int posY) {

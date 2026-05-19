@@ -1,6 +1,8 @@
 package domain;
 
-public class CheckPoint extends Zone{
+import java.io.Serializable;
+
+public class CheckPoint extends Zone implements Serializable {
 	private boolean isActive = true;
 	
 	public CheckPoint(Figure figure) {

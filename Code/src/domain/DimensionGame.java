@@ -1,6 +1,8 @@
 package domain;
 
-public class DimensionGame {
+import java.io.Serializable;
+
+public class DimensionGame implements Serializable {
 	
 	public static final int MAXWORLDCOL = 30;
 	public static final int MAXWORLDROW = 18;

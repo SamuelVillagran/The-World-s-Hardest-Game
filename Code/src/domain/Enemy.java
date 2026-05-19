@@ -1,9 +1,10 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.List;
 
-public class Enemy extends Entity implements Interactable, AutomaticMovement {
+public class Enemy extends Entity implements Interactable, AutomaticMovement, Serializable {
 
 	private AutomaticMovement strategyMovement;
 	private List<Point> movement;

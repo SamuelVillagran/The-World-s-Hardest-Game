@@ -1,5 +1,7 @@
 package domain;
 
+import java.io.Serializable;
+
 public class Random implements Behavior {
 
 	public static final float TIME_INTERVAL = 5.0f;

@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class PlayerState implements StateEntity {
+import java.io.Serializable;
+
+public abstract class PlayerState implements StateEntity, Serializable {
 	protected Player py;
 	
 	public PlayerState(Player player) {

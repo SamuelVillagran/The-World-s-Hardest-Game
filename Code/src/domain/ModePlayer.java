@@ -1,8 +1,9 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ModePlayer implements GameMode{
+public class ModePlayer implements GameMode, Serializable {
 	private final PlayerType type;
 	private final String playerName;
 	

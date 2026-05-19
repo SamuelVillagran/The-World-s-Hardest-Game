@@ -1,6 +1,8 @@
 package domain;
 
-public class Bomb extends DinamicObject {
+import java.io.Serializable;
+
+public class Bomb extends DinamicObject implements Serializable {
 
 	
 	public Bomb(int posX, int posY) {

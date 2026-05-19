@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class Tile extends Element {
+import java.io.Serializable;
+
+public abstract class Tile extends Element implements Serializable {
 
 	public String getNameSuperClass() {
 		return this.getClass().getSuperclass().getSimpleName().toLowerCase();

@@ -1,10 +1,11 @@
 package domain;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TheDOPOHardestGame {
+public class TheDOPOHardestGame implements Serializable {
 
 	private static Level currentLevel;
 	private ArrayList<Player> players;

@@ -1,13 +1,14 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Level implements CollisionContext {
+public abstract class Level implements CollisionContext, Serializable {
 	protected static int numCoin;
 	protected LinkedHashMap<Integer, Element> elements;
 	protected static Map map;

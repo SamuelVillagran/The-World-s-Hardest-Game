@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class Element implements HitBox{
+import java.io.Serializable;
+
+public abstract class Element implements HitBox, Serializable {
 
 	protected int posX, posY;
 	protected float size;

@@ -1,6 +1,8 @@
 package domain;
 
-public class InitialZone extends Zone{
+import java.io.Serializable;
+
+public class InitialZone extends Zone implements Serializable {
 
 	public InitialZone(Figure figure) {
 		super(figure);
