@@ -9,12 +9,20 @@ public class KeyHandler extends KeyAdapter {
 	private boolean down;
 	private boolean left;
 	private boolean rigth;
-	
+	private boolean w;
+	private boolean s;
+	private boolean a;
+	private boolean d;
+
 	public KeyHandler() {
 		up = false;
 		down = false;
 		rigth = false;
 		left = false;
+		a = false;
+		s = false;
+		d = false;
+		w = false;
 	}
 	
 	@Override
@@ -23,16 +31,28 @@ public class KeyHandler extends KeyAdapter {
 		int code = e.getKeyCode();
 		
 		if (code == KeyEvent.VK_W) {
-			up = true;
+			w = true;
 		}
 		if (code == KeyEvent.VK_S) {
-			down = true;
-		}
-		if (code == KeyEvent.VK_D) {
-			rigth = true;
+			s = true;
 		}
 		if (code == KeyEvent.VK_A) {
+			a = true;
+		}
+		if (code == KeyEvent.VK_D) {
+			d = true;
+		}
+		if (code == KeyEvent.VK_UP) {
+			up = true;
+		}
+		if (code == KeyEvent.VK_DOWN) {
+			down = true;
+		}
+		if (code == KeyEvent.VK_LEFT) {
 			left = true;
+		}
+		if (code == KeyEvent.VK_RIGHT) {
+			rigth = true;
 		}
 	}
 	
@@ -41,16 +61,28 @@ public class KeyHandler extends KeyAdapter {
 		int code = e.getKeyCode();
 		
 		if (code == KeyEvent.VK_W) {
-			setUp(false);
+			w = false;
 		}
 		if (code == KeyEvent.VK_S) {
-			setDown(false);
+			s = false;
 		}
 		if (code == KeyEvent.VK_A) {
-			setLeft(false);
+			a = false;
 		}
 		if (code == KeyEvent.VK_D) {
-			setRigth(false);
+			d = false;
+		}
+		if (code == KeyEvent.VK_UP) {
+			up = false;
+		}
+		if (code == KeyEvent.VK_DOWN) {
+			down = false;
+		}
+		if (code == KeyEvent.VK_LEFT) {
+			left = false;
+		}
+		if (code == KeyEvent.VK_RIGHT) {
+			rigth = false;
 		}
 	}
 
@@ -100,5 +132,37 @@ public class KeyHandler extends KeyAdapter {
 	
 	public boolean getLeft() {
 		return left;
+	}
+	
+	public boolean getW() {
+		return w;
+	}
+
+	public void setW(boolean w) {
+		this.w = w;
+	}
+
+	public boolean getS() {
+		return s;
+	}
+
+	public void setS(boolean s) {
+		this.s = s;
+	}
+
+	public boolean getA() {
+		return a;
+	}
+
+	public void setA(boolean a) {
+		this.a = a;
+	}
+
+	public boolean getD() {
+		return d;
+	}
+
+	public void setD(boolean d) {
+		this.d = d;
 	}
 }

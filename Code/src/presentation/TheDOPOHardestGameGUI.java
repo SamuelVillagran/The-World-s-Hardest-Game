@@ -141,17 +141,30 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	 * @throws HardestGameException 
 	 */
 	private void update() throws HardestGameException {
+		if (keyH.getW() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('u');
+		}
+		if (keyH.getS() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('d');
+		}
+		if (keyH.getA() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('l');
+		}
+		if (keyH.getD() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('r');	
+		}
+		
 		if (keyH.getUp() == true) {
-			TheDOPOHardestGame.getGame().movePlayers('u');
+			TheDOPOHardestGame.getGame().movePlayer2('u');
 		}
 		if (keyH.getDown() == true) {
-			TheDOPOHardestGame.getGame().movePlayers('d');
+			TheDOPOHardestGame.getGame().movePlayer2('d');
 		}
 		if (keyH.getLeft() == true) {
-			TheDOPOHardestGame.getGame().movePlayers('l');
+			TheDOPOHardestGame.getGame().movePlayer2('l');
 		}
 		if (keyH.getRigth() == true) {
-			TheDOPOHardestGame.getGame().movePlayers('r');	
+			TheDOPOHardestGame.getGame().movePlayer2('r');	
 		}
 		TheDOPOHardestGame.getGame().update();
 	}
