@@ -132,7 +132,6 @@ public abstract class Level implements CollisionContext, Serializable {
 	/**
 	 * Returns all Damageable entities (players and enemies) whose bounding box
 	 * overlaps the given axis-aligned rectangle.
-	 *
 	 * @param x      left edge of the area in pixels
 	 * @param y      top  edge of the area in pixels
 	 * @param width  width  of the area in pixels
@@ -146,7 +145,9 @@ public abstract class Level implements CollisionContext, Serializable {
 				.toList();
 	}
 
-	/** AABB check: does element e overlap the rectangle (x, y, w, h)? */
+	/* 
+	 * AABB check: does element e overlap the rectangle (x, y, w, h)? 
+	 */
 	private boolean overlapsArea(Element e, int x, int y, int width, int height) {
 		return e.getPosX() < x + width
 			&& e.getPosX() + ((HitBox) e).getWidth()  > x
@@ -232,6 +233,5 @@ public abstract class Level implements CollisionContext, Serializable {
 		int desface = DimensionGame.TILESIZE/4;
 		Bomb bomb =  new Bomb(col * DimensionGame.TILESIZEWIDTH+desface, row * DimensionGame.TILESIZEHEIGHT+desface);
 		elements.put(elements.size()+1, bomb);
-		
 	}
 }

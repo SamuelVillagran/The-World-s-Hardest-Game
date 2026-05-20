@@ -95,15 +95,12 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	 */
 	@Override
 	public void run() {
-
 		double drawInterval = 1000000000 / FPS;
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
 		long timer = 0;
-
 		while (gameThread != null) {
-
 			currentTime = System.nanoTime();
 			delta += (currentTime - lastTime) / drawInterval;
 			timer += (currentTime - lastTime);
@@ -119,9 +116,9 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 				repaint();
 				delta--;
 			}
-
 			if (timer >= 1000000000) {
 				timer -= 1000000000;
+				// Ayudado con IA (inforPanel)
 				if(secondsRemaining > 0) secondsRemaining--;
 				SwingUtilities.invokeLater(() -> {
 					try {
