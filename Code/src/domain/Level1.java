@@ -57,7 +57,20 @@ public class Level1 extends Level {
 	}
 	
 	@Override
-	public boolean isCompleted() {
-		return false;
+	public boolean isCompleted() { //verifica que al menos un jugador llegó a la meta con monedas.
+		for (Player player : players) {
+	        if (player.hasGoalCompleted() && player.getCollectedCoins() >= numCoin) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
+
+
+	@Override
+	public int getLevelTime() {
+		return 90;
+	}
+	
+	
 }

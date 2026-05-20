@@ -58,4 +58,9 @@ public class Level2 extends Level {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public int getLevelTime() {
+		return 80;
+	}
 }

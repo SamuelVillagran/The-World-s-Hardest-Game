@@ -73,4 +73,9 @@ public class Level3 extends Level {
 		return false;
 	}
 
+	@Override
+	public int getLevelTime() {
+		return 90;
+	}
+
 }

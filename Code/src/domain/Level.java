@@ -193,4 +193,6 @@ public abstract class Level implements CollisionContext {
 		elements.put(elements.size()+1, bomb);
 		
 	}
+	
+	public abstract int getLevelTime();
 }

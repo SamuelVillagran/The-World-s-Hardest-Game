@@ -8,7 +8,6 @@ public class TheDOPOHardestGame implements Runnable{
 
 	private static final int FPS = 60;
 	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
-	private static final int LEVEL_TIME_SECONDS = 90;
 	private int secondsRemaining;
 	
 	private Thread gameThread;
@@ -54,7 +53,6 @@ public class TheDOPOHardestGame implements Runnable{
 	public void startGame(GameMode gameMode, int numCurrentLevel) throws HardestGameException {
 		this.gameMode = gameMode;
 		this.numCurrentLevel = numCurrentLevel; 
-		this.secondsRemaining = LEVEL_TIME_SECONDS;
 		players = new ArrayList<>(gameMode.createPlayers());
 		loadLevel(buildLevel(numCurrentLevel));
 	}
@@ -134,6 +132,7 @@ public class TheDOPOHardestGame implements Runnable{
 	
 	public void loadLevel(Level level) {
 		this.currentLevel = level;
+		this.secondsRemaining = level.getLevelTime();
 		currentLevel.initialize();
 		currentLevel.setPlayers(players);
 		currentLevel.spawnPlayers(players);
