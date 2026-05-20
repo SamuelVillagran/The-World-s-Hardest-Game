@@ -7,9 +7,13 @@ import java.util.HashMap;
 public class TheDOPOHardestGame implements Runnable{
 
 	private static final int FPS = 60;
-	private static final double NS_INTERVAL = 1000000000.0 / FPS;
+	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
+	private static final int LEVEL_TIME_SECONDS = 90;
+	private int secondsRemaining;
+	
 	private Thread gameThread;
 	private boolean running;
+	private boolean paused = false;
 	
 	private static Level currentLevel;
 	private ArrayList<Player> players;
@@ -17,6 +21,8 @@ public class TheDOPOHardestGame implements Runnable{
 	private GameMode gameMode;
 	private CollisionChecker cChecker;
 	private static TheDOPOHardestGame game;
+	
+	private final ArrayList<GameObserver> observers = new ArrayList<>();
 	
 	/**
 	 * Constructor class to start game once Window is open.
@@ -48,13 +54,15 @@ public class TheDOPOHardestGame implements Runnable{
 	public void startGame(GameMode gameMode, int numCurrentLevel) throws HardestGameException {
 		this.gameMode = gameMode;
 		this.numCurrentLevel = numCurrentLevel; 
+		this.secondsRemaining = LEVEL_TIME_SECONDS;
 		players = new ArrayList<>(gameMode.createPlayers());
 		loadLevel(buildLevel(numCurrentLevel));
-		startLoop();
-		
 	}
 	
-	private void startLoop() {
+	/**
+	 * Starts the game loop thread.
+	 */
+	public void startLoop() {
 		running = true;
 		gameThread = new Thread(this);
 		gameThread.start();
@@ -65,26 +73,48 @@ public class TheDOPOHardestGame implements Runnable{
 		gameThread = null;
 	}
 	
+	public void addObserver(GameObserver observer) {
+		observers.add(observer);
+	}
+	
 	// Inicio loop del juego
 	// Complementado con AI - ChatGPT
 	@Override
 	public void run(){
 		double delta = 0;
 		long lastTime = System.nanoTime();
+		long timer = 0;
 		
 		while(running) {
 			long currentTime = System.nanoTime();
-			delta += (currentTime - lastTime) / NS_INTERVAL;
+			long elapsed = currentTime - lastTime;
 			lastTime = currentTime;
+			if(!paused) {
+				delta += elapsed / NS_INTERVAL;
+				timer += elapsed;
 			
-			if(delta >= 1) {
-				float deltaSeconds = (float) (delta * (1.0 / FPS)); //Tiempo en segundos
-				try {
-					update();
-				} catch (HardestGameException e) {
-					e.printStackTrace();
+				if(delta >= 1) {
+					try {
+						notifyPreUpdate();
+						update();
+						notifyPostUpdate();
+					} catch (HardestGameException e) {
+						e.printStackTrace();
+					}
+					delta--;
 				}
-				delta--;
+				
+				if (timer >= 1_000_000_000L) {
+					timer -= 1_000_000_000L;
+					if (secondsRemaining > 0) secondsRemaining--;
+					notifySecondElapsed(secondsRemaining);
+				}
+			}
+			
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -92,8 +122,6 @@ public class TheDOPOHardestGame implements Runnable{
 	private void endGame() {
 		running = false;
 	}
-	
-	
 	
 	private Level buildLevel(int num) throws HardestGameException {
 		switch(num){
@@ -179,6 +207,32 @@ public class TheDOPOHardestGame implements Runnable{
 			default: return PlayerType.RED;
 		}
 	}
+	
+	private void notifyPreUpdate() {
+		for(GameObserver observer  : observers) {
+			observer.preUpdate();
+		}
+	}
+	
+	private void notifyPostUpdate() {
+		for(GameObserver observer  : observers) {
+			observer.postUpdate();
+		}
+	}
+	
+	public void pauseGame() {
+		paused = true;
+	}
+	
+	public void despauseGame() {
+		paused = false;
+	}
+	
+	private void notifySecondElapsed(int seconds) {
+		for(GameObserver observer  : observers) {
+			observer.secondsElapsed(seconds);
+		}
+	}
 
 	public int getScreenWidth() {
 		return DimensionGame.getScreenWidth();
@@ -190,5 +244,9 @@ public class TheDOPOHardestGame implements Runnable{
 
 	public int getTileSizeHeight() {
 		return DimensionGame.getTileSizeHeight();
+	}
+	
+	public boolean isPaused() {
+		return paused;
 	}
 }

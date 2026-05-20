@@ -58,7 +58,6 @@ public class Level1 extends Level {
 	
 	@Override
 	public boolean isCompleted() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

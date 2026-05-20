@@ -15,6 +15,7 @@ public class KeyHandler extends KeyAdapter {
 		down = false;
 		rigth = false;
 		left = false;
+		
 	}
 	
 	@Override
