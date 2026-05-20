@@ -1,6 +1,12 @@
 package domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,4 +151,43 @@ public class TheDOPOHardestGame implements Serializable {
 	public int getTileSizeHeight() {
 		return DimensionGame.getTileSizeHeight();
 	}
+	
+	/**
+     * Opens a specified file.
+     * @param file the name or path of file to be saved.
+     * @return Forest game.
+     * @throws ForestException if there are problems with the disk or files.
+     * 			or file is corrupt.
+     */
+    public static TheDOPOHardestGame open(File file) throws HardestGameException {
+    	if(!file.exists()) {
+    		throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
+    	}
+    	
+    	try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
+    		game = (TheDOPOHardestGame) in.readObject();
+		} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+		}
+		return game; 
+    }
+    
+    /**
+     * Save like a file the game running
+     * @param file
+     * @throws IOException 
+     * @throws FileNotFoundException 
+     * @throws ForestException
+     */
+    public void saveAs(File file) throws HardestGameException, FileNotFoundException, IOException {
+   
+    	try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+    		try {
+				out.writeObject(this);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	} 
+    }
 }
