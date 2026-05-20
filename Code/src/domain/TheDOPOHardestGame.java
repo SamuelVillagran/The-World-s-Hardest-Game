@@ -57,8 +57,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		this.numCurrentLevel = numCurrentLevel; 
 		players = new ArrayList<>(gameMode.createPlayers());
 		loadLevel(buildLevel(numCurrentLevel));
-		startLoop();
-		
+		//startLoop();
 	}
 	
 	private void startLoop() {
