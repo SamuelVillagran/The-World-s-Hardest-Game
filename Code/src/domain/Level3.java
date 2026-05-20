@@ -14,7 +14,6 @@ public class Level3 extends Level implements Serializable  {
 		map = new Map(3);
 	    registerTiles();        // 1. Las baldosas toman los índices bajos (0, 1, 2...)
 	    this.cChecker = cChecker; // 2. Asignas el checker antes de crear los enemigos
-	    initialize();           // 3. Creas los enemigos al final
 	}
 
 	@Override

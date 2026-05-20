@@ -16,9 +16,10 @@ public class Bomb extends DinamicObject implements Interactable, AutomaticMoveme
 
 	private static final int FPS = 60;
 	private static final int FUSE_SECONDS = 5;
-	private static final int FUSE_TICKS   = FPS * FUSE_SECONDS;           // 300 ticks
+	private static final int FUSE_TICKS   = FPS * FUSE_SECONDS * 2;           // 300 ticks
 	private static final int BLAST_TILES  = 3;
 	private static final int BLAST_PX     = BLAST_TILES * DimensionGame.TILESIZE; // 108 px
+	private int debugCount = 0;
 
 	/** Counts game frames. Resets after each explosion. */
 	private int tickCounter = 0;

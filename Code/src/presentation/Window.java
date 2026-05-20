@@ -57,13 +57,18 @@ public class Window extends JFrame {
 				selectedFile = new File(selectedFile.getAbsolutePath() + ".dat");
 			}
 			try {
-				TheDOPOHardestGame.getGame().saveAs(selectedFile);
-			} catch (IOException  io) {
-				JOptionPane.showMessageDialog(Window.this, "Error al guardar archivo", "Error",
-	    				JOptionPane.ERROR_MESSAGE);
+			    TheDOPOHardestGame.getGame().saveAs(selectedFile);
+			} catch (IOException io) { // Catch escrito con Gemini Pro 3.1
+			    // 1. Agrega esto para ver la causa exacta en la consola de Eclipse:
+			    io.printStackTrace(); 
+			    
+			    // 2. Opcionalmente, puedes mostrar la causa en la misma ventana:
+			    JOptionPane.showMessageDialog(Window.this, 
+			        "Error al guardar archivo:\n" + io.getMessage(), 
+			        "Error",
+			        JOptionPane.ERROR_MESSAGE);
 			} catch (HardestGameException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			    e.printStackTrace();
 			}
 		}
 	}
