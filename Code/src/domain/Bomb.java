@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Bomb extends DinamicObject implements Interactable, AutomaticMovement, Serializable {
 
-	private static final int FPS          = 60;
+	private static final int FPS = 60;
 	private static final int FUSE_SECONDS = 5;
 	private static final int FUSE_TICKS   = FPS * FUSE_SECONDS;           // 300 ticks
 	private static final int BLAST_TILES  = 3;
