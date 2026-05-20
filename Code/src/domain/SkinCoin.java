@@ -1,5 +1,7 @@
 package domain;
 
-public class SkinCoin {
+public class SkinCoin extends Coin {
 
+	
+	
 }
