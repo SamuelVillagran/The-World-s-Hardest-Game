@@ -23,6 +23,8 @@ public class Window extends JFrame {
 	private JMenuBar menuBar;
     private JMenu menu;
     private JMenuItem optionOpen, optionSaveAs, optionImport, optionExportAs, optionNew, optionExit;
+    private GameContainer gameContainer;
+    
 	
     public Window() throws HardestGameException {
     	setScreen();
@@ -79,19 +81,18 @@ public class Window extends JFrame {
     	int result = fileChooser.showOpenDialog(Window.this);
     	if(result == JFileChooser.APPROVE_OPTION) {
     		File selectedFile = fileChooser.getSelectedFile();
-    		/*try {
-    			
-    			//TheDOPOHardestGame.getGame().open(selectedFile).run();
-    		} catch(HardestGameException hge){
-    			JOptionPane.showMessageDialog(Window.this, hge.getMessage(),"Error",
+    		try {
+    			gameContainer.loadSavedGame(selectedFile);
+    		} catch(Exception ex){
+    			ex.printStackTrace();
+    			JOptionPane.showMessageDialog(Window.this, ex.getMessage(),"Error",
     					JOptionPane.ERROR_MESSAGE);
-    		} */ // Quitar comentario cuando run ya esté hecho  
+    		}
     	}
     }
 
 	private void prepareElements() {
 		prepareElementsMenu();
-		prepareActions();
 	}
 	
 	private void prepareElementsMenu() {
@@ -120,16 +121,12 @@ public class Window extends JFrame {
 	
 	private void setScreen() throws HardestGameException {
 		setResizable(false);
-		setTitle("The DOPO Hardest Game");
-		prepareElementsMenu();
-		GameContainer gameContainer = new GameContainer();
-		add(gameContainer);
-		
-		pack();
-		
-		setLocationRelativeTo(null);
-		
-		//gameContainer.getPlayerModePanel().startGameThread();
+	    setTitle("The DOPO Hardest Game");
+	    prepareElementsMenu();
+	    gameContainer = new GameContainer(); // ← guardar referencia
+	    add(gameContainer);
+	    pack();
+	    setLocationRelativeTo(null);
     }
     
     

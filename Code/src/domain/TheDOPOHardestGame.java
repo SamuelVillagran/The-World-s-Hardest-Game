@@ -1,11 +1,13 @@
 package domain;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,7 +70,11 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	
 	private void stopGame() {
 		running = false;
-		gameThread = null;
+		running = false;
+	    if (gameThread != null) {
+	        gameThread.interrupt();
+	        gameThread = null;
+	    }
 	}
 	
 	// Inicio loop del juego
@@ -223,16 +229,21 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
      * 			or file is corrupt.
      */
     public static TheDOPOHardestGame open(File file) throws HardestGameException {
-    	if(!file.exists()) {
-    		throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
-    	}
-    	
-    	try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
-    		game = (TheDOPOHardestGame) in.readObject();
-		} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-		}
-		return game; 
+    	if (!file.exists()) {
+            throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
+        }
+        
+        if (game != null) {
+            game.stopGame();
+        }
+        
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            // Recibe el objeto serializado completo y actualiza la instancia singleton
+            game = (TheDOPOHardestGame) in.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            throw new HardestGameException("Archivo corrupto o no compatible.");
+        }
+        return game;
     }
     
     /**
@@ -243,14 +254,18 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
      * @throws ForestException
      */
     public void saveAs(File file) throws HardestGameException, FileNotFoundException, IOException {
-   
-    	try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
-    		try {
-				out.writeObject(this);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	} 
+    	// 1. Detener el hilo del juego para limpiar variables no serializables
+        this.stopGame(); 
+        
+        // 2. Guardar la instancia completa directamente en una sola línea
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+            out.writeObject(this);
+        } catch (IOException e) {
+            throw new HardestGameException("Error al escribir el archivo: " + e.getMessage());
+        }
     }
+
+	public GameMode getGameMode() {
+		return gameMode;
+	}
 }
