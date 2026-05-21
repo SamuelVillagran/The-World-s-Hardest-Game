@@ -9,6 +9,8 @@ import java.util.List;
 public class Level1 extends Level implements Serializable {
 	
 	public Level1(CollisionChecker cChecker) {
+		timeLimit = 90.0f;
+		timeRemaining = timeLimit;
 		numCoin = 2;
 	    map = new Map(1);
 	    registerTiles();        // 1. Las baldosas toman los índices bajos (0, 1, 2...)
@@ -61,11 +63,4 @@ public class Level1 extends Level implements Serializable {
 			putCoin(23,9);
 	}
 
-
-	@Override
-	public int getLevelTime() {
-		return 90;
-	}
-	
-	
 }

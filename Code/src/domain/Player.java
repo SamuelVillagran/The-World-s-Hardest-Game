@@ -9,6 +9,7 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 
 	private int collectedCoins;
 	private int deaths;
+	private int totalDeathsGot;
 	private int lifes;
 	protected String name;
 	protected int baseSpeed;
@@ -31,6 +32,7 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 		baseSpeed = 3;
 		size = 0.5f;
 		lifes = 1;
+		totalDeathsGot = 0;
 		playerType = type;
 	} 
 	
@@ -127,6 +129,7 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	public void reset() {
 		this.collectedCoins = 0;
 		this.goalCompleted = false;
+		this.deaths = 0;
 		try {
 			this.createInitialState(playerType);
 		}catch(HardestGameException e) {
@@ -228,6 +231,10 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	public void setPosition(int x, int y) {
 		posX = x;
 		posY = y;
+	}
+	
+	public int getTotalDeathsGot() {
+		return totalDeathsGot;
 	}
 	
 	public String getNameState() {

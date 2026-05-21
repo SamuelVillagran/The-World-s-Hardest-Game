@@ -12,6 +12,8 @@ public class Level3 extends Level implements Serializable  {
 	
 	public Level3(CollisionChecker cChecker) {
 		map = new Map(3);
+		timeLimit = 70.0f;
+		timeRemaining = timeLimit;
 	    registerTiles();        // 1. Las baldosas toman los índices bajos (0, 1, 2...)
 	    this.cChecker = cChecker; // 2. Asignas el checker antes de crear los enemigos
 	    initialize();           // 3. Creas los enemigos al final
@@ -66,12 +68,6 @@ public class Level3 extends Level implements Serializable  {
 		addPointToList(15, 28, zoneGoal);
 		addPointToList(15, 25, zoneGoal);
 		putZone((ArrayList<Point>) zoneGoal, "goal");
-	}
-
-
-	@Override
-	public int getLevelTime() {
-		return 90;
 	}
 
 }

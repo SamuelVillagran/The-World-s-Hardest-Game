@@ -11,15 +11,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TheDOPOHardestGame implements Serializable, Runnable{
+public class TheDOPOHardestGame implements Serializable{
 
-	private static final int FPS = 60;
-	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
 	private static final int TOTAL_LEVELS = 3;
 	private int secondsRemaining;
-	
-	private Thread gameThread;
-	private boolean running;
+
 	private boolean paused = false;
 	
 	private static Level currentLevel;
@@ -28,6 +24,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	private GameMode gameMode;
 	private CollisionChecker cChecker;
 	private static TheDOPOHardestGame game;
+	private boolean gameOver;
 	
 	private final ArrayList<GameObserver> observers = new ArrayList<>();
 	
@@ -65,70 +62,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		loadLevel(buildLevel(numCurrentLevel));
 	}
 	
-	/**
-	 * Starts the game loop thread.
-	 */
-	public void startLoop() {
-		running = true;
-		gameThread = new Thread(this);
-		gameThread.start();
-	}
-	
-	private void stopGame() {
-		running = false;
-		gameThread = null;
-	}
-	
-	public void addObserver(GameObserver observer) {
-		observers.add(observer);
-	}
-	
-	// Inicio loop del juego
-	// Complementado con AI - ChatGPT
-	@Override
-	public void run(){
-		double delta = 0;
-		long lastTime = System.nanoTime();
-		long timer = 0;
-		
-		while(running) {
-			long currentTime = System.nanoTime();
-			long elapsed = currentTime - lastTime;
-			lastTime = currentTime;
-			if(!paused) {
-				delta += elapsed / NS_INTERVAL;
-				timer += elapsed;
-			
-				if(delta >= 1) {
-					try {
-						notifyPreUpdate();
-						update();
-						notifyPostUpdate();
-					} catch (HardestGameException e) {
-						e.printStackTrace();
-					}
-					delta--;
-				}
-				
-				if (timer >= 1_000_000_000L) {
-					timer -= 1_000_000_000L;
-					if (secondsRemaining > 0) secondsRemaining--;
-					notifySecondElapsed(secondsRemaining);
-				}
-			}
-			
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
-	
-	private void endGame() {
-		running = false;
-	}
-	
 	private Level buildLevel(int num) throws HardestGameException {
 		switch(num){
 			case 1: return new Level1(cChecker);
@@ -140,10 +73,14 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	
 	public void loadLevel(Level level) {
 		this.currentLevel = level;
-		this.secondsRemaining = level.getLevelTime();
 		currentLevel.initialize();
 		currentLevel.setPlayers(players);
 		currentLevel.spawnPlayers(players);
+		currentLevel.resetTime();
+	}
+	
+	public float getTimeRemaining() {
+		return currentLevel.getTimeRemaining();
 	}
 	
 	/**
@@ -219,18 +156,39 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		numCurrentLevel = numLevel;
 	}
 	
-	public void update() throws HardestGameException {
+	public void update(float delta) throws HardestGameException {
+		currentLevel.tickTime(delta);
 		currentLevel.update(cChecker);
+		
 		if(currentLevel.isCompleted()) {
 			nextLevel();
 			return;
 		}
+		
+		if(currentLevel.isTimeUp() || gameMode.isGameOver(players, currentLevel)) {
+			endGame();
+			return;
+		}
+		
+		if(gameMode.isGameOver(players, currentLevel)) {
+			Player winner = gameMode.getWinner(players);
+			endGame();
+			return;
+		}
 	}
-
+	
+	private void endGame() {
+		gameOver = true;
+	}
+	
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	
 	public void nextLevel() {
 		numCurrentLevel ++;
 		if(!hasNextLevel(numCurrentLevel)) {
-			endGame();
+			//Implementar EndGame
 			return;
 		}
 		for(Player player : players) {
@@ -257,18 +215,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		}
 	}
 	
-	private void notifyPreUpdate() {
-		for(GameObserver observer  : observers) {
-			observer.preUpdate();
-		}
-	}
-	
-	private void notifyPostUpdate() {
-		for(GameObserver observer  : observers) {
-			observer.postUpdate();
-		}
-	}
-	
 	public void pauseGame() {
 		paused = true;
 	}
@@ -277,11 +223,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		paused = false;
 	}
 	
-	private void notifySecondElapsed(int seconds) {
-		for(GameObserver observer  : observers) {
-			observer.secondsElapsed(seconds);
-		}
-	}
 
 	public int getScreenWidth() {
 		return DimensionGame.getScreenWidth();

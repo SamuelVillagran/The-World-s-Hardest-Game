@@ -19,7 +19,7 @@ public class ModePlayer implements GameMode, Serializable {
 
 	@Override
 	public boolean isGameOver(List<Player> players, Level level) {
-		return level.isCompleted() || players.get(0).isDead(); 
+		return level.isCompleted() || level.isTimeUp(); 
 	}
 
 	@Override

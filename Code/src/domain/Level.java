@@ -15,6 +15,8 @@ public abstract class Level implements CollisionContext, Serializable {
 	protected CollisionChecker cChecker;
 	protected List<Player> players;
 	protected List<Zone> zones;
+	protected float timeLimit;
+	protected float timeRemaining;
 	
 	/* 
 	 * elements = new HashMap<>();
@@ -128,7 +130,6 @@ public abstract class Level implements CollisionContext, Serializable {
 				player.respawn();
 			}
 		}
-		
 		checkZones();
 	}
 
@@ -253,5 +254,39 @@ public abstract class Level implements CollisionContext, Serializable {
 		elements.put(elements.size()+1, bomb);
 	}
 	
-	public abstract int getLevelTime();
+	/**
+	 * Check if the allocated time has run out.
+	 * @return true if the remaining time is less than or equal to zero.
+	 * Otherwise false.
+	 */
+	public boolean isTimeUp() {
+		return timeRemaining <= 0;
+	}
+	
+	public float getLevelTime() {
+		return timeLimit;
+	}
+	
+	/**
+	 * Initialize timeRemaining and timeLimit with the level value.
+	 * This is called every time load and restart the level
+	 */
+	public void resetTime() {
+		timeRemaining = getLevelTime();
+		timeLimit = getLevelTime();
+	}
+
+	/**
+	 * Subtract the time elapsed in the current frame.
+	 * @param deltaSeconds seconds elapsed in a frame.
+	 */
+	public void tickTime(float deltaSeconds) {
+		if (timeRemaining > 0) {
+			timeRemaining -= deltaSeconds;
+		}
+	}
+
+	public float getTimeRemaining() {
+		return timeRemaining;
+	}
 }

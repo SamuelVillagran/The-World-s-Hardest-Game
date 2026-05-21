@@ -108,17 +108,11 @@ public class GameContainer extends JPanel{
 	public void startGame() throws IOException, HardestGameException {
 		GameMode gameMode = setup.build();
 		try {
-			TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-			game.startGame(gameMode, 1);
-			
-			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(infoPanel);
-			game.addObserver(gamePanel);
-			
+			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(gameMode, infoPanel);
 			cardPanel.add(gamePanel, GAME_MODE);
 			showMode(GAME_MODE);
+			gamePanel.startGameThread();
 			gamePanel.requestFocusInWindow();
-			
-			game.startLoop();
 
 		} catch(Exception e) {
 			e.printStackTrace();
