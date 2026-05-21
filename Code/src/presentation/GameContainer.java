@@ -25,6 +25,7 @@ public class GameContainer extends JPanel{
 	private TheDOPOHardestGameGUI playerModePanel;
 	private GameSetup setup;
 	private InfoPanel infoPanel;
+	private TheDOPOHardestGameGUI activeGamePanel;
 	
 	public static final String MENU_MODE = "menu";
 	public static final String PLAYER_CONFIG_MODE = "playerConfig";
@@ -108,16 +109,34 @@ public class GameContainer extends JPanel{
 	public void startGame() throws IOException, HardestGameException {
 		GameMode gameMode = setup.build();
 		try {
-			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(gameMode, infoPanel);
-			cardPanel.add(gamePanel, GAME_MODE);
-			showMode(GAME_MODE);
-			gamePanel.startGameThread();
-			gamePanel.requestFocusInWindow();
-
+			launchGamePanel(new TheDOPOHardestGameGUI(gameMode, infoPanel));
 		} catch(Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error al iniciar el juego: " + e.getMessage());
 		}
-		
+	}
+	
+	/**
+	 * Resumes a game loaded from a .dat file.
+	 * The TheDOPOHardestGame singleton must already be restored before calling this.
+	 */
+	public void resumeGame() {
+		try {
+			launchGamePanel(new TheDOPOHardestGameGUI(infoPanel));
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Error al reanudar el juego: " + e.getMessage());
+		}
+	}
+
+	private void launchGamePanel(TheDOPOHardestGameGUI gamePanel) {
+		if (activeGamePanel != null) {
+			cardPanel.remove(activeGamePanel);
+		}
+		activeGamePanel = gamePanel;
+		cardPanel.add(gamePanel, GAME_MODE);
+		showMode(GAME_MODE);
+		gamePanel.startGameThread();
+		gamePanel.requestFocusInWindow();
 	}
 }

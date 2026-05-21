@@ -18,9 +18,9 @@ public class TheDOPOHardestGame implements Serializable{
 
 	private boolean paused = false;
 	
-	private static Level currentLevel;
+	private Level currentLevel;
 	private ArrayList<Player> players;
-	private static int numCurrentLevel;
+	private int numCurrentLevel;
 	private GameMode gameMode;
 	private CollisionChecker cChecker;
 	private static TheDOPOHardestGame game;

@@ -48,6 +48,16 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		prepareActions();
 	}
 	
+	/**
+	 * Constructor for resuming a previously saved game.
+	 */
+	public TheDOPOHardestGameGUI(InfoPanel infoPanel) throws IOException, HardestGameException {
+		this.infoPanel = infoPanel;
+		cachedImages = new HashMap<>();
+		prepareElements();
+		prepareActions();
+	}
+	
 	private void prepareActions() {
 		keyH = new KeyHandler();
 		this.addKeyListener(keyH);

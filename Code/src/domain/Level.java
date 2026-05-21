@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Level implements CollisionContext, Serializable {
-	protected static int numCoin;
+	protected int numCoin;
 	protected LinkedHashMap<Integer, Element> elements;
-	protected static Map map;
+	protected Map map;
 	protected CollisionChecker cChecker;
 	protected List<Player> players;
 	protected List<Zone> zones;
