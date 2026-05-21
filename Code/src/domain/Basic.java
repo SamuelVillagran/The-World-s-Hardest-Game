@@ -1,9 +1,10 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.List;
 
-public class Basic extends ColliderEnemy implements AutomaticMovement {
+public class Basic extends ColliderEnemy implements AutomaticMovement, Serializable {
 
 	
 	public Basic(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {

@@ -1,6 +1,8 @@
 package domain;
 
-public class MachinePlayer {
+import java.io.Serializable;
+
+public class MachinePlayer implements Serializable {
 
 	private MachineContext machineContext;
 	private Behavior machineBehavior;

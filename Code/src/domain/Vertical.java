@@ -1,8 +1,9 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Vertical extends ColliderEnemy implements AutomaticMovement {
+public class Vertical extends ColliderEnemy implements AutomaticMovement, Serializable {
 	
 	public Vertical(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
 		this.enemy = enemy;

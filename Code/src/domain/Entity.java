@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class Entity extends Element {
+import java.io.Serializable;
+
+public abstract class Entity extends Element implements Serializable {
 
 	protected float speed;
 	

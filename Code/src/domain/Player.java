@@ -1,6 +1,11 @@
 package domain;
 
-public abstract class Player extends Entity implements HitBox, Movable {
+import java.io.Serializable;
+
+/**
+ * @implNote takeDamage() added with Claude Sonnet 4.6
+ */
+public abstract class Player extends Entity implements HitBox, Movable, Damageable, Serializable {
 
 	private int collectedCoins;
 	private int deaths;
@@ -119,6 +124,15 @@ public abstract class Player extends Entity implements HitBox, Movable {
 		posY = nextY;
 	}
 	
+	public void reset() {
+		this.collectedCoins = 0;
+		this.goalCompleted = false;
+		try {
+			this.createInitialState(playerType);
+		}catch(HardestGameException e) {
+			System.out.println(e.getStackTrace());
+		}
+	}
 	
 	/**
 	 * Check if the player is dead.
@@ -160,6 +174,15 @@ public abstract class Player extends Entity implements HitBox, Movable {
 
 	public void destroy() {
 		setState(new DeadState(this));
+	}
+
+	/**
+	 * Receive damage from a bomb (direct contact or explosion area).
+	 * Delegates to destroy() which triggers the dead state and respawn.
+	 */
+	@Override
+	public void takeDamage(Level level) {
+		destroy();
 	}
 
 	public void addLife() {

@@ -1,6 +1,8 @@
 package domain;
 
-public class MachineContext {
+import java.io.Serializable;
+
+public class MachineContext implements Serializable {
 
 	private int goalXPos;
 	private int goalYPos;

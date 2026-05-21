@@ -1,6 +1,8 @@
 package domain;
 
-public class Green extends PlayerState{
+import java.io.Serializable;
+
+public class Green extends PlayerState implements Serializable {
 	private double timeToChange = 0;
 
 	public Green(Player py) {

@@ -1,6 +1,8 @@
 package domain;
 
-public class InitialZone extends Zone{
+import java.io.Serializable;
+
+public class InitialZone extends Zone implements Serializable {
 
 	public InitialZone(Figure figure) {
 		super(figure);
@@ -8,7 +10,7 @@ public class InitialZone extends Zone{
 
 	@Override
 	public void whenPlayerEnter(Player player, Level level) {
-		// No hace nada porque es la zona inicial
+		//No hace nada
 	}
 
 }

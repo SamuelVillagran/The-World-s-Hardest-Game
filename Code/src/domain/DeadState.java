@@ -1,6 +1,8 @@
 package domain;
 
-public class DeadState extends PlayerState {
+import java.io.Serializable;
+
+public class DeadState extends PlayerState implements Serializable {
 
 	public DeadState(Player py) {
 		super(py);

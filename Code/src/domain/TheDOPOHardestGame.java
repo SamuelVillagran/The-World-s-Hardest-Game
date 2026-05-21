@@ -1,14 +1,21 @@
 package domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TheDOPOHardestGame implements Runnable{
+public class TheDOPOHardestGame implements Serializable, Runnable{
 
 	private static final int FPS = 60;
 	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
-	private static final int LEVEL_TIME_SECONDS = 90;
+	private static final int TOTAL_LEVELS = 3;
 	private int secondsRemaining;
 	
 	private Thread gameThread;
@@ -54,7 +61,6 @@ public class TheDOPOHardestGame implements Runnable{
 	public void startGame(GameMode gameMode, int numCurrentLevel) throws HardestGameException {
 		this.gameMode = gameMode;
 		this.numCurrentLevel = numCurrentLevel; 
-		this.secondsRemaining = LEVEL_TIME_SECONDS;
 		players = new ArrayList<>(gameMode.createPlayers());
 		loadLevel(buildLevel(numCurrentLevel));
 	}
@@ -134,6 +140,7 @@ public class TheDOPOHardestGame implements Runnable{
 	
 	public void loadLevel(Level level) {
 		this.currentLevel = level;
+		this.secondsRemaining = level.getLevelTime();
 		currentLevel.initialize();
 		currentLevel.setPlayers(players);
 		currentLevel.spawnPlayers(players);
@@ -191,14 +198,56 @@ public class TheDOPOHardestGame implements Runnable{
 		}
 	}
 	
+	/**
+	 * Move player 1 to specific direction
+	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
+	 */
+	public void movePlayer1(char direction) {
+		players.get(0).move(direction, currentLevel, cChecker);
+	}
+	
+	/**
+	 * Move player 2 to specific direction
+	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
+	 */
+	public void movePlayer2(char direction) {
+		players.get(1).move(direction, currentLevel, cChecker);
+		
+	}
+	
 	public void setCurrentLevel(int numLevel) {
 		numCurrentLevel = numLevel;
 	}
 	
 	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
+		if(currentLevel.isCompleted()) {
+			nextLevel();
+			return;
+		}
 	}
 
+	public void nextLevel() {
+		numCurrentLevel ++;
+		if(!hasNextLevel(numCurrentLevel)) {
+			endGame();
+			return;
+		}
+		for(Player player : players) {
+			player.reset();
+		}
+		try {
+			loadLevel(buildLevel(numCurrentLevel));
+		} catch (HardestGameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private boolean hasNextLevel(int num) {
+		return num <= TOTAL_LEVELS;
+	}
+	
 	public PlayerType getPlayerType(String type) {
 		switch (type) {
 			case "red": return PlayerType.RED;
@@ -249,4 +298,42 @@ public class TheDOPOHardestGame implements Runnable{
 	public boolean isPaused() {
 		return paused;
 	}
+	/**
+     * Opens a specified file.
+     * @param file the name or path of file to be saved.
+     * @return Forest game.
+     * @throws ForestException if there are problems with the disk or files.
+     * 			or file is corrupt.
+     */
+    public static TheDOPOHardestGame open(File file) throws HardestGameException {
+    	if(!file.exists()) {
+    		throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
+    	}
+    	
+    	try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
+    		game = (TheDOPOHardestGame) in.readObject();
+		} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+		}
+		return game; 
+    }
+    
+    /**
+     * Save like a file the game running
+     * @param file
+     * @throws IOException 
+     * @throws FileNotFoundException 
+     * @throws ForestException
+     */
+    public void saveAs(File file) throws HardestGameException, FileNotFoundException, IOException {
+   
+    	try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+    		try {
+				out.writeObject(this);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	} 
+    }
 }

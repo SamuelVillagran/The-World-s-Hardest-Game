@@ -1,9 +1,13 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.List;
 
-public class Enemy extends Entity implements Interactable, AutomaticMovement {
+/**
+ * @implNote takeDamage() added with Claude Sonnet 4.6
+ */
+public class Enemy extends Entity implements Interactable, AutomaticMovement, Damageable, Serializable {
 
 	private AutomaticMovement strategyMovement;
 	private List<Point> movement;
@@ -55,12 +59,12 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement {
 
 	@Override
 	public int getWidth() {
-		return 32;
+		return 10;
 	}
 
 	@Override
 	public int getHeight() {
-		return 32;
+		return 10;
 	}
 
 	public void setPoints(List<Point> points) {
@@ -70,6 +74,15 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement {
 	@Override
 	public void onContact(Player player, Level level) {
 		player.onEnemyContact();
+	}
+
+	/**
+	 * Receive damage from a bomb explosion.
+	 * The enemy is removed from the level.
+	 */
+	@Override
+	public void takeDamage(Level level) {
+		level.removeElement(this);
 	}
 
 	public List<Point> getMovement() {

@@ -1,6 +1,8 @@
 package domain;
 
-public class LifeSource extends DinamicObject {
+import java.io.Serializable;
+
+public class LifeSource extends DinamicObject implements Serializable {
 
 	public LifeSource(int posX, int posY) {
 		this.posX = posX;

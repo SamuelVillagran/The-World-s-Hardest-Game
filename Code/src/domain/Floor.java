@@ -1,6 +1,8 @@
 package domain;
 
-public class Floor extends Tile {
+import java.io.Serializable;
+
+public class Floor extends Tile implements Serializable {
 
 	
 	public Floor(int posX, int posY) {

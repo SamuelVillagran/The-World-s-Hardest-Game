@@ -1,8 +1,9 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CollisionChecker {
+public class CollisionChecker implements Serializable {
 	
 	public boolean canMove(HitBox mover, int px, int py, CollisionContext context) {
 		List<Solid> solidElements = context.getSolidElements();

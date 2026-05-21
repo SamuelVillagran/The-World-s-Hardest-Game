@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class DinamicObject extends SuperObject {
+import java.io.Serializable;
+
+public abstract class DinamicObject extends SuperObject implements Serializable {
 
 	private boolean isActive;
 	

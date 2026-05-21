@@ -1,6 +1,8 @@
 package domain;
 
-public class Coin extends SuperObject {
+import java.io.Serializable;
+
+public class Coin extends SuperObject implements Serializable {
 
 	public Coin() {
 		posX = 150;
@@ -38,5 +40,6 @@ public class Coin extends SuperObject {
 	public void onContact(Player player, Level level) {
 		player.addCoin();
 		level.removeElement(this);
+		
 	}
 }

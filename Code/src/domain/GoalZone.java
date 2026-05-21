@@ -1,6 +1,8 @@
 package domain;
 
-public class GoalZone extends Zone{
+import java.io.Serializable;
+
+public class GoalZone extends Zone implements Serializable {
 
 	public GoalZone(Figure figure) {
 		super(figure);
@@ -8,9 +10,7 @@ public class GoalZone extends Zone{
 
 	@Override
 	public void whenPlayerEnter(Player player, Level level) {
-		if(level.playerHasAllCoins(player)) {
 			player.markGoalCompleted();
-		}
 	}
 
 }

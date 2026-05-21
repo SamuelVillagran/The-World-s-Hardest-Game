@@ -4,12 +4,13 @@ package domain;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class Map {
+public class Map implements Serializable {
 
 	private int[][] mapTileNum; //Datos para presentación.
 	private Figure polygon;

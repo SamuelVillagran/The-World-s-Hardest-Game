@@ -1,5 +1,7 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Abstract creator
  * 
@@ -8,7 +10,7 @@ package domain;
  * to the name read of the map
  * 
  * */
-public abstract class TileFactory {
+public abstract class TileFactory implements Serializable {
 	/**
 	 * Factory method, creates and initialize the corresponding Tile to the
 	 * cell located in the column and in the corresponding row.

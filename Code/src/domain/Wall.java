@@ -1,6 +1,8 @@
 package domain;
 
-public class Wall extends Tile  implements Solid{
+import java.io.Serializable;
+
+public class Wall extends Tile  implements Solid, Serializable {
 
 	public Wall() {
 		posX = 150;

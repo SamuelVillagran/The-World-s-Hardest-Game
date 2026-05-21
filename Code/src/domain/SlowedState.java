@@ -1,6 +1,8 @@
 package domain;
 
-public class SlowedState extends PlayerState{
+import java.io.Serializable;
+
+public class SlowedState extends PlayerState implements Serializable {
 	private double timeToChange = 0;
 
 	public SlowedState(Player py) {

@@ -1,5 +1,7 @@
 package domain;
 
-public class Expert {
+import java.io.Serializable;
+
+public class Expert implements Serializable {
 
 }
