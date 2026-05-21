@@ -190,16 +190,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	}
 	
 	/**
-	 * Move every player to specific direction
-	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
-	 */
-	public void movePlayers(char direction) {
-		for (Player py : players) {
-			py.move(direction, currentLevel, cChecker);
-		}
-	}
-	
-	/**
 	 * Move player 1 to specific direction
 	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
 	 */
