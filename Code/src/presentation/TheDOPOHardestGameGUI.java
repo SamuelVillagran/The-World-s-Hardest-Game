@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,46 +14,55 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import domain.Element;
 import domain.GameMode;
+import domain.GameObserver;
 import domain.HardestGameException;
 import domain.TheDOPOHardestGame;
 
-public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
+public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 
 	private static BufferedImage imageTitleScreen;
-
 	private KeyHandler keyH;
-	private Thread gameThread;
 	private HashMap<String, BufferedImage> cachedImages;
 	private InfoPanel infoPanel;
-	private int secondsRemaining;
 	
-	public static final int FPS = 60;
-	public static final int LEVEL_TIME_SECONDS = 90;
 	
 	/**
 	 * Inicializate the game panel
 	 * @throws IOException 
 	 * @throws HardestGameException 
 	 */
-	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
+	public TheDOPOHardestGameGUI(InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
-		secondsRemaining = LEVEL_TIME_SECONDS;
-		TheDOPOHardestGame.getGame().startGame(gameMode, 3);
 		cachedImages = new HashMap<>();
 		prepareElements();
 		prepareActions();
 	}
 	
 	private void prepareActions() {
-		
 		keyH = new KeyHandler();
-			
-			
 		this.addKeyListener(keyH);
+		
+		this.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+	            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+	                try {
+	                    TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
+	                    if (game.isPaused()) {
+	                        game.despauseGame();
+	                    } else {
+	                        game.pauseGame();
+	                    }
+	                } catch (HardestGameException ex) {
+	                    ex.printStackTrace();
+	                }
+	            }
+	        }
+	    });
 	}
 
 	private void prepareElements() throws IOException, HardestGameException {
@@ -91,52 +100,6 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Make a thread to game run with time
-	 */
-	@Override
-	public void run() {
-		double drawInterval = 1000000000 / FPS;
-		double delta = 0;
-		long lastTime = System.nanoTime();
-		long currentTime;
-		long timer = 0;
-		while (gameThread != null) {
-			currentTime = System.nanoTime();
-			delta += (currentTime - lastTime) / drawInterval;
-			timer += (currentTime - lastTime);
-			lastTime = currentTime;
-			if (delta >= 1) {
-				// 1. UPDATE: 
-				try {
-					update();
-				} catch (HardestGameException e) {
-					e.printStackTrace();
-				}
-				// 2. DRAW:
-				repaint();
-				delta--;
-			}
-			if (timer >= 1000000000) {
-				timer -= 1000000000;
-				// Ayudado con IA (inforPanel)
-				if(secondsRemaining > 0) secondsRemaining--;
-				SwingUtilities.invokeLater(() -> {
-					try {
-						infoPanel.refresh(secondsRemaining);
-					} catch (HardestGameException e) {
-						e.printStackTrace();
-					}
-				});
-			}
-			try { // No ahogar la CPU 
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
 	 * Make the interaction of keyboard with the player
 	 * @throws HardestGameException 
 	 */
@@ -170,14 +133,6 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Make game thread run
-	 */
-	public void startGameThread() {
-		gameThread = new Thread(this);
-		gameThread.start();
-	}
-	
-	/**
 	 * Draw at a panel g2 different entitys
 	 * @param g2
 	 * @throws HardestGameException 
@@ -209,6 +164,37 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		}
 	    g2.dispose();
 	}
-	
-	
+
+	/**
+	 * Make the interaction of keyboard with the player
+	 * @throws HardestGameException 
+	 */
+	@Override
+	public void preUpdate(){
+		try {
+			TheDOPOHardestGame.getGame().despauseGame();
+			update();
+		} catch(HardestGameException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void postUpdate() {
+		repaint();
+	}
+
+	@Override
+	public void secondsElapsed(int secondsRemaining) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					infoPanel.refresh(secondsRemaining);
+				} catch(HardestGameException e) {
+					JOptionPane.showMessageDialog(TheDOPOHardestGameGUI.this, e.getMessage(),"Error!", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+	}
 }
