@@ -137,6 +137,9 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 
 	/**
 	 * Draw at a panel g2 different entitys
+=======
+	 * Draw at a panel g2 different entities
+>>>>>>> origin/Hernan
 	 * @param g2
 	 * @throws HardestGameException 
 	 */

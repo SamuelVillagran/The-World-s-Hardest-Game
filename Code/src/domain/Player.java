@@ -124,6 +124,15 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 		posY = nextY;
 	}
 	
+	public void reset() {
+		this.collectedCoins = 0;
+		this.goalCompleted = false;
+		try {
+			this.createInitialState(playerType);
+		}catch(HardestGameException e) {
+			System.out.println(e.getStackTrace());
+		}
+	}
 	
 	/**
 	 * Check if the player is dead.

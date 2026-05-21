@@ -67,10 +67,10 @@ public class Level3 extends Level implements Serializable  {
 		putZone((ArrayList<Point>) zoneGoal, "goal");
 	}
 
+
 	@Override
-	public boolean isCompleted() {
-		// TODO Auto-generated method stub
-		return false;
+	public int getLevelTime() {
+		return 90;
 	}
 
 }

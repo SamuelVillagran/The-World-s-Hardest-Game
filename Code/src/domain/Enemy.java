@@ -59,12 +59,12 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 
 	@Override
 	public int getWidth() {
-		return 32;
+		return 10;
 	}
 
 	@Override
 	public int getHeight() {
-		return 32;
+		return 10;
 	}
 
 	public void setPoints(List<Point> points) {

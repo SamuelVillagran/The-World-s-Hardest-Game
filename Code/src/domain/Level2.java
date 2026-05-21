@@ -53,9 +53,9 @@ public class Level2 extends Level implements Serializable {
 		
 	}
 
+
 	@Override
-	public boolean isCompleted() {
-		// TODO Auto-generated method stub
-		return false;
+	public int getLevelTime() {
+		return 80;
 	}
 }
