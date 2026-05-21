@@ -31,7 +31,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	private CollisionChecker cChecker;
 	private static TheDOPOHardestGame game;
 	
-	//private final ArrayList<GameObserver> observers = new ArrayList<>();
+	private final ArrayList<GameObserver> observers = new ArrayList<>();
 	
 	/**
 	 * Constructor class to start game once Window is open.
@@ -85,10 +85,16 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	        gameThread = null;
 	    }
 	}
-	/*
+	
 	public void addObserver(GameObserver observer) {
 		observers.add(observer);
-	}*/
+	}
+	
+	private void notifyPreUpdate() {
+		for(GameObserver observer  : observers) {
+			observer.preUpdate();
+		}
+	}
 	
 	// Inicio loop del juego
 	// Complementado con AI - ChatGPT
@@ -108,9 +114,9 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 			
 				if(delta >= 1) {
 					try {
-						//notifyPreUpdate();
+						notifyPreUpdate();
 						update();
-						//notifyPostUpdate();
+						notifyPostUpdate();
 					} catch (HardestGameException e) {
 						e.printStackTrace();
 					}
@@ -257,12 +263,12 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		}
 	}
 	
-	/*
+	
 	private void notifyPostUpdate() {
 		for(GameObserver observer  : observers) {
 			observer.postUpdate();
 		}
-	} */
+	} 
 	
 	public void pauseGame() {
 		paused = true;
@@ -271,12 +277,12 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	public void despauseGame() {
 		paused = false;
 	}
-	/*
+	
 	private void notifySecondElapsed(int seconds) {
 		for(GameObserver observer  : observers) {
 			observer.secondsElapsed(seconds);
 		}
-	}*/
+	}
 
 	public int getScreenWidth() {
 		return DimensionGame.getScreenWidth();
