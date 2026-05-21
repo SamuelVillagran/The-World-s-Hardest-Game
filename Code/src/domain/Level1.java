@@ -53,14 +53,14 @@ public class Level1 extends Level implements Serializable {
 		putZone((ArrayList<Point>) zoneInitial, "initial");
 		
 		List<Point> zoneGoal = new ArrayList<>();
-			addPointToList(6, 26, zoneInitial);
-			addPointToList(6, 29, zoneInitial);
-			addPointToList(13, 26, zoneInitial);
-			addPointToList(13, 29, zoneInitial);
-			putZone((ArrayList<Point>) zoneInitial, "goal");
+			addPointToList(6, 26, zoneGoal);
+			addPointToList(6, 29, zoneGoal);
+			addPointToList(13, 26, zoneGoal);
+			addPointToList(13, 29, zoneGoal);
+			putZone((ArrayList<Point>) zoneGoal, "goal");
 			
 			putCoin(10, 9);
-			putCoin(23,9);
+			putCoin(10,23);
 	}
 
 }
