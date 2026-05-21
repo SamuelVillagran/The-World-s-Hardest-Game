@@ -23,6 +23,6 @@ public class ModePlayer implements GameMode{
 
 	@Override
 	public Player getWinner(List<Player> players) {
-		return players.get(0).isDead() ? null : players.get(0);
+		return players.get(0).hasGoalCompleted() ? players.get(0) : null;
 	}
 }

@@ -8,6 +8,7 @@ public class TheDOPOHardestGame implements Runnable{
 
 	private static final int FPS = 60;
 	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
+	private static final int TOTAL_LEVELS = 3;
 	private int secondsRemaining;
 	
 	private Thread gameThread;
@@ -196,8 +197,33 @@ public class TheDOPOHardestGame implements Runnable{
 	
 	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
+		if(currentLevel.isCompleted()) {
+			nextLevel();
+			return;
+		}
 	}
 
+	public void nextLevel() {
+		numCurrentLevel ++;
+		if(!hasNextLevel(numCurrentLevel)) {
+			endGame();
+			return;
+		}
+		for(Player player : players) {
+			player.reset();
+		}
+		try {
+			loadLevel(buildLevel(numCurrentLevel));
+		} catch (HardestGameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private boolean hasNextLevel(int num) {
+		return num <= TOTAL_LEVELS;
+	}
+	
 	public PlayerType getPlayerType(String type) {
 		switch (type) {
 			case "red": return PlayerType.RED;

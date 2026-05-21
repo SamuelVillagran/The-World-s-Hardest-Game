@@ -36,8 +36,26 @@ public abstract class Level implements CollisionContext {
 		return elements;
 	}
 
-	public abstract boolean isCompleted();
-
+	/**
+	 * Check if the level has all its coins collected by players.
+	 * @return true if there's no coins otherwise false.
+	 */
+	public  boolean isCompleted() {
+		int totalCoinsCollected = 0;
+		for(Player player : players) {
+			totalCoinsCollected += player.getCollectedCoins();			
+		}
+		if(totalCoinsCollected < numCoin) {
+			return false;
+		}
+		for(Player player : players) {
+			if(!player.hasGoalCompleted()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * Put at the correct position the players of level1
 	 * @param pys pys are the list of players that are at the level

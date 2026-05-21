@@ -53,11 +53,6 @@ public class Level2 extends Level {
 		
 	}
 
-	@Override
-	public boolean isCompleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public int getLevelTime() {

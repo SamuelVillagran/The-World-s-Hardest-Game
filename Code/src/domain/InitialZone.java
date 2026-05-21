@@ -8,7 +8,7 @@ public class InitialZone extends Zone{
 
 	@Override
 	public void whenPlayerEnter(Player player, Level level) {
-		// No hace nada porque es la zona inicial
+		//No hace nada
 	}
 
 }

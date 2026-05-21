@@ -38,5 +38,6 @@ public class Coin extends SuperObject {
 	public void onContact(Player player, Level level) {
 		player.addCoin();
 		level.removeElement(this);
+		
 	}
 }

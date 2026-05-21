@@ -67,11 +67,6 @@ public class Level3 extends Level {
 		putZone((ArrayList<Point>) zoneGoal, "goal");
 	}
 
-	@Override
-	public boolean isCompleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public int getLevelTime() {

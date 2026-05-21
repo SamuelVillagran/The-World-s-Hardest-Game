@@ -8,6 +8,7 @@ import java.util.List;
 public class Level1 extends Level {
 	
 	public Level1(CollisionChecker cChecker) {
+		numCoin = 2;
 	    map = new Map(1);
 	    registerTiles();        // 1. Las baldosas toman los índices bajos (0, 1, 2...)
 	    this.cChecker = cChecker; // 2. Asignas el checker antes de crear los enemigos
@@ -54,16 +55,9 @@ public class Level1 extends Level {
 			addPointToList(13, 26, zoneInitial);
 			addPointToList(13, 29, zoneInitial);
 			putZone((ArrayList<Point>) zoneInitial, "goal");
-	}
-	
-	@Override
-	public boolean isCompleted() { //verifica que al menos un jugador llegó a la meta con monedas.
-		for (Player player : players) {
-	        if (player.hasGoalCompleted() && player.getCollectedCoins() >= numCoin) {
-	            return true;
-	        }
-	    }
-	    return false;
+			
+			putCoin(10, 9);
+			putCoin(23,9);
 	}
 
 
