@@ -111,12 +111,11 @@ public class GameContainer extends JPanel {
 		GameMode gameMode = setup.build();
 		try {
 			TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-			game.startGame(gameMode, 2);
 			
 			game.startGame(gameMode, 1);
 			
-			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(infoPanel);
-			//game.addObserver(gamePanel);
+			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(gameMode, infoPanel);
+			game.addObserver(gamePanel);
 			
 			cardPanel.add(gamePanel, GAME_MODE);
 			showMode(GAME_MODE);
@@ -131,17 +130,24 @@ public class GameContainer extends JPanel {
 		
 	}
 
-	public void loadSavedGame(File selectedFile) { // Ayudado a hacer con Gemini IA 
+	public void loadSavedGame(File selectedFile) throws IOException, HardestGameException { // Ayudado a hacer con Gemini IA 
 		// 2. Ejecutar la actualización de la interfaz de forma segura en el EDT
+		TheDOPOHardestGameGUI newGamePanel = new TheDOPOHardestGameGUI(TheDOPOHardestGame.open(selectedFile).getGameMode(),
+				this.infoPanel);
+		this.removeAll();
+		this.add(this.infoPanel, BorderLayout.NORTH); // Asegura su posición fija arriba
+		this.add(newGamePanel, BorderLayout.CENTER);
+		this.revalidate();
+		this.repaint();
 		SwingUtilities.invokeLater(() -> {
-		    this.removeAll();
+		    
 		    
 		    try {
 		        // Extraemos el gameMode directamente desde la partida recuperada
 		        
 		        
 		        // Re-instanciamos la vista usando el modo recuperado
-		        //TheDOPOHardestGameGUI newGamePanel = new TheDOPOHardestGameGUI(TheDOPOHardestGame.open(selectedFile).getGameMode(), this.infoPanel);
+		        //
 		        // ... código de re-instanciación previo ...
 		        /*
 		    	this.add(this.infoPanel);

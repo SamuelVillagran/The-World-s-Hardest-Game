@@ -1,13 +1,11 @@
 package domain;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.HashMap;
 
 public class TheDOPOHardestGame implements Serializable, Runnable{
 
-	private static final int FPS = 60;
+	private static final int FPS = 30;
 	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
 	private static final int TOTAL_LEVELS = 3;
 	private int secondsRemaining;
@@ -79,7 +77,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	
 	private void stopGame() {
 		running = false;
-		running = false;
 	    if (gameThread != null) {
 	        gameThread.interrupt();
 	        gameThread = null;
@@ -126,7 +123,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 				if (timer >= 1_000_000_000L) {
 					timer -= 1_000_000_000L;
 					if (secondsRemaining > 0) secondsRemaining--;
-					//notifySecondElapsed(secondsRemaining);
+					notifySecondElapsed(secondsRemaining);
 				}
 			}
 			

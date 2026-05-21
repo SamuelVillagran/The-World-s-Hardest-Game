@@ -33,10 +33,11 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 	
 	/**
 	 * Inicializate the game panel
+	 * @param gameMode 
 	 * @throws IOException 
 	 * @throws HardestGameException 
 	 */
-	public TheDOPOHardestGameGUI(InfoPanel infoPanel) throws IOException, HardestGameException {
+	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
 		/*
 		secondsRemaining = LEVEL_TIME_SECONDS;
@@ -132,14 +133,11 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 		if (keyH.getRigth() == true) {
 			TheDOPOHardestGame.getGame().movePlayer2('r');	
 		}
-		TheDOPOHardestGame.getGame().update();
+		
 	}
 
 	/**
-	 * Draw at a panel g2 different entitys
-=======
 	 * Draw at a panel g2 different entities
->>>>>>> origin/Hernan
 	 * @param g2
 	 * @throws HardestGameException 
 	 */
