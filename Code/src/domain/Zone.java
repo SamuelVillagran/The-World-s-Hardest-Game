@@ -2,11 +2,12 @@ package domain;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Zone {
+public abstract class Zone implements Serializable {
 
 	protected List<Tile> tiles;
 	protected Figure figure;

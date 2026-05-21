@@ -1,11 +1,12 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Level3 extends Level {
+public class Level3 extends Level implements Serializable  {
 
 	
 	

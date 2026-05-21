@@ -1,11 +1,12 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Level1 extends Level {
+public class Level1 extends Level implements Serializable {
 	
 	public Level1(CollisionChecker cChecker) {
 		numCoin = 2;

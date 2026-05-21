@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class StateEnemy implements StateEntity  {
+import java.io.Serializable;
+
+public abstract class StateEnemy implements Serializable {
 
 	protected Enemy enemy;
 	

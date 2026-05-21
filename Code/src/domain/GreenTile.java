@@ -1,6 +1,8 @@
 package domain;
 
-public class GreenTile extends Tile {
+import java.io.Serializable;
+
+public class GreenTile extends Tile implements Serializable {
 
 	public GreenTile(int xPos, int yPos) {
 		posX = xPos;

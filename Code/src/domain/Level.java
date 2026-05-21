@@ -1,13 +1,14 @@
 package domain;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Level implements CollisionContext {
+public abstract class Level implements CollisionContext, Serializable {
 	protected static int numCoin;
 	protected LinkedHashMap<Integer, Element> elements;
 	protected static Map map;
@@ -110,10 +111,17 @@ public abstract class Level implements CollisionContext {
 	}
 	
 	public void update(CollisionChecker checker) throws HardestGameException {
+		// 1. Move automatic entities (also ticks bomb counters)
 		for(AutomaticMovement am : getElementsAutomaticMovement()) {
 			am.move();
 		}
 		
+		// 2. Fire any pending bomb explosions (3x3 area, players + enemies)
+		for(Bomb bomb : getBombs()) {
+			bomb.explodeIfPending(this);
+		}
+		
+		// 3. Check direct contact between players and interactable elements
 		for(Player player : players) {
 			checker.checkContactsWithInteractable(player, this, this);
 			if(player.isDead()) {
@@ -129,6 +137,40 @@ public abstract class Level implements CollisionContext {
 				.filter(e -> e instanceof Enemy)
 				.map(e -> (Enemy) e)
 				.toList();
+	}
+
+	/** Returns all bombs currently in the level. */
+	private List<Bomb> getBombs() {
+		return elements.values().stream()
+				.filter(e -> e instanceof Bomb)
+				.map(e -> (Bomb) e)
+				.toList();
+	}
+
+	/**
+	 * Returns all Damageable entities (players and enemies) whose bounding box
+	 * overlaps the given axis-aligned rectangle.
+	 * @param x      left edge of the area in pixels
+	 * @param y      top  edge of the area in pixels
+	 * @param width  width  of the area in pixels
+	 * @param height height of the area in pixels
+	 */
+	public List<Damageable> getDamageablesInArea(int x, int y, int width, int height) {
+		return elements.values().stream()
+				.filter(e -> e instanceof Damageable)
+				.filter(e -> overlapsArea((Element) e, x, y, width, height))
+				.map(e -> (Damageable) e)
+				.toList();
+	}
+
+	/* 
+	 * AABB check: does element e overlap the rectangle (x, y, w, h)? 
+	 */
+	private boolean overlapsArea(Element e, int x, int y, int width, int height) {
+		return e.getPosX() < x + width
+			&& e.getPosX() + ((HitBox) e).getWidth()  > x
+			&& e.getPosY() < y + height
+			&& e.getPosY() + ((HitBox) e).getHeight() > y;
 	}
 
 	public boolean playerHasAllCoins(Player player) {
@@ -209,7 +251,6 @@ public abstract class Level implements CollisionContext {
 		int desface = DimensionGame.TILESIZE/4;
 		Bomb bomb =  new Bomb(col * DimensionGame.TILESIZEWIDTH+desface, row * DimensionGame.TILESIZEHEIGHT+desface);
 		elements.put(elements.size()+1, bomb);
-		
 	}
 	
 	public abstract int getLevelTime();

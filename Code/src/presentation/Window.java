@@ -1,12 +1,21 @@
 package presentation;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import domain.HardestGameException;
+import domain.TheDOPOHardestGame;
 
 public class Window extends JFrame {
 
@@ -23,11 +32,61 @@ public class Window extends JFrame {
 	
     private void prepareActions() {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	
+    	optionSaveAs.addActionListener(
+        		new ActionListener() {
+        			public void actionPerformed(ActionEvent e) {
+        				saveAsAction();
+        			}
+        	});
+    	optionOpen.addActionListener(
+        		new ActionListener() {
+        			public void actionPerformed(ActionEvent e) {
+    			    	openAction();
+        		}
+        	});
 	}
+
+	protected void saveAsAction() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileNameExtensionFilter("DAT Files", "dat"));
+		int result = fileChooser.showSaveDialog(Window.this);
+		if(result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			if(!selectedFile.getName().endsWith(".dat")) {
+				selectedFile = new File(selectedFile.getAbsolutePath() + ".dat");
+			}
+			try {
+				TheDOPOHardestGame.getGame().saveAs(selectedFile);
+			} catch (IOException  io) {
+				JOptionPane.showMessageDialog(Window.this, "Error al guardar archivo", "Error",
+	    				JOptionPane.ERROR_MESSAGE);
+			} catch (HardestGameException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void openAction() {
+    	JFileChooser fileChooser = new JFileChooser();
+    	fileChooser.setFileFilter(new FileNameExtensionFilter("DAT Files", "dat"));
+    	int result = fileChooser.showOpenDialog(Window.this);
+    	if(result == JFileChooser.APPROVE_OPTION) {
+    		File selectedFile = fileChooser.getSelectedFile();
+    		/*try {
+    			
+    			//TheDOPOHardestGame.getGame().open(selectedFile).run();
+    		} catch(HardestGameException hge){
+    			JOptionPane.showMessageDialog(Window.this, hge.getMessage(),"Error",
+    					JOptionPane.ERROR_MESSAGE);
+    		} */ // Quitar comentario cuando run ya esté hecho  
+    	}
+    }
 
 	private void prepareElements() {
 		prepareElementsMenu();
-		
+		prepareActions();
 	}
 	
 	private void prepareElementsMenu() {

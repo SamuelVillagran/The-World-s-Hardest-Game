@@ -1,6 +1,8 @@
 package domain;
 
-public class GoalZone extends Zone{
+import java.io.Serializable;
+
+public class GoalZone extends Zone implements Serializable {
 
 	public GoalZone(Figure figure) {
 		super(figure);

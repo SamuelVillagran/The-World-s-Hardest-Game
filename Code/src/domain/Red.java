@@ -1,6 +1,8 @@
 package domain;
 
-public class Red extends PlayerState {
+import java.io.Serializable;
+
+public class Red extends PlayerState implements Serializable {
 	
 	public Red(Player py) {
 		super(py);
