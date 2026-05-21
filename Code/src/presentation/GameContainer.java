@@ -109,7 +109,7 @@ public class GameContainer extends JPanel{
 		GameMode gameMode = setup.build();
 		try {
 			TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-			game.startGame(gameMode, 1);
+			game.startGame(gameMode, 3);
 			
 			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(infoPanel);
 			game.addObserver(gamePanel);

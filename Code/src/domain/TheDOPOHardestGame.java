@@ -11,9 +11,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TheDOPOHardestGame implements Serializable, Runnable{
+public class TheDOPOHardestGame implements Serializable, Runnable {
 
-	private static final int FPS = 60;
+	private static final int FPS = 30;
 	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
 	private static final int TOTAL_LEVELS = 3;
 	private int secondsRemaining;
@@ -99,7 +99,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 				delta += elapsed / NS_INTERVAL;
 				timer += elapsed;
 			
-				if(delta >= 1) {
+				while(delta >= 1) {
 					try {
 						notifyPreUpdate();
 						update();
@@ -116,12 +116,12 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 					notifySecondElapsed(secondsRemaining);
 				}
 			}
-			
+			/*
 			try {
 				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
-			}
+			}*/
 		}
 	}
 	
@@ -203,7 +203,10 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
 	 */
 	public void movePlayer1(char direction) {
-		players.get(0).move(direction, currentLevel, cChecker);
+		if (players.size() > 0) {
+			players.get(0).move(direction, currentLevel, cChecker);
+		}
+		
 	}
 	
 	/**
@@ -211,7 +214,9 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
 	 */
 	public void movePlayer2(char direction) {
-		players.get(1).move(direction, currentLevel, cChecker);
+		if (players.size() > 1) {
+			players.get(1).move(direction, currentLevel, cChecker);
+		}
 		
 	}
 	

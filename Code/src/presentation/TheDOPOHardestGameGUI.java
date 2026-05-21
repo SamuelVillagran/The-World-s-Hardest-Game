@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import domain.Element;
-import domain.GameMode;
 import domain.GameObserver;
 import domain.HardestGameException;
 import domain.TheDOPOHardestGame;
@@ -108,6 +107,18 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
         // Dibujar; Tiles, obstáculos, monedas 
         for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
+            if (img == null) {
+                // Lazy-load missing images (e.g. for elements that only appear in later levels)
+                try {
+                    InputStream stream = getClass().getResourceAsStream(e.getPathImage());
+                    if (stream != null) {
+                        img = ImageIO.read(stream);
+                        cachedImages.put(e.getNameClass(), img);
+                    }
+                } catch (IOException ex) {
+                    System.err.println("draw | Error al leer imagen dinámica: " + e.getPathImage());
+                }
+            }
             if (img != null) {
                 g2.drawImage(img, e.getPosX(), e.getPosY(),
                     (int)(e.getWidth()),
@@ -139,30 +150,40 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 	@Override
 	public void preUpdate(){
 		try {
-			TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-			game.despauseGame();
+			if (keyH.getW() == true) {
+				TheDOPOHardestGame.getGame().movePlayer1('u');
+			}
+			if (keyH.getS() == true) {
+				TheDOPOHardestGame.getGame().movePlayer1('d');
+			}
+			if (keyH.getA() == true) {
+				TheDOPOHardestGame.getGame().movePlayer1('l');
+			}
+			if (keyH.getD() == true) {
+				TheDOPOHardestGame.getGame().movePlayer1('r');	
+			}
+			
 			if (keyH.getUp() == true) {
-				game.movePlayers('u');
+				TheDOPOHardestGame.getGame().movePlayer2('u');
 			}
 			if (keyH.getDown() == true) {
-				game.movePlayers('d');
+				TheDOPOHardestGame.getGame().movePlayer2('d');
 			}
 			if (keyH.getLeft() == true) {
-				game.movePlayers('l');
+				TheDOPOHardestGame.getGame().movePlayer2('l');
 			}
 			if (keyH.getRigth() == true) {
-					game.movePlayers('r');	
+				TheDOPOHardestGame.getGame().movePlayer2('r');	
 			}
+			TheDOPOHardestGame.getGame().update();
 		} catch(HardestGameException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
 	public void postUpdate() {
 		repaint();
-		
 	}
 
 	@Override

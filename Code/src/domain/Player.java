@@ -178,11 +178,10 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 
 	/**
 	 * Receive damage from a bomb (direct contact or explosion area).
-	 * Delegates to destroy() which triggers the dead state and respawn.
 	 */
 	@Override
 	public void takeDamage(Level level) {
-		destroy();
+		lifes--;
 	}
 
 	public void addLife() {

@@ -79,8 +79,10 @@ public class Bomb extends DinamicObject implements Interactable, AutomaticMoveme
 	 */
 	private void explode(Level level) {
 		int halfBlast = BLAST_PX / 2;
-		int bx = posX - halfBlast;
-		int by = posY - halfBlast;
+		int centerX = posX + getWidth() / 2;
+		int centerY = posY + getHeight() / 2;
+		int bx = centerX - halfBlast;
+		int by = centerY - halfBlast;
 		List<Damageable> targets = level.getDamageablesInArea(bx, by, BLAST_PX, BLAST_PX);
 		for (Damageable d : targets) {
 			d.takeDamage(level);
