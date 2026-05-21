@@ -140,7 +140,10 @@ public class TheDOPOHardestGame implements Serializable{
 	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
 	 */
 	public void movePlayer1(char direction) {
-		players.get(0).move(direction, currentLevel, cChecker);
+		if (players.size() > 0) {
+			players.get(0).move(direction, currentLevel, cChecker);
+		}
+		
 	}
 	
 	/**
@@ -148,7 +151,9 @@ public class TheDOPOHardestGame implements Serializable{
 	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
 	 */
 	public void movePlayer2(char direction) {
-		players.get(1).move(direction, currentLevel, cChecker);
+		if (players.size() > 1) {
+			players.get(1).move(direction, currentLevel, cChecker);
+		}
 		
 	}
 	

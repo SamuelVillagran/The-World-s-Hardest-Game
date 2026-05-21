@@ -19,7 +19,7 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 		posX = (int) firstPoint.getX();
 		posY = (int) firstPoint.getY();
 		size = 0.5f;
-		speed = 5.0f;
+		speed = 4.0f;
 	}
 
 	/**

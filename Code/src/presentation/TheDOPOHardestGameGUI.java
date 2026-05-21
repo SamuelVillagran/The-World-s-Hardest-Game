@@ -175,6 +175,18 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
         // Dibujar; Tiles, obstáculos, monedas 
         for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
+            if (img == null) {
+                // Lazy-load missing images (e.g. for elements that only appear in later levels)
+                try {
+                    InputStream stream = getClass().getResourceAsStream(e.getPathImage());
+                    if (stream != null) {
+                        img = ImageIO.read(stream);
+                        cachedImages.put(e.getNameClass(), img);
+                    }
+                } catch (IOException ex) {
+                    System.err.println("draw | Error al leer imagen dinámica: " + e.getPathImage());
+                }
+            }
             if (img != null) {
                 g2.drawImage(img, e.getPosX(), e.getPosY(),
                     (int)(e.getWidth()),
