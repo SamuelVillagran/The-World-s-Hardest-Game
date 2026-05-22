@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class helped to make with GPT 5.5
+ */
 class BombTest {
 
 	private static final int FUSE_FRAMES = 300;
@@ -15,7 +18,7 @@ class BombTest {
 
 	private Player runBombTest(PlayerType type, int frames) throws HardestGameException {
 		CollisionChecker checker = new CollisionChecker();
-		Level level = Level.builder(1, checker)
+		Level level = Level.builder(1)
 				.time(10)
 				.bomb(0, 0)
 				.build();

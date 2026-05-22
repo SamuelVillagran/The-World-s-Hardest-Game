@@ -7,13 +7,11 @@ public class Coin extends SuperObject implements Serializable {
 	public Coin() {
 		posX = 150;
 		posY = 150;
-		size = 0.5f;
 	}
 	
 	public Coin(int x, int y) {
 		posX = x;
 		posY = y;
-		size = 0.5f;
 	}
 	
 	@Override
@@ -36,10 +34,15 @@ public class Coin extends SuperObject implements Serializable {
 		return 15.0f;
 	}
 
+
 	@Override
-	public void onContact(Player player, Level level) {
+	public void onContactWithPlayer(Player player, Level level) {
 		player.addCoin();
 		level.removeElement(this);
+	}
+
+	@Override
+	public void onContactWithEnemy(Enemy enemy, Level level) {
 		
 	}
 }

@@ -33,11 +33,17 @@ public class LifeSource extends DinamicObject implements Serializable {
 		return 25.0f;
 	}
 
-
 	@Override
-	public void onContact(Player player, Level level) {
+	public void onContactWithPlayer(Player player, Level level) {
 		player.addLife();
 		level.removeElement(this);
+	}
+
+
+	@Override
+	public void onContactWithEnemy(Enemy enemy, Level level) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

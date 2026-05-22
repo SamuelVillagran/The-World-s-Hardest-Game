@@ -1,13 +1,10 @@
 package domain;
 
-public class BombSpawn implements LevelComponent {
+public class BombSpawn extends SuperObjectSpawn implements LevelComponent {
 
-	private int row;
-	private int col;
 
 	public BombSpawn(int row, int col) {
-		this.row = row;
-		this.col = col;
+		super(row, col);
 	}
 
 	@Override

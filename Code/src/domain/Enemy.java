@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @implNote takeDamage() added with Claude Sonnet 4.6
  */
-public class Enemy extends Entity implements Interactable, AutomaticMovement, Damageable, Serializable {
+public class Enemy extends Entity implements Interactable, Damageable, Serializable {
 
 	private AutomaticMovement strategyMovement;
 	private List<Point> movement;
@@ -18,14 +18,12 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 		Point firstPoint = movement.get(0);
 		posX = (int) firstPoint.getX();
 		posY = (int) firstPoint.getY();
-		size = 0.5f;
 		speed = 4.0f;
 	}
 
 	/**
-	 * Makes move the player of game
-	 * 
-	 * @param direction direction is where going to move the player
+	 * Makes move the enemy of game
+	 * @param direction direction is where going to move the enemy
 	 */
 	public void move(char direction) {
 		switch (direction) {
@@ -72,7 +70,7 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 	}
 
 	@Override
-	public void onContact(Player player, Level level) {
+	public void onContactWithPlayer(Player player, Level level) {
 		player.onEnemyContact();
 	}
 
@@ -107,5 +105,11 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 
 	public float getSpeed() {
 		return this.speed;
+	}
+
+	@Override
+	public void onContactWithEnemy(Enemy enemy, Level level) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @implNote Implemented with Claude Sonnet 4.6
  */
-public class Bomb extends DinamicObject implements Interactable, Serializable {
+public class Bomb extends DinamicObject implements Serializable {
 
 	private static final int FPS = 60;
 	private static final int FUSE_SECONDS = 5;
@@ -54,10 +54,8 @@ public class Bomb extends DinamicObject implements Interactable, Serializable {
 	 * The bomb is NEVER removed from the level.
 	 */
 	@Override
-	public void onContact(Player player, Level level) {
+	public void onContactWithPlayer(Player player, Level level) {
 		player.takeDamage(level);
-		// Also hit any enemy that is standing on the bomb at this moment
-		damageOverlappingEnemies(level);
 	}
 
 	// ── Explosion ────────────────────────────────────────────────────────
@@ -89,19 +87,7 @@ public class Bomb extends DinamicObject implements Interactable, Serializable {
 		}
 	}
 
-	/**
-	 * Damages every enemy whose bounding box overlaps the bomb's own hitbox.
-	 * Called from onContact so that enemies touching the bomb are also hit.
-	 */
-	private void damageOverlappingEnemies(Level level) {
-		List<Damageable> targets = level.getDamageablesInArea(posX, posY, getWidth(), getHeight());
-		for (Damageable d : targets) {
-			if (d instanceof Enemy) {
-				d.takeDamage(level);
-			}
-		}
-	}
-
+	
 	// ── Element metadata ─────────────────────────────────────────────────
 
 	@Override
@@ -123,4 +109,20 @@ public class Bomb extends DinamicObject implements Interactable, Serializable {
 	public float getHeight() {
 		return 32.0f;
 	}
+
+	/**
+	 * Damages every enemy whose bounding box overlaps the bomb's own hitbox.
+	 * Called from onContact so that enemies touching the bomb are also hit.
+	 */
+	@Override
+	public void onContactWithEnemy(Enemy enemy, Level level) {
+		List<Damageable> targets = level.getDamageablesInArea(posX, posY, getWidth(), getHeight());
+		for (Damageable d : targets) {
+			if (d instanceof Enemy) {
+				d.takeDamage(level);
+			}
+		}
+	}
+
+
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public abstract class Entity extends Element implements Serializable {
 
+	protected float width;
+	protected float height;
 	protected float speed;
 	
 	
@@ -11,4 +13,11 @@ public abstract class Entity extends Element implements Serializable {
 		return this.getClass().getSimpleName().toLowerCase();
 	}
 	
+	public float getWidth() {
+		return width;
+	}
+	
+	public float getHeight() {
+		return height;
+	}
 }

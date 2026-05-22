@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Define the factory method createTile where concrete subclasses
  * have to implements to instance the type of tile according to
  * to the name read of the map
- * 
+ * Helped to make with GPT 5.5
  * */
 public abstract class TileFactory implements Serializable {
 	/**

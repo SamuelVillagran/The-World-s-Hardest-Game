@@ -9,19 +9,16 @@ public class Red extends PlayerState implements Serializable {
 	}
 
 	@Override
-	public float getSpeed() {
-		return py.getBaseSpeed();
+	public float getSizeMultiplier() {
+		return 1.0f;
 	}
+	
 
 	@Override
-	public float getWidth() {
-		return 30;
+	public float getSpeedMultiplier() {
+		return 1.0f;
 	}
 
-	@Override
-	public float getHeight() {
-		return 30;
-	}
 
 	@Override
 	public void onEnemyContact() {

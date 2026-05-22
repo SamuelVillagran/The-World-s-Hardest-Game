@@ -9,23 +9,18 @@ public class Blue extends PlayerState implements Serializable {
 	}
 
 	@Override
-	public float getSpeed() {
-		return py.getBaseSpeed()*1.5f;
-	}
-
-	@Override
-	public float getWidth() {
-		return 45.0f;
-	}
-
-	@Override
-	public float getHeight() {
-		return 45.0f;
+	public float getSizeMultiplier() {
+		return 1.5f;
 	}
 
 	@Override
 	public void onEnemyContact() {
 		py.setState(new DeadState(py));
+	}
+
+	@Override
+	public float getSpeedMultiplier() {
+		return 1.5f;
 	}
 
 }
