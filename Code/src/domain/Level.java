@@ -112,12 +112,13 @@ public abstract class Level implements CollisionContext, Serializable {
 	
 	public void update(CollisionChecker checker) throws HardestGameException {
 		// 1. Move automatic entities (also ticks bomb counters)
-		for(AutomaticMovement am : getElementsAutomaticMovement()) {
-			am.move();
+		for(Enemy am : getEnemies()) {
+			am.move(checker, this);
 		}
 		
 		// 2. Fire any pending bomb explosions (3x3 area, players + enemies)
 		for(Bomb bomb : getBombs()) {
+			bomb.action();
 			bomb.explodeIfPending(this);
 		}
 		
@@ -155,22 +156,29 @@ public abstract class Level implements CollisionContext, Serializable {
 	 * @param width  width  of the area in pixels
 	 * @param height height of the area in pixels
 	 */
-	public List<Damageable> getDamageablesInArea(int x, int y, int width, int height) {
-		return elements.values().stream()
+	public List<Damageable> getDamageablesInArea(int x, int y, float width, float height) {
+		List<Damageable> targets = elements.values().stream()
 				.filter(e -> e instanceof Damageable)
 				.filter(e -> overlapsArea((Element) e, x, y, width, height))
 				.map(e -> (Damageable) e)
-				.toList();
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		for (Player player : players) {
+			if (!targets.contains(player) && overlapsArea(player, x, y, width, height)) {
+				targets.add(player);
+			}
+		}
+		return targets;
 	}
 
 	/* 
 	 * AABB check: does element e overlap the rectangle (x, y, w, h)? 
 	 */
-	private boolean overlapsArea(Element e, int x, int y, int width, int height) {
+	private boolean overlapsArea(Element e, int x, int y, float width, float height) {
 		return e.getPosX() < x + width
-			&& e.getPosX() + ((HitBox) e).getWidth()  > x
+			&& e.getPosX() +  e.getWidth()  > x
 			&& e.getPosY() < y + height
-			&& e.getPosY() + ((HitBox) e).getHeight() > y;
+			&& e.getPosY() +  e.getHeight() > y;
 	}
 
 	public boolean playerHasAllCoins(Player player) {
@@ -200,9 +208,9 @@ public abstract class Level implements CollisionContext, Serializable {
 		Enemy enemy = new Enemy(movement);
 		int unIdAlto = elements.size() + 1000;
 		switch (type) {
-			case "basic" -> enemy.setStrategyMovement(new Basic(enemy, cChecker, this));
-			case "vertical" -> enemy.setStrategyMovement(new Vertical(enemy, cChecker, this));
-			case "acelerate" -> enemy.setStrategyMovement(new Acelerate(enemy, cChecker, this));
+			case "basic" -> enemy.setStrategyMovement(new Basic(enemy));
+			case "vertical" -> enemy.setStrategyMovement(new Vertical(enemy));
+			case "acelerate" -> enemy.setStrategyMovement(new Acelerate(enemy));
 		}
 		elements.put(unIdAlto, enemy);
 	}

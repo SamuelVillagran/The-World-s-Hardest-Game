@@ -14,12 +14,12 @@ public class Red extends PlayerState implements Serializable {
 	}
 
 	@Override
-	public int getWidth() {
+	public float getWidth() {
 		return 30;
 	}
 
 	@Override
-	public int getHeight() {
+	public float getHeight() {
 		return 30;
 	}
 

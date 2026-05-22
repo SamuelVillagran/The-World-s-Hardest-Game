@@ -15,13 +15,13 @@ public class SlowedState extends PlayerState implements Serializable {
 	}
 
 	@Override
-	public int getWidth() {
-		return 30;
+	public float getWidth() {
+		return 30.0f;
 	}
 
 	@Override
-	public int getHeight() {
-		return 30;
+	public float getHeight() {
+		return 30.0f;
 	}
 
 	@Override
@@ -29,7 +29,11 @@ public class SlowedState extends PlayerState implements Serializable {
 		timeToChange += 1.0 / 60.0;
 		if(timeToChange >= 0.18) {
 			py.substractLife();
-			py.setState(new DeadState(py));
+			if (py.getLifes() <= 0) {
+				py.setState(new DeadState(py));
+			} else {
+				py.setState(new SlowedState(py));
+			}
 		}
 	}
 }

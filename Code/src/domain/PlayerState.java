@@ -10,8 +10,8 @@ public abstract class PlayerState implements StateEntity, Serializable {
 	}
 	
 	public abstract float getSpeed();
-	public abstract int getWidth();
-	public abstract int getHeight();
+	public abstract float getWidth();
+	public abstract float getHeight();
 	public abstract void onEnemyContact();
 	
 	public boolean isDead(){ //Solo lo sobre escribirá DeadState

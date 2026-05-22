@@ -133,7 +133,11 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 		if (keyH.getRigth() == true) {
 			TheDOPOHardestGame.getGame().movePlayer2('r');	
 		}
-		
+//		if (keyH.getEsc() == true) {
+//			TheDOPOHardestGame.getGame().setPaused();
+//		} else if (keyH.getEsc() == false) {
+//			TheDOPOHardestGame.getGame().resumeGame();
+//		}
 	}
 
 	/**

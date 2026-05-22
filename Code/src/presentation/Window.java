@@ -57,7 +57,7 @@ public class Window extends JFrame {
 			File selectedFile = fileChooser.getSelectedFile();
 			if(!selectedFile.getName().endsWith(".dat")) {
 				selectedFile = new File(selectedFile.getAbsolutePath() + ".dat");
-			}
+			}/*
 			try {
 			    TheDOPOHardestGame.getGame().saveAs(selectedFile);
 			} catch (IOException io) { // Catch escrito con Gemini Pro 3.1
@@ -71,7 +71,7 @@ public class Window extends JFrame {
 			        JOptionPane.ERROR_MESSAGE);
 			} catch (HardestGameException e) {
 			    e.printStackTrace();
-			}
+			}*/
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class Window extends JFrame {
     	if(result == JFileChooser.APPROVE_OPTION) {
     		File selectedFile = fileChooser.getSelectedFile();
     		try {
-    			gameContainer.loadSavedGame(selectedFile);
+    			//gameContainer.loadSavedGame(selectedFile);
     		} catch(Exception ex){
     			ex.printStackTrace();
     			JOptionPane.showMessageDialog(Window.this, ex.getMessage(),"Error",

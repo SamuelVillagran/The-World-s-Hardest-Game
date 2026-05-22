@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class TheDOPOHardestGame implements Serializable, Runnable{
 
-	private static final int FPS = 30;
+	private static final int FPS = 60;
 	private static final double NS_INTERVAL = 1_000_000_000.0 / FPS;
 	private static final int TOTAL_LEVELS = 3;
 	private int secondsRemaining;
@@ -75,6 +75,21 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 		gameThread.start();
 	}
 	
+	// Método para alternar pausa // Ayudado con Gemini IA 
+	public void setPaused() {
+	    this.paused = false;
+	    synchronized (this) {
+	        notify(); // Despierta el hilo si estaba esperando
+	    }
+	}
+	// Ayudado con Gemini IA 
+	public void resumeGame() {
+	    this.paused = false; // Cambiamos el estado
+	    synchronized (this) {
+	        this.notify(); // Notificamos al hilo que está esperando que continúe
+	    }
+	}
+	
 	private void stopGame() {
 		running = false;
 	    if (gameThread != null) {
@@ -127,6 +142,15 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 				}
 			}
 			
+			synchronized (this) { // Ayudado con IA
+	            while (paused) {
+	                try {
+	                    wait(); // El hilo entra en pausa y libera recursos
+	                } catch (InterruptedException e) {
+	                    Thread.currentThread().interrupt();
+	                }
+	            }
+			}
 			try {
 				Thread.sleep(2);
 			} catch (InterruptedException e) {
@@ -224,7 +248,8 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	
 	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
-		if(currentLevel.isCompleted()) {
+		boolean isLevelCompleted = currentLevel.isCompleted();
+		if(isLevelCompleted) {
 			nextLevel();
 			return;
 		}

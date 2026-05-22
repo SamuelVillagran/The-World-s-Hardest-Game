@@ -27,13 +27,13 @@ public class Coin extends SuperObject implements Serializable {
 	}
 
 	@Override
-	public int getWidth() {
-		return 15;
+	public float getWidth() {
+		return 15.0f;
 	}
 
 	@Override
-	public int getHeight() {
-		return 15;
+	public float getHeight() {
+		return 15.0f;
 	}
 
 	@Override
