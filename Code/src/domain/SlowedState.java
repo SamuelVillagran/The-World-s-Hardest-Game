@@ -16,7 +16,7 @@ public class SlowedState extends PlayerState implements Serializable {
 
 	@Override
 	public float getSpeedMultiplier() {
-		return 0.3f;
+		return 0.7f;
 	}
 
 	@Override
