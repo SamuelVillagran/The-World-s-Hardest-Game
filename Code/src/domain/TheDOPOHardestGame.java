@@ -13,8 +13,6 @@ import java.util.HashMap;
 
 public class TheDOPOHardestGame implements Serializable {
 
-	private static final int TOTAL_LEVELS = 3;
-
 	private boolean paused = false;
 	private boolean gameOver = false;
 
@@ -46,7 +44,7 @@ public class TheDOPOHardestGame implements Serializable {
 	}
 
 	private Level buildLevel(int num) throws HardestGameException {
-		return Level.create(num, cChecker);
+		return LevelCatalog.create(num);
 	}
 
 	public void loadLevel(Level level) {
@@ -104,6 +102,18 @@ public class TheDOPOHardestGame implements Serializable {
 		numCurrentLevel = numLevel;
 	}
 
+	public void switchToLevel(int numLevel) throws HardestGameException {
+		if (!LevelCatalog.hasLevel(numLevel)) {
+			throw new HardestGameException("Nivel no existe");
+		}
+		numCurrentLevel = numLevel;
+		for (Player player : players) {
+			player.reset();
+		}
+		gameOver = false;
+		loadLevel(buildLevel(numCurrentLevel));
+	}
+
 	public void update(float delta) throws HardestGameException {
 		if (paused || gameOver) {
 			return;
@@ -132,7 +142,7 @@ public class TheDOPOHardestGame implements Serializable {
 
 	public void nextLevel() {
 		numCurrentLevel++;
-		if (!hasNextLevel(numCurrentLevel)) {
+		if (!LevelCatalog.hasLevel(numCurrentLevel)) {
 			endGame();
 			return;
 		}
@@ -145,10 +155,6 @@ public class TheDOPOHardestGame implements Serializable {
 			e.printStackTrace();
 			endGame();
 		}
-	}
-
-	private boolean hasNextLevel(int num) {
-		return num <= TOTAL_LEVELS;
 	}
 
 	public PlayerType getPlayerType(String type) {

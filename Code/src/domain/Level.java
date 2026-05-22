@@ -9,137 +9,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @implNot Clasw ayudada a estructurar y unificar por GPT 5-5
- **/
+ * Runtime instance of a level.
+ *
+ * Level does not know how Level 1, 2 or 3 are configured. It only owns the
+ * map, entities, zones, players and timer for the active level definition.
+ */
 public class Level implements CollisionContext, Serializable {
 
-	private int numCoin;
+	private int coinsRequired;
 	private LinkedHashMap<Integer, Element> elements;
 	private Map map;
-	private CollisionChecker cChecker;
 	private List<Player> players;
 	private List<Zone> zones;
-	private int levelTime;
+	private int timeLimitSeconds;
 	private float timeRemaining;
 	private List<LevelComponent> components;
 	private boolean initialized;
 
-	private Level(int mapNumber, int numCoin, int levelTime, CollisionChecker cChecker,
-			List<LevelComponent> components) {
-		this.numCoin = numCoin;
-		this.levelTime = levelTime;
-		this.timeRemaining = levelTime;
-		this.cChecker = cChecker;
-		this.components = new ArrayList<>(components);
+	public Level(LevelDefinition definition) {
+		this.coinsRequired = definition.coinsRequired();
+		this.timeLimitSeconds = definition.timeLimitSeconds();
+		this.timeRemaining = timeLimitSeconds;
+		this.components = new ArrayList<>(definition.components());
 		this.elements = new LinkedHashMap<>();
 		this.players = new ArrayList<>();
 		this.zones = new ArrayList<>();
-		this.map = new Map(mapNumber);
+		this.map = new Map(definition.mapNumber());
 		registerTiles();
 	}
 
-	public static Builder builder(int mapNumber, CollisionChecker cChecker) {
-		return new Builder(mapNumber, cChecker);
+	public static LevelBuilder builder(int mapNumber, CollisionChecker cChecker) {
+		return new LevelBuilder(mapNumber);
 	}
 
 	public static Level create(int levelNumber, CollisionChecker cChecker) throws HardestGameException {
-		switch (levelNumber) {
-			case 1:
-				return createLevelOne(cChecker);
-			case 2:
-				return createLevelTwo(cChecker);
-			case 3:
-				return createLevelThree(cChecker);
-			default:
-				throw new HardestGameException("Nivel no existe");
-		}
-	}
-
-	private static Level createLevelOne(CollisionChecker cChecker) {
-		Builder builder = builder(1, cChecker)
-				.coinsRequired(2)
-				.time(90)
-				.enemy("basic", 8, 7, 8, 24)
-				.enemy("basic", 9, 24, 9, 7)
-				.enemy("basic", 10, 7, 10, 24)
-				.enemy("basic", 11, 24, 11, 7)
-				.coin(10, 9)
-				.coin(23, 9);
-
-		rectangleZone(builder, "initial", 6, 2, 13, 5);
-		rectangleZone(builder, "goal", 6, 26, 13, 29);
-		return builder.build();
-	}
-
-	private static Level createLevelTwo(CollisionChecker cChecker) {
-		Builder builder = builder(2, cChecker)
-				.coinsRequired(3)
-				.time(80)
-				.coin(4, 6)
-				.coin(13, 6)
-				.coin(4, 23)
-				.coin(13, 23);
-
-		int numEnemies = 18;
-		int startRowDown = 4;
-		int startRowUp = 13;
-		int startCol = 6;
-		for (int i = 0; i < numEnemies; i++) {
-			int col = startCol + i;
-			if (i % 2 == 0) {
-				builder.enemy("vertical", startRowDown, col, startRowUp, col);
-			} else {
-				builder.enemy("vertical", startRowUp, col, startRowDown, col);
-			}
-		}
-
-		rectangleZone(builder, "initial", 7, 2, 13, 5);
-		rectangleZone(builder, "goal", 7, 26, 13, 29);
-		return builder.build();
-	}
-
-	private static Level createLevelThree(CollisionChecker cChecker) {
-		Builder builder = builder(3, cChecker)
-				.coinsRequired(0)
-				.time(90)
-				.enemy("acelerate", 2, 6, 15, 6)
-				.enemy("acelerate", 2, 10, 15, 10)
-				.enemy("acelerate", 2, 12, 15, 12)
-				.enemy("acelerate", 15, 11, 3, 11)
-				.enemy("acelerate", 15, 13, 3, 13)
-				.bomb(7, 3)
-				.bomb(3, 9)
-				.bomb(14, 14)
-				.bomb(14, 16)
-				.bomb(10, 17)
-				.bomb(6, 17)
-				.bomb(5, 23)
-				.bomb(9, 26);
-
-		builder.zone("initial",
-				tilePoint(3, 2),
-				tilePoint(3, 4),
-				tilePoint(4, 4),
-				tilePoint(4, 2));
-		builder.zone("goal",
-				tilePoint(13, 25),
-				tilePoint(7, 28),
-				tilePoint(15, 28),
-				tilePoint(15, 25));
-		return builder.build();
-	}
-
-	private static void rectangleZone(Builder builder, String type, int topRow, int leftCol, int bottomRow,
-			int rightCol) {
-		builder.zone(type,
-				tilePoint(topRow, leftCol),
-				tilePoint(topRow, rightCol),
-				tilePoint(bottomRow, rightCol),
-				tilePoint(bottomRow, leftCol));
-	}
-
-	private static Point tilePoint(int row, int col) {
-		return new Point(col * DimensionGame.TILESIZEWIDTH, row * DimensionGame.TILESIZEHEIGHT);
+		return LevelCatalog.create(levelNumber);
 	}
 
 	public void initialize() {
@@ -157,31 +61,44 @@ public class Level implements CollisionContext, Serializable {
 	}
 
 	/**
-	 * Check if the level has all its coins collected by players.
-	 * @return true if there are no pending coins and all players reached the goal.
+	 * Checks if every required coin was collected and every player reached the goal.
 	 */
 	public boolean isCompleted() {
+		return allRequiredCoinsCollected() && allPlayersInGoalZone();
+	}
+
+	private boolean allRequiredCoinsCollected() {
 		int totalCoinsCollected = 0;
 		for (Player player : players) {
 			totalCoinsCollected += player.getCollectedCoins();
 		}
-		if (totalCoinsCollected < numCoin) {
-			return false;
-		}
+		return totalCoinsCollected >= coinsRequired;
+	}
+
+	private boolean allPlayersInGoalZone() {
 		for (Player player : players) {
-			if (!player.hasGoalCompleted()) {
+			if (!isInsideGoalZone(player)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public void spawnPlayers(List<Player> pys) {
+	private boolean isInsideGoalZone(Player player) {
+		for (Zone zone : zones) {
+			if (zone instanceof GoalZone && zone.contains(player.getPosX(), player.getPosY())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void spawnPlayers(List<Player> playersToSpawn) {
 		Zone zone = getInitialZone();
 		if (zone == null) {
 			return;
 		}
-		for (Player player : players) {
+		for (Player player : playersToSpawn) {
 			player.setPosition(zone.getSpawnX(), zone.getSpawnY());
 			player.setRespawnPoint(zone.getSpawnX(), zone.getSpawnY());
 		}
@@ -204,15 +121,20 @@ public class Level implements CollisionContext, Serializable {
 
 	private void registerTiles() {
 		for (Tile tile : map.getTiles()) {
-			elements.put(elements.size() + 1, tile);
+			elements.put(nextElementId(), tile);
 		}
 	}
 
 	public void setPlayers(List<Player> players) {
+		removeCurrentPlayersFromElements();
 		this.players = players;
-		for (Player py : players) {
-			elements.put(elements.size() + 1, py);
+		for (Player player : players) {
+			elements.put(nextElementId(), player);
 		}
+	}
+
+	private void removeCurrentPlayersFromElements() {
+		elements.entrySet().removeIf(entry -> entry.getValue() instanceof Player);
 	}
 
 	public void removeElement(Element element) {
@@ -224,8 +146,8 @@ public class Level implements CollisionContext, Serializable {
 	}
 
 	public void update(CollisionChecker checker) throws HardestGameException {
-		for (Enemy am : getEnemies()) {
-			am.move(checker, this);
+		for (Enemy enemy : getEnemies()) {
+			enemy.move(checker, this);
 		}
 
 		for (Bomb bomb : getBombs()) {
@@ -259,7 +181,7 @@ public class Level implements CollisionContext, Serializable {
 	public List<Damageable> getDamageablesInArea(float bx, float by, float width, float height) {
 		List<Damageable> targets = elements.values().stream()
 				.filter(e -> e instanceof Damageable)
-				.filter(e -> overlapsArea((Element) e, bx, by, width, height))
+				.filter(e -> overlapsArea(e, bx, by, width, height))
 				.map(e -> (Damageable) e)
 				.collect(Collectors.toCollection(ArrayList::new));
 
@@ -279,7 +201,7 @@ public class Level implements CollisionContext, Serializable {
 	}
 
 	public boolean playerHasAllCoins(Player player) {
-		return player.getCollectedCoins() >= numCoin;
+		return player.getCollectedCoins() >= coinsRequired;
 	}
 
 	public void checkZones() {
@@ -299,29 +221,32 @@ public class Level implements CollisionContext, Serializable {
 				.toList();
 	}
 
-	private void putEnemy(List<Point> movement, String type) {
+	void addEnemy(List<Point> movement, String type) {
 		Enemy enemy = new Enemy(movement);
-		int unIdAlto = elements.size() + 1000;
-		switch (type) {
-			case "basic" -> enemy.setStrategyMovement(new Basic(enemy));
-			case "vertical" -> enemy.setStrategyMovement(new Vertical(enemy));
-			case "acelerate" -> enemy.setStrategyMovement(new Acelerate(enemy));
-		}
-		elements.put(unIdAlto, enemy);
+		enemy.setStrategyMovement(EnemyMovementStrategyFactory.create(type, enemy));
+		elements.put(nextElementId(), enemy);
 	}
 
-	private void putCoin(int row, int col) {
-		int desface = DimensionGame.TILESIZE / 4;
-		Coin coin = new Coin(col * DimensionGame.TILESIZEHEIGHT + desface,
-				row * DimensionGame.TILESIZEWIDTH + desface);
-		elements.put(elements.size() + 1, coin);
+	void addCoin(int row, int col) {
+		int offset = DimensionGame.TILESIZE / 4;
+		Coin coin = new Coin(col * DimensionGame.TILESIZEHEIGHT + offset,
+				row * DimensionGame.TILESIZEWIDTH + offset);
+		elements.put(nextElementId(), coin);
 	}
 
-	private void putZone(List<Point> figure, String type) {
-		switch (type) {
-			case "goal" -> zones.add(new GoalZone(new Figure(figure)));
-			case "initial" -> zones.add(new InitialZone(new Figure(figure)));
-		}
+	void addBomb(int row, int col) {
+		int offset = DimensionGame.TILESIZE / 4;
+		Bomb bomb = new Bomb(col * DimensionGame.TILESIZEWIDTH + offset,
+				row * DimensionGame.TILESIZEHEIGHT + offset);
+		elements.put(nextElementId(), bomb);
+	}
+
+	void addZone(List<Point> figure, String type) {
+		zones.add(ZoneFactory.create(type, figure));
+	}
+
+	private int nextElementId() {
+		return elements.size() + 1;
 	}
 
 	public List<Solid> getSolidElements() {
@@ -346,42 +271,17 @@ public class Level implements CollisionContext, Serializable {
 		}
 		return null;
 	}
-	
-	
-	/**
-	 * Check if the allocated time has run out.
-	 * @return true if the remaining time is less than or equal to zero.
-	 * Otherwise false.
-	 */
-	public boolean isTimeUp(){
-		return timeRemaining <= 0;
-	}
-	
-	public float getLevelTime() {
-		return timeLimit;
-	}
-	
-	/**
-	 * Initialize timeRemaining and timeLimit with the level value.
-	 * This is called every time load and restart the level
-	 */
-	public void resetTime() {
-		timeRemaining = getLevelTime();
-		timeLimit = getLevelTime();
-
-	private void putBomb(int row, int col) {
-		int desface = DimensionGame.TILESIZE / 4;
-		Bomb bomb = new Bomb(col * DimensionGame.TILESIZEWIDTH + desface,
-				row * DimensionGame.TILESIZEHEIGHT + desface);
-		elements.put(elements.size() + 1, bomb);
-	}
 
 	public int getLevelTime() {
-		return levelTime;
+		return timeLimitSeconds;
 	}
 
 	public float getTimeRemaining() {
 		return timeRemaining;
+	}
+
+	public void resetTime() {
+		timeRemaining = timeLimitSeconds;
 	}
 
 	public void tickTime(float delta) {
@@ -391,123 +291,4 @@ public class Level implements CollisionContext, Serializable {
 	public boolean isTimeUp() {
 		return timeRemaining <= 0f;
 	}
-
-	public static class Builder {
-
-		private int mapNumber;
-		private CollisionChecker cChecker;
-		private int numCoin;
-		private int levelTime;
-		private List<LevelComponent> components;
-
-		private Builder(int mapNumber, CollisionChecker cChecker) {
-			this.mapNumber = mapNumber;
-			this.cChecker = cChecker;
-			this.levelTime = 90;
-			this.components = new ArrayList<>();
-		}
-
-		public Builder coinsRequired(int numCoin) {
-			this.numCoin = numCoin;
-			return this;
-		}
-
-		public Builder time(int seconds) {
-			this.levelTime = seconds;
-			return this;
-		}
-
-		public Builder enemy(String type, int startRow, int startCol, int endRow, int endCol) {
-			return enemy(type, tilePoint(startRow, startCol), tilePoint(endRow, endCol));
-		}
-
-		public Builder enemy(String type, Point... movement) {
-			components.add(new EnemyComponent(type, movement));
-			return this;
-		}
-
-		public Builder coin(int row, int col) {
-			components.add(new CoinComponent(row, col));
-			return this;
-		}
-
-		public Builder bomb(int row, int col) {
-			components.add(new BombComponent(row, col));
-			return this;
-		}
-
-		public Builder zone(String type, Point... points) {
-			components.add(new ZoneComponent(type, points));
-			return this;
-		}
-
-		public Level build() {
-			return new Level(mapNumber, numCoin, levelTime, cChecker, components);
-		}
-	}
-
-	private interface LevelComponent extends Serializable {
-		void addTo(Level level);
-	}
-
-	private static class EnemyComponent implements LevelComponent {
-		private String type;
-		private List<Point> movement;
-
-		private EnemyComponent(String type, Point... movement) {
-			this.type = type;
-			this.movement = new ArrayList<>(List.of(movement));
-		}
-
-		@Override
-		public void addTo(Level level) {
-			level.putEnemy(new ArrayList<>(movement), type);
-		}
-	}
-
-	private static class CoinComponent implements LevelComponent {
-		private int row;
-		private int col;
-
-		private CoinComponent(int row, int col) {
-			this.row = row;
-			this.col = col;
-		}
-
-		@Override
-		public void addTo(Level level) {
-			level.putCoin(row, col);
-		}
-	}
-
-	private static class BombComponent implements LevelComponent {
-		private int row;
-		private int col;
-
-		private BombComponent(int row, int col) {
-			this.row = row;
-			this.col = col;
-		}
-
-		@Override
-		public void addTo(Level level) {
-			level.putBomb(row, col);
-		}
-	}
-
-	private static class ZoneComponent implements LevelComponent {
-		private String type;
-		private List<Point> points;
-
-		private ZoneComponent(String type, Point... points) {
-			this.type = type;
-			this.points = new ArrayList<>(List.of(points));
-		}
-
-		@Override
-		public void addTo(Level level) {
-			level.putZone(new ArrayList<>(points), type);
-		}
-	}
-
 }
