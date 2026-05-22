@@ -23,15 +23,14 @@ public class LifeSource extends DinamicObject implements Serializable {
 
 
 	@Override
-	public int getWidth() {
-		return 25;
+	public float getWidth() {
+		return 25.0f;
 	}
 
 
 	@Override
-	public int getHeight() {
-		// TODO Auto-generated method stub
-		return 25;
+	public float getHeight() {
+		return 25.0f;
 	}
 
 

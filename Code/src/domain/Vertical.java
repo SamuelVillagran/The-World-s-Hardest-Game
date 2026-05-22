@@ -5,11 +5,25 @@ import java.io.Serializable;
 
 public class Vertical extends ColliderEnemy implements AutomaticMovement, Serializable {
 	
-	public Vertical(Enemy enemy, CollisionChecker cCheker, CollisionContext context) {
+	public Vertical(Enemy enemy) {
 		this.enemy = enemy;
-		
-		this.cCheker = cCheker;
-		this.context = context;
+		setInitialDirection();
+		enemy.setSpeed(3.0f);
+	}
+
+	@Override
+	public void move(CollisionChecker checker, Level level) {
+		int nextX = enemy.getPosX();
+	    int nextY = enemy.getPosY();
+	   
+		if (!checker.canMove(enemy, nextX, nextY, level)) {
+			enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
+		}
+		enemy.move(enemy.getDirection());
+	}
+	
+	@Override
+	protected void setInitialDirection() { 
 		Point point1 = enemy.getMovement().get(0);
 		Point point2 = enemy.getMovement().get(1);
 		int px1 = (int) point1.getX();
@@ -22,17 +36,5 @@ public class Vertical extends ColliderEnemy implements AutomaticMovement, Serial
 		} else {
 		  	enemy.setDirection('u'); // Va hacia arriba
 		}
-		enemy.setSpeed(3.0f);
-	}
-	
-	@Override
-	public void move() {
-		int nextX = enemy.getPosX();
-	    int nextY = enemy.getPosY();
-	   
-		if (!cCheker.canMove(enemy, nextX, nextY, context)) {
-			enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');
-		}
-		enemy.move(enemy.getDirection());
 	}
 }

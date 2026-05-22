@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import domain.Element;
+import domain.GameMode;
 import domain.GameObserver;
 import domain.HardestGameException;
 import domain.TheDOPOHardestGame;
@@ -32,11 +33,15 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 	
 	/**
 	 * Inicializate the game panel
+	 * @param gameMode 
 	 * @throws IOException 
 	 * @throws HardestGameException 
 	 */
-	public TheDOPOHardestGameGUI(InfoPanel infoPanel) throws IOException, HardestGameException {
+	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
+		/*
+		secondsRemaining = LEVEL_TIME_SECONDS;
+		TheDOPOHardestGame.getGame().startGame(gameMode, 1); */
 		cachedImages = new HashMap<>();
 		prepareElements();
 		prepareActions();
@@ -99,11 +104,49 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 	}
 
 	/**
+	 * Make the interaction of keyboard with the player
+	 * @throws HardestGameException 
+	 */
+	private void update() throws HardestGameException {
+		if (keyH.getW() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('u');
+		}
+		if (keyH.getS() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('d');
+		}
+		if (keyH.getA() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('l');
+		}
+		if (keyH.getD() == true) {
+			TheDOPOHardestGame.getGame().movePlayer1('r');	
+		}
+		
+		if (keyH.getUp() == true) {
+			TheDOPOHardestGame.getGame().movePlayer2('u');
+		}
+		if (keyH.getDown() == true) {
+			TheDOPOHardestGame.getGame().movePlayer2('d');
+		}
+		if (keyH.getLeft() == true) {
+			TheDOPOHardestGame.getGame().movePlayer2('l');
+		}
+		if (keyH.getRigth() == true) {
+			TheDOPOHardestGame.getGame().movePlayer2('r');	
+		}
+//		if (keyH.getEsc() == true) {
+//			TheDOPOHardestGame.getGame().setPaused();
+//		} else if (keyH.getEsc() == false) {
+//			TheDOPOHardestGame.getGame().resumeGame();
+//		}
+	}
+
+	/**
 	 * Draw at a panel g2 different entities
 	 * @param g2
 	 * @throws HardestGameException 
 	 */
 	public void draw(Graphics2D g2) throws HardestGameException {
+		
         // Dibujar; Tiles, obstáculos, monedas 
         for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
             BufferedImage img = cachedImages.get(e.getNameClass());
@@ -176,6 +219,8 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 				TheDOPOHardestGame.getGame().movePlayer2('r');	
 			}
 			TheDOPOHardestGame.getGame().update();
+			TheDOPOHardestGame.getGame().despauseGame();
+			update();
 		} catch(HardestGameException e) {
 			e.printStackTrace();
 		}
@@ -199,7 +244,4 @@ public class TheDOPOHardestGameGUI extends JPanel implements GameObserver {
 			}
 		});
 	}
-	
-	
-	
 }

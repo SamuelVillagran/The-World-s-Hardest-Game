@@ -2,7 +2,7 @@ package domain;
 
 import java.io.Serializable;
 
-public abstract class Element implements HitBox, Serializable {
+public abstract class Element implements Serializable {
 
 	protected int posX, posY;
 	protected float size;
@@ -22,5 +22,13 @@ public abstract class Element implements HitBox, Serializable {
 	}
 	public float getSize() {
 		return size;
+	}
+	
+	public float getWidth() {
+		return 32.0f;
+	}
+	
+	public float getHeight() {
+		return 32.0f;
 	}
 }

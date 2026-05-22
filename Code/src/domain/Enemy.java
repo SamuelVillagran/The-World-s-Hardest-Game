@@ -48,8 +48,8 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 		}
 	}
 
-	public void move() {
-		strategyMovement.move();
+	public void move(CollisionChecker checker, Level level) {
+		strategyMovement.move(checker, level);
 	}
 
 	@Override
@@ -58,13 +58,13 @@ public class Enemy extends Entity implements Interactable, AutomaticMovement, Da
 	}
 
 	@Override
-	public int getWidth() {
-		return 10;
+	public float getWidth() {
+		return 10.0f;
 	}
 
 	@Override
-	public int getHeight() {
-		return 10;
+	public float getHeight() {
+		return 10.0f;
 	}
 
 	public void setPoints(List<Point> points) {

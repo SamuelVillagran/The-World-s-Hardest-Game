@@ -5,10 +5,12 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
 
 import domain.DimensionGame;
@@ -17,7 +19,7 @@ import domain.HardestGameException;
 import domain.PlayerType;
 import domain.TheDOPOHardestGame;
 
-public class GameContainer extends JPanel{
+public class GameContainer extends JPanel {
 
 	private BufferedImage backgroundImage;
 	private CardLayout cardLayout;
@@ -108,22 +110,59 @@ public class GameContainer extends JPanel{
 	public void startGame() throws IOException, HardestGameException {
 		GameMode gameMode = setup.build();
 		try {
-			TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-			game.startGame(gameMode, 3);
+			 TheDOPOHardestGame.getGame().startGame(gameMode, 3);
 			
-			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(infoPanel);
-			game.addObserver(gamePanel);
+			TheDOPOHardestGameGUI gamePanel = new TheDOPOHardestGameGUI(gameMode, infoPanel);
+			 TheDOPOHardestGame.getGame().addObserver(gamePanel);
 			
 			cardPanel.add(gamePanel, GAME_MODE);
 			showMode(GAME_MODE);
 			gamePanel.requestFocusInWindow();
 			
-			game.startLoop();
+			 TheDOPOHardestGame.getGame().startLoop();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error al iniciar el juego: " + e.getMessage());
 		}
 		
+	}
+
+	public void loadSavedGame(File selectedFile) throws IOException, HardestGameException { // Ayudado a hacer con Gemini IA 
+		// 2. Ejecutar la actualización de la interfaz de forma segura en el EDT
+		TheDOPOHardestGameGUI newGamePanel = new TheDOPOHardestGameGUI(TheDOPOHardestGame.open(selectedFile).getGameMode(),
+				this.infoPanel);
+		this.removeAll();
+		this.add(this.infoPanel, BorderLayout.NORTH); // Asegura su posición fija arriba
+		this.add(newGamePanel, BorderLayout.CENTER);
+		this.revalidate();
+		this.repaint();
+		SwingUtilities.invokeLater(() -> {
+		    
+		    
+		    try {
+		        // Extraemos el gameMode directamente desde la partida recuperada
+		        
+		        
+		        // Re-instanciamos la vista usando el modo recuperado
+		        //
+		        // ... código de re-instanciación previo ...
+		        /*
+		    	this.add(this.infoPanel);
+		        this.add(newGamePanel);
+
+		        this.revalidate();
+		        this.repaint();
+
+		        // Forzar el foco encolándolo al final del procesador de eventos
+		        SwingUtilities.invokeLater(() -> {
+		            newGamePanel.requestFocusInWindow();
+		            newGamePanel.startGameThread();
+		        });
+		        */
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		});
 	}
 }

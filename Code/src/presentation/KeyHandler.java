@@ -13,13 +13,13 @@ public class KeyHandler extends KeyAdapter {
 	private boolean s;
 	private boolean a;
 	private boolean d;
+	private boolean esc;
 
 	public KeyHandler() {
 		up = false;
 		down = false;
 		rigth = false;
 		left = false;
-		
 		a = false;
 		s = false;
 		d = false;
@@ -55,6 +55,9 @@ public class KeyHandler extends KeyAdapter {
 		if (code == KeyEvent.VK_RIGHT) {
 			rigth = true;
 		}
+		if (code == KeyEvent.VK_ESCAPE) {
+			esc = true;
+		}
 	}
 	
 	@Override
@@ -84,6 +87,9 @@ public class KeyHandler extends KeyAdapter {
 		}
 		if (code == KeyEvent.VK_RIGHT) {
 			rigth = false;
+		}
+		if (code == KeyEvent.VK_ESCAPE) {
+			esc = false;
 		}
 	}
 
@@ -165,5 +171,9 @@ public class KeyHandler extends KeyAdapter {
 
 	public void setD(boolean d) {
 		this.d = d;
+	}
+	
+	public boolean getEsc() {
+		return esc;
 	}
 }

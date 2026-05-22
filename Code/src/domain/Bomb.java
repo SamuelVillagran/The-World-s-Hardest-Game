@@ -12,13 +12,14 @@ import java.util.List;
  *
  * @implNote Implemented with Claude Sonnet 4.6
  */
-public class Bomb extends DinamicObject implements Interactable, AutomaticMovement, Serializable {
+public class Bomb extends DinamicObject implements Interactable, Serializable {
 
 	private static final int FPS = 60;
 	private static final int FUSE_SECONDS = 5;
 	private static final int FUSE_TICKS   = FPS * FUSE_SECONDS;           // 300 ticks
 	private static final int BLAST_TILES  = 3;
 	private static final int BLAST_PX     = BLAST_TILES * DimensionGame.TILESIZE; // 108 px
+	
 
 	/** Counts game frames. Resets after each explosion. */
 	private int tickCounter = 0;
@@ -37,8 +38,7 @@ public class Bomb extends DinamicObject implements Interactable, AutomaticMoveme
 	 * Called every frame by Level.update().
 	 * Counts frames and marks a pending explosion every 5 seconds.
 	 */
-	@Override
-	public void move() {
+	public void action() {
 		tickCounter++;
 		if (tickCounter >= FUSE_TICKS) {
 			tickCounter      = 0;
@@ -78,11 +78,11 @@ public class Bomb extends DinamicObject implements Interactable, AutomaticMoveme
 	 * area centered on this bomb.
 	 */
 	private void explode(Level level) {
-		int halfBlast = BLAST_PX / 2;
-		int centerX = posX + getWidth() / 2;
-		int centerY = posY + getHeight() / 2;
-		int bx = centerX - halfBlast;
-		int by = centerY - halfBlast;
+		float halfBlast = BLAST_PX / 2;
+		float centerX = posX + getWidth() / 2;
+		float centerY = posY + getHeight() / 2;
+		float bx = centerX - halfBlast;
+		float by = centerY - halfBlast;
 		List<Damageable> targets = level.getDamageablesInArea(bx, by, BLAST_PX, BLAST_PX);
 		for (Damageable d : targets) {
 			d.takeDamage(level);
@@ -115,12 +115,12 @@ public class Bomb extends DinamicObject implements Interactable, AutomaticMoveme
 	}
 
 	@Override
-	public int getWidth() {
-		return 32;
+	public float getWidth() {
+		return 32.0f;
 	}
 
 	@Override
-	public int getHeight() {
-		return 32;
+	public float getHeight() {
+		return 32.0f;
 	}
 }

@@ -63,6 +63,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 		this.numCurrentLevel = numCurrentLevel; 
 		players = new ArrayList<>(gameMode.createPlayers());
 		loadLevel(buildLevel(numCurrentLevel));
+
 	}
 	
 	/**
@@ -74,13 +75,37 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 		gameThread.start();
 	}
 	
+	// Método para alternar pausa // Ayudado con Gemini IA 
+	public void setPaused() {
+	    this.paused = false;
+	    synchronized (this) {
+	        notify(); // Despierta el hilo si estaba esperando
+	    }
+	}
+	// Ayudado con Gemini IA 
+	public void resumeGame() {
+	    this.paused = false; // Cambiamos el estado
+	    synchronized (this) {
+	        this.notify(); // Notificamos al hilo que está esperando que continúe
+	    }
+	}
+	
 	private void stopGame() {
 		running = false;
-		gameThread = null;
+	    if (gameThread != null) {
+	        gameThread.interrupt();
+	        gameThread = null;
+	    }
 	}
 	
 	public void addObserver(GameObserver observer) {
 		observers.add(observer);
+	}
+	
+	private void notifyPreUpdate() {
+		for(GameObserver observer  : observers) {
+			observer.preUpdate();
+		}
 	}
 	
 	// Inicio loop del juego
@@ -116,12 +141,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 					notifySecondElapsed(secondsRemaining);
 				}
 			}
-			/*
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}*/
 		}
 	}
 	
@@ -130,12 +149,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 	}
 	
 	private Level buildLevel(int num) throws HardestGameException {
-		switch(num){
-			case 1: return new Level1(cChecker);
-			case 2: return new Level2(cChecker);
-			case 3: return new Level3(cChecker);
-			default : throw new HardestGameException("Nivel no existe");
-		}
+		return Level.create(num, cChecker);
 	}
 	
 	public void loadLevel(Level level) {
@@ -189,16 +203,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 	}
 	
 	/**
-	 * Move every player to specific direction
-	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
-	 */
-	public void movePlayers(char direction) {
-		for (Player py : players) {
-			py.move(direction, currentLevel, cChecker);
-		}
-	}
-	
-	/**
 	 * Move player 1 to specific direction
 	 * @param direction direction is 'l': left, 'r': right, 'u': up or 'd': down
 	 */
@@ -206,7 +210,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 		if (players.size() > 0) {
 			players.get(0).move(direction, currentLevel, cChecker);
 		}
-		
 	}
 	
 	/**
@@ -217,7 +220,6 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 		if (players.size() > 1) {
 			players.get(1).move(direction, currentLevel, cChecker);
 		}
-		
 	}
 	
 	public void setCurrentLevel(int numLevel) {
@@ -226,7 +228,8 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 	
 	public void update() throws HardestGameException {
 		currentLevel.update(cChecker);
-		if(currentLevel.isCompleted()) {
+		boolean isLevelCompleted = currentLevel.isCompleted();
+		if(isLevelCompleted) {
 			nextLevel();
 			return;
 		}
@@ -262,17 +265,12 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 		}
 	}
 	
-	private void notifyPreUpdate() {
-		for(GameObserver observer  : observers) {
-			observer.preUpdate();
-		}
-	}
 	
 	private void notifyPostUpdate() {
 		for(GameObserver observer  : observers) {
 			observer.postUpdate();
 		}
-	}
+	} 
 	
 	public void pauseGame() {
 		paused = true;
@@ -300,9 +298,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
 		return DimensionGame.getTileSizeHeight();
 	}
 	
-	public boolean isPaused() {
-		return paused;
-	}
+	
 	/**
      * Opens a specified file.
      * @param file the name or path of file to be saved.
@@ -311,16 +307,21 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
      * 			or file is corrupt.
      */
     public static TheDOPOHardestGame open(File file) throws HardestGameException {
-    	if(!file.exists()) {
-    		throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
-    	}
-    	
-    	try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
-    		game = (TheDOPOHardestGame) in.readObject();
-		} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-		}
-		return game; 
+    	if (!file.exists()) {
+            throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
+        }
+        
+        if (game != null) {
+            game.stopGame();
+        }
+        
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            // Recibe el objeto serializado completo y actualiza la instancia singleton
+            game = (TheDOPOHardestGame) in.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            throw new HardestGameException("Archivo corrupto o no compatible.");
+        }
+        return game;
     }
     
     /**
@@ -331,14 +332,22 @@ public class TheDOPOHardestGame implements Serializable, Runnable {
      * @throws ForestException
      */
     public void saveAs(File file) throws HardestGameException, FileNotFoundException, IOException {
-   
-    	try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
-    		try {
-				out.writeObject(this);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	} 
+    	// 1. Detener el hilo del juego para limpiar variables no serializables
+        this.stopGame(); 
+        
+        // 2. Guardar la instancia completa directamente en una sola línea
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+            out.writeObject(this);
+        } catch (IOException e) {
+            throw new HardestGameException("Error al escribir el archivo: " + e.getMessage());
+        }
     }
+    
+	public GameMode getGameMode() {
+		return gameMode;
+	}
+    
+	public boolean isPaused() {
+		return paused;
+	}
 }
