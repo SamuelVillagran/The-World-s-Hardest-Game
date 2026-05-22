@@ -13,21 +13,12 @@ class BombTest {
 	private static final int RESPAWN_X = 100;
 	private static final int RESPAWN_Y = 100;
 
-	private static class TestLevel extends Level {
-		@Override
-		public void initialize() {
-			putBomb(0, 0);
-		}
-
-		@Override
-		public int getLevelTime() {
-			return 10;
-		}
-	}
-
 	private Player runBombTest(PlayerType type, int frames) throws HardestGameException {
 		CollisionChecker checker = new CollisionChecker();
-		TestLevel level = new TestLevel();
+		Level level = Level.builder(1, checker)
+				.time(10)
+				.bomb(0, 0)
+				.build();
 		level.initialize();
 
 		Player player = new HumanPlayer(type, "test");
@@ -43,7 +34,7 @@ class BombTest {
 	}
 
 	/**
-	 * Verify if player dies and come back the respawn zone when this is red
+	 * Verify if player dies and come back the respawn zone when this is red.
 	 * @throws HardestGameException
 	 */
 	@Test
@@ -58,7 +49,7 @@ class BombTest {
 	}
 
 	/**
-	 * Verify if player dies and come back the respawn zone when this is blue
+	 * Verify if player dies and come back the respawn zone when this is blue.
 	 * @throws HardestGameException
 	 */
 	@Test
@@ -73,7 +64,7 @@ class BombTest {
 	}
 
 	/**
-	 * Verify if player dies and come back the respawn zone when this is green
+	 * Verify if green player loses a life but does not die with one explosion.
 	 * @throws HardestGameException
 	 */
 	@Test

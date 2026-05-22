@@ -164,12 +164,7 @@ public class TheDOPOHardestGame implements Serializable, Runnable{
 	}
 	
 	private Level buildLevel(int num) throws HardestGameException {
-		switch(num){
-			case 1: return new Level1(cChecker);
-			case 2: return new Level2(cChecker);
-			case 3: return new Level3(cChecker);
-			default : throw new HardestGameException("Nivel no existe");
-		}
+		return Level.create(num, cChecker);
 	}
 	
 	public void loadLevel(Level level) {
