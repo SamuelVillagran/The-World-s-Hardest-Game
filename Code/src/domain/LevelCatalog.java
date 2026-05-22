@@ -1,17 +1,38 @@
 package domain;
 
+/**
+ * Level catalog class, structured with the help of GPT 5.5 AI.
+ * Uses the Composite pattern to place level components using the spawn classes.
+ */
 public final class LevelCatalog {
 
 	public static final int DEFAULT_LEVEL_TIME_SECONDS = 90;
 	private static final int TOTAL_LEVELS = 3;
 
+	
+	/*
+	 * Private constructor to prevent instantiation of this catalog class.
+	 */
 	private LevelCatalog() {
 	}
-
+	
+	/**
+	 * Creates a level instance with all its interactive objects.
+	 * Uses the Factory Method pattern internally to build the level from its catalog definition.
+	 * @param levelNumber the number of the level to create
+	 * @return a fully constructed Level instance
+	 * @throws HardestGameException if the level number does not exist
+	 */
 	public static Level create(int levelNumber) throws HardestGameException {
 		return new Level(definition(levelNumber));
 	}
 
+	/**
+	 * Defines which level will be created based on the given number.
+	 * @param levelNumber the number of the level to define
+	 * @return the level definition containing all the elements for that level
+	 * @throws HardestGameException if the level number does not exist
+	 */
 	public static LevelDefinition definition(int levelNumber) throws HardestGameException {
 		return switch (levelNumber) {
 			case 1 -> levelOne();
@@ -21,14 +42,27 @@ public final class LevelCatalog {
 		};
 	}
 
+	/**
+	 * Give if exists the level
+	 * @param levelNumber levelNumber is the number to verify if exists at the game
+	 * @return true if level number is between range of level created 
+	 * 			false otherwise
+	 */
 	public static boolean hasLevel(int levelNumber) {
 		return levelNumber >= 1 && levelNumber <= TOTAL_LEVELS;
 	}
 
+	/**
+	 * Give number total of levels created
+	 */
 	public static int totalLevels() {
 		return TOTAL_LEVELS;
 	}
 
+	/**
+	 * Defines the contents of level one.
+	 * @return the complete definition of level one
+	 */
 	private static LevelDefinition levelOne() {
 		LevelBuilder builder = new LevelBuilder(1)
 				.coinsRequired(2)
@@ -44,6 +78,10 @@ public final class LevelCatalog {
 		return builder.buildDefinition();
 	}
 
+	/**
+	 * Defines the contents of level two.
+	 * @return the complete definition of level two
+	 */
 	private static LevelDefinition levelTwo() {
 		LevelBuilder builder = new LevelBuilder(2)
 				.coinsRequired(4)
@@ -70,6 +108,10 @@ public final class LevelCatalog {
 		return builder.buildDefinition();
 	}
 
+	/**
+	 * Defines the contents of level three.
+	 * @return the complete definition of level three
+	 */
 	private static LevelDefinition levelThree() {
 		LevelBuilder builder = new LevelBuilder(3)
 				.coinsRequired(0)
@@ -100,6 +142,15 @@ public final class LevelCatalog {
 		return builder.buildDefinition();
 	}
 
+	/*
+	 * Builds a rectangular zone of the given type using four corner tile points.
+	 * @param builder the LevelBuilder instance used to construct the level
+	 * @param type the type of zone to create (e.g. "initial" or "goal")
+	 * @param topRow the topmost row of the zone
+	 * @param leftCol the leftmost column of the zone
+	 * @param bottomRow the bottommost row of the zone
+	 * @param rightCol the rightmost column of the zone
+	 */
 	private static void rectangleZone(LevelBuilder builder, String type, int topRow, int leftCol, int bottomRow,
 			int rightCol) {
 		builder.zone(type,
