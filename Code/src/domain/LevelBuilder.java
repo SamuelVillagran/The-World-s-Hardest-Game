@@ -7,6 +7,8 @@ import java.util.List;
 /**
  * LevelBuilder class, structured with the help of GPT 5.5 AI.
  * Uses the Builder pattern to build level.
+ * This class create with mwthods objects going to be at level
+ * Its state is mutable  
  */
 public class LevelBuilder {
 
