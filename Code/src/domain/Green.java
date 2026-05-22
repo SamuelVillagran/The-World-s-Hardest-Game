@@ -15,6 +15,11 @@ public class Green extends PlayerState implements Serializable {
 	public float getSizeMultiplier() {
 		return 1.0f;
 	}
+	
+	@Override
+	public float getSpeedMultiplier() {
+		return 1.0f;
+	}
 
 	@Override
 	public void onEnemyContact() {
@@ -23,14 +28,11 @@ public class Green extends PlayerState implements Serializable {
 			py.substractLife();
 			if (py.getLifes() <= 0) {
 				py.setState(new DeadState(py));
-			} else {
+			} else if (py.getLifes() == 1) {
 				py.setState(new SlowedState(py));
 			}
 		}
 	}
 
-	@Override
-	public float getSpeedMultiplier() {
-		return 1.0f;
-	}
+	
 }

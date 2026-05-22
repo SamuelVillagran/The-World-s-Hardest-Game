@@ -16,9 +16,8 @@ public class SlowedState extends PlayerState implements Serializable {
 
 	@Override
 	public float getSpeedMultiplier() {
-		return 0.7f;
+		return 0.1f;
 	}
-
 
 	@Override
 	public void onEnemyContact() {

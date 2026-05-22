@@ -19,7 +19,7 @@ public class Level implements CollisionContext, Serializable {
 
 	private int coinsRequired;
 	private LinkedHashMap<Integer, Element> elements;
-	private Map map;
+	private static Map map;
 	private List<Player> players;
 	private List<Zone> zones;
 	private int timeLimitSeconds;
