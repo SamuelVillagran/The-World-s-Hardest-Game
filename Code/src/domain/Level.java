@@ -259,7 +259,7 @@ public abstract class Level implements CollisionContext, Serializable {
 	 * @return true if the remaining time is less than or equal to zero.
 	 * Otherwise false.
 	 */
-	public boolean isTimeUp() {
+	public boolean isTimeUp(){
 		return timeRemaining <= 0;
 	}
 	

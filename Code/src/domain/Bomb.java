@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @implNote Implemented with Claude Sonnet 4.6
  */
-public class Bomb extends DinamicObject implements Interactable, AutomaticMovement, Serializable {
+public class Bomb extends DinamicObject implements AutomaticMovement, Serializable {
 
 	private static final int FPS = 60;
 	private static final int FUSE_SECONDS = 5;
