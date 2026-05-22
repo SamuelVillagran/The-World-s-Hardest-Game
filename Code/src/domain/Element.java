@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public abstract class Element implements Serializable {
 
-	protected int posX, posY;
 	protected float size;
+	protected int posX;
+	protected int posY;
 	
 	public abstract String getPathImage();
 	public abstract String getNameClass();

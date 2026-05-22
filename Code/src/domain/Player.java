@@ -11,6 +11,7 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 
 	private int collectedCoins;
 	private int deaths;
+	private int totalDeathsGot;
 	private int lifes;
 	protected String name;
 	protected int baseSpeed;
@@ -32,6 +33,7 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 		baseSpeed = 3;
 		size = 0.5f;
 		lifes = INITIAL_LIFES;
+		totalDeathsGot = 0;
 		playerType = type;
 		this.state = createInitialState(type);
 	} 
@@ -132,10 +134,11 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 		this.collectedCoins = 0;
 		this.goalCompleted = false;
 		this.lifes = INITIAL_LIFES;
+		this.deaths = 0;
 		try {
 			this.state = createInitialState(playerType);
-		}catch(HardestGameException e) {
-			System.out.println(e.getStackTrace());
+		} catch(HardestGameException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -243,6 +246,10 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	public void setPosition(int x, int y) {
 		posX = x;
 		posY = y;
+	}
+	
+	public int getTotalDeathsGot() {
+		return totalDeathsGot;
 	}
 	
 	public String getNameState() {

@@ -33,10 +33,6 @@ class BombTest {
 		return player;
 	}
 
-	/**
-	 * Verify if player dies and come back the respawn zone when this is red.
-	 * @throws HardestGameException
-	 */
 	@Test
 	void redPlayerDiesAndRespawnsWhenBombExplodes() throws HardestGameException {
 		Player player = runBombTest(PlayerType.RED, FUSE_FRAMES);
@@ -48,10 +44,6 @@ class BombTest {
 		assertEquals("red", player.getNameState());
 	}
 
-	/**
-	 * Verify if player dies and come back the respawn zone when this is blue.
-	 * @throws HardestGameException
-	 */
 	@Test
 	void bluePlayerDiesAndRespawnsWhenBombExplodes() throws HardestGameException {
 		Player player = runBombTest(PlayerType.BLUE, FUSE_FRAMES);
@@ -63,10 +55,6 @@ class BombTest {
 		assertEquals("blue", player.getNameState());
 	}
 
-	/**
-	 * Verify if green player loses a life but does not die with one explosion.
-	 * @throws HardestGameException
-	 */
 	@Test
 	void greenPlayerLosesOneLifeOnFirstBombExplosion() throws HardestGameException {
 		Player player = runBombTest(PlayerType.GREEN, FUSE_FRAMES);

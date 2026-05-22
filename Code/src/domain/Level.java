@@ -8,6 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @implNot Clasw ayudada a estructurar y unificar por GPT 5-5
+ **/
 public class Level implements CollisionContext, Serializable {
 
 	private int numCoin;
@@ -17,6 +20,7 @@ public class Level implements CollisionContext, Serializable {
 	private List<Player> players;
 	private List<Zone> zones;
 	private int levelTime;
+	private float timeRemaining;
 	private List<LevelComponent> components;
 	private boolean initialized;
 
@@ -24,6 +28,7 @@ public class Level implements CollisionContext, Serializable {
 			List<LevelComponent> components) {
 		this.numCoin = numCoin;
 		this.levelTime = levelTime;
+		this.timeRemaining = levelTime;
 		this.cChecker = cChecker;
 		this.components = new ArrayList<>(components);
 		this.elements = new LinkedHashMap<>();
@@ -234,7 +239,6 @@ public class Level implements CollisionContext, Serializable {
 				player.respawn();
 			}
 		}
-
 		checkZones();
 	}
 
@@ -354,6 +358,18 @@ public class Level implements CollisionContext, Serializable {
 		return levelTime;
 	}
 
+	public float getTimeRemaining() {
+		return timeRemaining;
+	}
+
+	public void tickTime(float delta) {
+		timeRemaining = Math.max(0f, timeRemaining - delta);
+	}
+
+	public boolean isTimeUp() {
+		return timeRemaining <= 0f;
+	}
+
 	public static class Builder {
 
 		private int mapNumber;
@@ -471,4 +487,5 @@ public class Level implements CollisionContext, Serializable {
 			level.putZone(new ArrayList<>(points), type);
 		}
 	}
+
 }
