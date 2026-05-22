@@ -1,5 +1,8 @@
 package domain;
 
+/**
+ * Class helped to make with GPT 5.5
+ */
 public final class EnemyMovementStrategyFactory {
 
 	private EnemyMovementStrategyFactory() {

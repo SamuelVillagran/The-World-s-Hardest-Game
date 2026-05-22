@@ -5,5 +5,8 @@ package domain;
  * implement this interface. 
  */
 public interface Interactable {
-	public void onContact(Player player, Level level);
+	public void onContactWithPlayer(Player player, Level level);
+	public void onContactWithEnemy(Enemy enemy, Level level);
+	
 }
+

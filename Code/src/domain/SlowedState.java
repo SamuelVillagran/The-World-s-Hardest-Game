@@ -10,19 +10,15 @@ public class SlowedState extends PlayerState implements Serializable {
 	}
 
 	@Override
-	public float getSpeed() {
-		return  py.getBaseSpeed() * 0.7f;
+	public float getSizeMultiplier() {
+		return 1.0f;
 	}
 
 	@Override
-	public float getWidth() {
-		return 30.0f;
+	public float getSpeedMultiplier() {
+		return 0.7f;
 	}
 
-	@Override
-	public float getHeight() {
-		return 30.0f;
-	}
 
 	@Override
 	public void onEnemyContact() {
@@ -36,4 +32,5 @@ public class SlowedState extends PlayerState implements Serializable {
 			}
 		}
 	}
+
 }

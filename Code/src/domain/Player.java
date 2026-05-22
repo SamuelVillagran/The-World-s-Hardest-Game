@@ -14,11 +14,10 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	private int totalDeathsGot;
 	private int lifes;
 	protected String name;
-	protected int baseSpeed;
 	private PlayerType playerType;
 	private int respawnX, respawnY;
 	private boolean goalCompleted = false;
-	protected StateEntity state;
+	protected PlayerState state;
 	
 	/**
 	 * 
@@ -30,13 +29,14 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 		collectedCoins = 0;
 		setAttributesPlayer(75, 75);
 		this.name = name;
-		baseSpeed = 3;
-		size = 0.5f;
+		speed = 3;
 		lifes = INITIAL_LIFES;
 		totalDeathsGot = 0;
 		playerType = type;
 		this.state = createInitialState(type);
-	} 
+		width = 20.0f;
+		height = 20.0f;
+	}
 	
 	private PlayerState createInitialState(PlayerType type) throws HardestGameException {
 		switch (type) {
@@ -51,10 +51,12 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 		deaths = 0;
 		collectedCoins = 0;
 		setAttributesPlayer(x, y);
-		size = 0.5f;
 		lifes = INITIAL_LIFES;
 		state = new Red(this);
 		setRespawnPoint(x,y);
+		width = 20.0f;
+		height = 20.0f;
+		speed = 3;
 	}
 	
 
@@ -71,7 +73,7 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	}
 	
 	public float getSpeed() {
-		return speed;
+		return speed*state.getSpeedMultiplier();
 	}
 
 	public void setAttributesPlayer(int x, int y) {
@@ -92,7 +94,7 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	 * @param direction direction is where going to move the player
 	 */
 	public void move(char direction) {
-		float speed = getPlayerState().getSpeed();
+		float speed = this.speed*state.getSpeedMultiplier();
 		switch (direction) {
 			case 'u': posY -= speed;
 				break;
@@ -106,7 +108,7 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	}
 	
 	public void move(char direction, CollisionContext context, CollisionChecker checker) {
-		float speed = getPlayerState().getSpeed();;
+		float speed = this.speed*state.getSpeedMultiplier();;
 		
 		int nextX = posX;
 		int nextY = posY;
@@ -147,33 +149,25 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	 * @return
 	 */
 	public boolean isDead() {
-		return getPlayerState().isDead();
+		return state.isDead();
 	}
 	
 	@Override
 	public float getWidth() {
-		return getPlayerState().getWidth();
+		return width*state.getSizeMultiplier();
 	}
 	
 	@Override
 	public float getHeight() {
-		return getPlayerState().getHeight();
-	}
-	
-	public int getBaseSpeed() {
-		return baseSpeed;
+		return height*state.getSizeMultiplier();
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public PlayerState getPlayerState() {
-		return (PlayerState) state;
-	}
-	
 	public void onEnemyContact() {
-		getPlayerState().onEnemyContact();
+		state.onEnemyContact();
 	}
 
 	public void addCoin() {
@@ -247,6 +241,7 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 		posX = x;
 		posY = y;
 	}
+	
 	
 	public int getTotalDeathsGot() {
 		return totalDeathsGot;

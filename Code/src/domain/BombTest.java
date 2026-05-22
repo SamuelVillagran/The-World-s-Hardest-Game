@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class helped to make with GPT 5.5
+ */
 class BombTest {
 
 	private static final int FUSE_FRAMES = 300;

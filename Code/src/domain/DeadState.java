@@ -9,19 +9,9 @@ public class DeadState extends PlayerState implements Serializable {
 		py.addDeaths();
 	}
 
-	@Override
-	public float getSpeed() {
-		return 0;
-	}
 
-	@Override
-	public float getWidth() {
-		return 18;
-	}
-
-	@Override
-	public float getHeight() {
-		return 18;
+	public float getSizeMultiplier() {
+		return 0.5f;
 	}
 
 	@Override
@@ -31,6 +21,12 @@ public class DeadState extends PlayerState implements Serializable {
 	@Override
 	public boolean isDead() {
 		return true;
+	}
+
+
+	@Override
+	public float getSpeedMultiplier() {
+		return 0.0f;
 	}
 
 }

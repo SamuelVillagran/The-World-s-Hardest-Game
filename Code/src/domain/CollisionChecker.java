@@ -19,7 +19,7 @@ public class CollisionChecker implements Serializable {
 	public void checkContactsWithInteractable(Player player, CollisionContext context, Level level) {
 		for(Interactable element : context.getInteractableElements()) {
 			if(overlaps(player, element)) {
-				element.onContact(player, level);
+				element.onContactWithPlayer(player, level);
 			}
 		}
 	}
