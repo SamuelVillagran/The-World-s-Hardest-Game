@@ -71,7 +71,7 @@ public final class LevelCatalog {
 				.enemy("basic", 10, 7, 10, 24)
 				.enemy("basic", 11, 24, 11, 7)
 				.coin(9, 10)
-				.coin(9, 13);
+				.coin(9, 23);
 
 		rectangleZone(builder, "initial", 6, 2, 13, 5);
 		rectangleZone(builder, "goal", 6, 26, 13, 29);

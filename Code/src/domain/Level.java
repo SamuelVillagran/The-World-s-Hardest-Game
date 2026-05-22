@@ -322,8 +322,8 @@ public class Level implements CollisionContext, Serializable {
 	 */
 	void addCoin(int row, int col) {
 		int offset = DimensionGame.TILESIZE / 4;
-		Coin coin = new Coin(col * DimensionGame.TILESIZEHEIGHT + offset,
-				row * DimensionGame.TILESIZEWIDTH + offset);
+		Coin coin = new Coin(col * DimensionGame.TILESIZEWIDTH + offset,
+				row * DimensionGame.TILESIZEHEIGHT + offset);
 		elements.put(nextElementId(), coin);
 	}
 
