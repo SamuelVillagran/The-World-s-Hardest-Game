@@ -15,6 +15,7 @@ public class TheDOPOHardestGame implements Serializable {
 
 	private boolean paused = false;
 	private boolean gameOver = false;
+	private boolean gameWon = false;
 
 	private Level currentLevel;
 	private ArrayList<Player> players;
@@ -39,6 +40,7 @@ public class TheDOPOHardestGame implements Serializable {
 		this.numCurrentLevel = numCurrentLevel;
 		this.players = new ArrayList<>(gameMode.createPlayers());
 		this.gameOver = false;
+		this.gameWon = false;
 		this.paused = false;
 		loadLevel(buildLevel(numCurrentLevel));
 	}
@@ -111,6 +113,7 @@ public class TheDOPOHardestGame implements Serializable {
 			player.reset();
 		}
 		gameOver = false;
+		gameWon = false;
 		loadLevel(buildLevel(numCurrentLevel));
 	}
 
@@ -128,22 +131,27 @@ public class TheDOPOHardestGame implements Serializable {
 		}
 
 		if (currentLevel.isTimeUp() || gameMode.isGameOver(players, currentLevel)) {
-			endGame();
+			endGame(false);
 		}
 	}
 
-	private void endGame() {
+	private void endGame(boolean won) {
 		gameOver = true;
+		gameWon = won;
 	}
 
 	public boolean isGameOver() {
 		return gameOver;
 	}
 
+	public boolean isGameWon() {
+		return gameWon;
+	}
+
 	public void nextLevel() {
 		numCurrentLevel++;
 		if (!LevelCatalog.hasLevel(numCurrentLevel)) {
-			endGame();
+			endGame(true);
 			return;
 		}
 		for (Player player : players) {
@@ -153,7 +161,7 @@ public class TheDOPOHardestGame implements Serializable {
 			loadLevel(buildLevel(numCurrentLevel));
 		} catch (HardestGameException e) {
 			e.printStackTrace();
-			endGame();
+			endGame(false);
 		}
 	}
 

@@ -106,10 +106,12 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 				delta--;
 
 				try {
-					if (TheDOPOHardestGame.getGame().isGameOver()) {
+					TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
+					if (game.isGameOver()) {
 						gameThread = null;
-						JOptionPane.showMessageDialog(this, "Juego perdido!", "Juego finalizado",
-								JOptionPane.WARNING_MESSAGE);
+						String message = game.isGameWon() ? "Juego completado!" : "Juego perdido!";
+						int messageType = game.isGameWon() ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE;
+						JOptionPane.showMessageDialog(this, message, "Juego finalizado", messageType);
 					}
 				} catch (HardestGameException e) {
 					e.printStackTrace();

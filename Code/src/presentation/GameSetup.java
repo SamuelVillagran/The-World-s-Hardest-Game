@@ -33,7 +33,7 @@ public class GameSetup {
         this.nameP2 = name;
         return this;
     }
-    
+
     /**
      * Build the game mode with the specific type players and their names.
      * @return GameMode instance.
