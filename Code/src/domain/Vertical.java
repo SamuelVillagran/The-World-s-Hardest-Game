@@ -13,8 +13,8 @@ public class Vertical extends ColliderEnemy implements AutomaticMovement, Serial
 
 	@Override
 	public void move(CollisionChecker checker, Level level) {
-		int nextX = enemy.getPosX();
-	    int nextY = enemy.getPosY();
+		float nextX = enemy.getPosX();
+		float nextY = enemy.getPosY();
 	   
 		if (!checker.canMove(enemy, nextX, nextY, level)) {
 			enemy.setDirection((enemy.getDirection() == 'u') ? 'd' : 'u');

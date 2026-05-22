@@ -8,7 +8,7 @@ public abstract class ColliderEnemy implements Serializable {
 	protected Enemy enemy;
 	
 	protected void setInitialDirection() {
-		int dx2 = 0, dy2 = 0;
+		float dx2 = 0, dy2 = 0;
 		Point point1 = enemy.getMovement().get(0);
 		Point point2 = enemy.getMovement().get(1);
 		int px1 = (int) point1.getX();

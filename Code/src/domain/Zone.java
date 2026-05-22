@@ -23,12 +23,12 @@ public abstract class Zone implements Serializable {
 	
 	/**
 	 * Check if a point is inside.
-	 * @param x horizontal position element to check.
-	 * @param y vertical position element to check.
+	 * @param f horizontal position element to check.
+	 * @param g vertical position element to check.
 	 * @return true if is inside, false otherwise.
 	 */
-	public boolean contains(int x, int y) {
-		return figure.contains(x, y);
+	public boolean contains(float f, float g) {
+		return figure.contains(f, g);
 	}
 	
 	public int getSpawnX() {

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @implNote takeDamage() added with Claude Sonnet 4.6
  */
-public abstract class Player extends Entity implements Movable, Damageable, Serializable {
+public abstract class Player extends Entity implements Damageable, Serializable {
 
 	private static final int INITIAL_LIFES = 1;
 
@@ -94,33 +94,33 @@ public abstract class Player extends Entity implements Movable, Damageable, Seri
 	 * @param direction direction is where going to move the player
 	 */
 	public void move(char direction) {
-		float speed = this.speed*state.getSpeedMultiplier();
+		float speedPlus = this.speed*state.getSpeedMultiplier();
 		switch (direction) {
-			case 'u': posY -= speed;
+			case 'u': posY -= speedPlus;
 				break;
-			case 'd': posY += speed;
+			case 'd': posY += speedPlus;
 				break;
-			case 'l': posX -= speed;
+			case 'l': posX -= speedPlus;
 				break;
-			case 'r': posX += speed;
+			case 'r': posX += speedPlus;
 				break;
 		}
 	}
 	
 	public void move(char direction, CollisionContext context, CollisionChecker checker) {
-		float speed = this.speed*state.getSpeedMultiplier();;
+		float speedPlus = this.speed*state.getSpeedMultiplier();;
 		
-		int nextX = posX;
-		int nextY = posY;
+		float nextX = posX;
+		float nextY = posY;
 		
 		switch (direction) {
-		case 'u': nextY -= speed;
+		case 'u': nextY -= speedPlus;
 			break;
-		case 'd': nextY += speed;
+		case 'd': nextY += speedPlus;
 			break;
-		case 'l': nextX -= speed;
+		case 'l': nextX -= speedPlus;
 			break;
-		case 'r': nextX += speed;
+		case 'r': nextX += speedPlus;
 			break;
 		default: 
 			return;

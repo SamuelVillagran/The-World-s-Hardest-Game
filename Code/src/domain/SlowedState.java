@@ -16,13 +16,13 @@ public class SlowedState extends PlayerState implements Serializable {
 
 	@Override
 	public float getSpeedMultiplier() {
-		return 0.1f;
+		return 0.3f;
 	}
 
 	@Override
 	public void onEnemyContact() {
 		timeToChange += 1.0 / 60.0;
-		if(timeToChange >= 0.18) {
+		if(timeToChange >= 0.10) {
 			py.substractLife();
 			if (py.getLifes() <= 0) {
 				py.setState(new DeadState(py));

@@ -20,7 +20,6 @@ public class Level implements CollisionContext, Serializable {
 	private int coinsRequired;
 	private LinkedHashMap<Integer, Element> elements;
 	private static Map map;
-	private List<Player> players;
 	private List<Zone> zones;
 	private int timeLimitSeconds;
 	private float timeRemaining;
@@ -38,7 +37,6 @@ public class Level implements CollisionContext, Serializable {
 		this.timeRemaining = timeLimitSeconds;
 		this.components = new ArrayList<>(definition.components());
 		this.elements = new LinkedHashMap<>();
-		this.players = new ArrayList<>();
 		this.zones = new ArrayList<>();
 		this.map = new Map(definition.mapNumber());
 		registerTiles();
@@ -94,6 +92,7 @@ public class Level implements CollisionContext, Serializable {
 	 */
 	private boolean allRequiredCoinsCollected() {
 		int totalCoinsCollected = 0;
+		List<Player> players = getPlayers();
 		for (Player player : players) {
 			totalCoinsCollected += player.getCollectedCoins();
 		}
@@ -105,6 +104,7 @@ public class Level implements CollisionContext, Serializable {
 	 * @return true if every players are in goal zone
 	 */
 	private boolean allPlayersInGoalZone() {
+		List<Player> players = getPlayers();
 		for (Player player : players) {
 			if (!isInsideGoalZone(player)) {
 				return false;
@@ -179,7 +179,6 @@ public class Level implements CollisionContext, Serializable {
 	 */
 	public void setPlayers(List<Player> players) {
 		removeCurrentPlayersFromElements();
-		this.players = players;
 		for (Player player : players) {
 			elements.put(nextElementId(), player);
 		}
@@ -210,15 +209,18 @@ public class Level implements CollisionContext, Serializable {
 	 * @throws HardestGameException
 	 */
 	public void update(CollisionChecker checker) throws HardestGameException {
-		for (Enemy enemy : getEnemies()) {
+		List<Enemy> enemies = getEnemies();
+		for (Enemy enemy : enemies) {
 			enemy.move(checker, this);
 		}
 
-		for (Bomb bomb : getBombs()) {
+		List<Bomb> bombs = getBombs();
+		for (Bomb bomb : bombs) {
 			bomb.action();
 			bomb.explodeIfPending(this);
 		}
-
+		
+		List<Player> players = getPlayers();
 		for (Player player : players) {
 			checker.checkContactsWithInteractable(player, this, this);
 			if (player.isDead()) {
@@ -248,8 +250,8 @@ public class Level implements CollisionContext, Serializable {
 				.filter(e -> overlapsArea(e, bx, by, width, height))
 				.map(e -> (Damageable) e)
 				.collect(Collectors.toCollection(ArrayList::new));
-
-		for (Player player : players) {
+		List<Player> players = getPlayers();
+		for (Player player : getPlayers()) {
 			if (!targets.contains(player) && overlapsArea(player, bx, by, width, height)) {
 				targets.add(player);
 			}
@@ -288,7 +290,8 @@ public class Level implements CollisionContext, Serializable {
 	 * Make the funcionality of zones, make players a effect if player enters to some zone
 	 */
 	public void checkZones() {
-		for (Player player : players) {
+		List<Player> players = getPlayers();
+		for (Player player : getPlayers()) {
 			for (Zone zone : zones) {
 				if (zone.contains(player.getPosX(), player.getPosY())) {
 					zone.whenPlayerEnter(player, this);
@@ -367,6 +370,13 @@ public class Level implements CollisionContext, Serializable {
 		return elements.values().stream()
 				.filter(e -> e instanceof Interactable)
 				.map(e -> (Interactable) e)
+				.collect(Collectors.toList());
+	}
+	
+	public List<Player> getPlayers() {
+		return elements.values().stream()
+				.filter(e -> e instanceof Player)
+				.map(e -> (Player) e)
 				.collect(Collectors.toList());
 	}
 

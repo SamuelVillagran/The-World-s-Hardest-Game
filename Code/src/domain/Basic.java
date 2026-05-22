@@ -17,8 +17,8 @@ public class Basic extends ColliderEnemy implements AutomaticMovement, Serializa
 	public void move(CollisionChecker checker, Level level) {
 		int speed = (int) enemy.getSpeed();
 		char direction = enemy.getDirection();
-		int nextX = enemy.getPosX();
-	    int nextY = enemy.getPosY();
+		float nextX = enemy.getPosX();
+	    float nextY = enemy.getPosY();
 	    
 	    switch (direction) {
 		case 'r' -> nextX += speed;
