@@ -5,7 +5,9 @@ import java.io.Serializable;
 /**
  * @implNote takeDamage() added with Claude Sonnet 4.6
  */
-public abstract class Player extends Entity implements HitBox, Movable, Damageable, Serializable {
+public abstract class Player extends Entity implements Movable, Damageable, Serializable {
+
+	private static final int INITIAL_LIFES = 1;
 
 	private int collectedCoins;
 	private int deaths;
@@ -27,21 +29,21 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 		deaths = 0;
 		collectedCoins = 0;
 		setAttributesPlayer(75, 75);
-		this.state = createInitialState(type);
 		this.name = name;
 		baseSpeed = 3;
 		size = 0.5f;
-		lifes = 1;
+		lifes = INITIAL_LIFES;
 		totalDeathsGot = 0;
 		playerType = type;
+		this.state = createInitialState(type);
 	} 
 	
 	private PlayerState createInitialState(PlayerType type) throws HardestGameException {
-		switch (type){
-		case RED : return new Red(this);
-		case BLUE : return new Blue(this);
-		case GREEN : return new Green(this);
-		default : throw new HardestGameException(HardestGameException.PLAYER_TYPE_UNKNOWN); 
+		switch (type) {
+			case RED : return new Red(this);
+			case BLUE : return new Blue(this);
+			case GREEN : return new Green(this);
+			default : throw new HardestGameException(HardestGameException.PLAYER_TYPE_UNKNOWN); 
 		}
 	}
 	
@@ -49,8 +51,9 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 		deaths = 0;
 		collectedCoins = 0;
 		setAttributesPlayer(x, y);
-		state = new Red(this);
 		size = 0.5f;
+		lifes = INITIAL_LIFES;
+		state = new Red(this);
 		setRespawnPoint(x,y);
 	}
 	
@@ -63,6 +66,7 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	public void respawn() throws HardestGameException {
 		this.posX = respawnX;
 		this.posY = respawnY;
+		this.lifes = INITIAL_LIFES;
 		this.state = createInitialState(playerType);
 	}
 	
@@ -129,11 +133,12 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	public void reset() {
 		this.collectedCoins = 0;
 		this.goalCompleted = false;
+		this.lifes = INITIAL_LIFES;
 		this.deaths = 0;
 		try {
-			this.createInitialState(playerType);
-		}catch(HardestGameException e) {
-			System.out.println(e.getStackTrace());
+			this.state = createInitialState(playerType);
+		} catch(HardestGameException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -146,12 +151,12 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	}
 	
 	@Override
-	public int getWidth() {
+	public float getWidth() {
 		return getPlayerState().getWidth();
 	}
 	
 	@Override
-	public int getHeight() {
+	public float getHeight() {
 		return getPlayerState().getHeight();
 	}
 	
@@ -176,6 +181,9 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	}
 
 	public void destroy() {
+		if (isDead()) {
+			return;
+		}
 		setState(new DeadState(this));
 	}
 
@@ -184,7 +192,13 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	 */
 	@Override
 	public void takeDamage(Level level) {
-		lifes--;
+		if (isDead()) {
+			return;
+		}
+		substractLife();
+		if (lifes <= 0) {
+			destroy();
+		}
 	}
 
 	public void addLife() {
@@ -196,7 +210,9 @@ public abstract class Player extends Entity implements HitBox, Movable, Damageab
 	}
 	
 	public void substractLife() {
-		lifes --;
+		if (lifes > 0) {
+			lifes --;
+		}
 	}
 	
 	public PlayerType getPlayerType() {

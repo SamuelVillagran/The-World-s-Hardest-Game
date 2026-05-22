@@ -1,12 +1,9 @@
 package presentation;
 
 import java.awt.Color;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +23,6 @@ import domain.TheDOPOHardestGame;
 
 public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 
-	private static BufferedImage imageTitleScreen;
-
 	private static final int FPS = 60;
 
 	private KeyHandler keyH;
@@ -35,11 +30,6 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	private HashMap<String, BufferedImage> cachedImages;
 	private InfoPanel infoPanel;
 
-	/**
-	 * initialize the game panel and starts the game in domain.
-	 * @throws IOException
-	 * @throws HardestGameException
-	 */
 	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
 		TheDOPOHardestGame.getGame().startGame(gameMode, 1);
@@ -47,63 +37,53 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		prepareElements();
 		prepareActions();
 	}
-	
-	/**
-	 * Constructor for resuming a previously saved game.
-	 */
+
 	public TheDOPOHardestGameGUI(InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
 		cachedImages = new HashMap<>();
 		prepareElements();
 		prepareActions();
 	}
-	
+
 	private void prepareActions() {
 		keyH = new KeyHandler();
-		this.addKeyListener(keyH);
+		addKeyListener(keyH);
 	}
 
 	private void prepareElements() throws IOException, HardestGameException {
 		setScreen();
-		loadImages(); // <-- cargar una sola vez
-    }
-
-	/*
-	 * Load the paths of images of objects of game
-	 */
-    private void loadImages() throws IOException, HardestGameException {
-    	HashMap<String, String> paths = TheDOPOHardestGame.getGame().getElementsToDraw();
-        for (Entry<String, String> entry : paths.entrySet()) {
-            String path = entry.getValue();
-            InputStream stream = getClass().getResourceAsStream(path);
-            if (stream == null) {
-                System.err.println("loadImages| Recurso no encontrado en classpath " + path);
-                continue;
-            }
-            try {
-                BufferedImage img = ImageIO.read(stream);
-                cachedImages.put(entry.getKey(), img);
-            } catch (IOException e) {
-                System.err.println("loadImages | Error al leer imagen " + path);
-                e.printStackTrace();
-            }
-        }
-    }
-    
-	private void setScreen() {
-		this.setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.SCREENHEIGHT));
-		this.setBackground(Color.BLACK);
-		this.setDoubleBuffered(true);
-		this.setFocusable(true);
+		loadImages();
 	}
 
-	/**
-	 * Main loop: calculates deltaTime, process users input,
-	 * updates domain and redraw.
-	 */
+	private void loadImages() throws IOException, HardestGameException {
+		HashMap<String, String> paths = TheDOPOHardestGame.getGame().getElementsToDraw();
+		for (Entry<String, String> entry : paths.entrySet()) {
+			String path = entry.getValue();
+			InputStream stream = getClass().getResourceAsStream(path);
+			if (stream == null) {
+				System.err.println("loadImages | Recurso no encontrado: " + path);
+				continue;
+			}
+			try {
+				BufferedImage img = ImageIO.read(stream);
+				cachedImages.put(entry.getKey(), img);
+			} catch (IOException e) {
+				System.err.println("loadImages | Error al leer imagen " + path);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void setScreen() {
+		setPreferredSize(new Dimension(DimensionGame.SCREENWIDTH, DimensionGame.SCREENHEIGHT));
+		setBackground(Color.BLACK);
+		setDoubleBuffered(true);
+		setFocusable(true);
+	}
+
 	@Override
 	public void run() {
-		final double NS_INTERVAL = 1_000_000_000.0 / FPS;
+		final double nsInterval = 1_000_000_000.0 / FPS;
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long refreshTimer = 0;
@@ -111,7 +91,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		while (gameThread != null) {
 			long currentTime = System.nanoTime();
 			long elapsed = currentTime - lastTime;
-			delta += elapsed / NS_INTERVAL;
+			delta += elapsed / nsInterval;
 			refreshTimer += elapsed;
 			lastTime = currentTime;
 
@@ -124,18 +104,18 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 				}
 				repaint();
 				delta--;
-				
+
 				try {
-					if(TheDOPOHardestGame.getGame().isGameOver()) {
+					if (TheDOPOHardestGame.getGame().isGameOver()) {
 						gameThread = null;
-						JOptionPane.showMessageDialog(this, "Juego perdido!", "Juego finalizado", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(this, "Juego perdido!", "Juego finalizado",
+								JOptionPane.WARNING_MESSAGE);
 					}
 				} catch (HardestGameException e) {
 					e.printStackTrace();
 				}
 			}
 
-			//Actualiza InfoPanel
 			if (refreshTimer >= 100_000_000L) {
 				refreshTimer = 0;
 				SwingUtilities.invokeLater(() -> {
@@ -156,71 +136,72 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		}
 	}
 
-	/**
-	 * Sends the input keyboard input and delegate the update to domain
-	 */
 	private void update(float deltaTime) throws HardestGameException {
 		TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-		if (keyH.getUp())    game.movePlayers('u');
-		if (keyH.getDown())  game.movePlayers('d');
-		if (keyH.getLeft())  game.movePlayers('l');
-		if (keyH.getRigth()) game.movePlayers('r');
+		if (keyH.getW()) {
+			game.movePlayer1('u');
+		}
+		if (keyH.getS()) {
+			game.movePlayer1('d');
+		}
+		if (keyH.getA()) {
+			game.movePlayer1('l');
+		}
+		if (keyH.getD()) {
+			game.movePlayer1('r');
+		}
+		if (keyH.getUp()) {
+			game.movePlayer2('u');
+		}
+		if (keyH.getDown()) {
+			game.movePlayer2('d');
+		}
+		if (keyH.getLeft()) {
+			game.movePlayer2('l');
+		}
+		if (keyH.getRigth()) {
+			game.movePlayer2('r');
+		}
 		game.update(deltaTime);
 	}
 
-	/**
-	 * Starts the thread game loop.
-	 */
 	public void startGameThread() {
+		if (gameThread != null) {
+			return;
+		}
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
-	
-	/**
-	 * Draw at a panel g2 different entitys
-	 * @param g2
-	 * @throws HardestGameException 
-	 */
+
 	public void draw(Graphics2D g2) throws HardestGameException {
-        // Dibujar; Tiles, obstáculos, monedas 
-        for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
-            BufferedImage img = cachedImages.get(e.getNameClass());
-            if (img == null) {
-                // Lazy-load missing images (e.g. for elements that only appear in later levels)
-                try {
-                    InputStream stream = getClass().getResourceAsStream(e.getPathImage());
-                    if (stream != null) {
-                        img = ImageIO.read(stream);
-                        cachedImages.put(e.getNameClass(), img);
-                    }
-                } catch (IOException ex) {
-                    System.err.println("draw | Error al leer imagen dinámica: " + e.getPathImage());
-                }
-            }
-            if (img != null) {
-                g2.drawImage(img, e.getPosX(), e.getPosY(),
-                    (int)(e.getWidth()),
-                    (int)(e.getHeight()),
-                    null);
-            }
-        }
-    }
-	
-	/**
-	 * Paint components at the graphic
-	 */
+		for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
+			BufferedImage img = cachedImages.get(e.getNameClass());
+			if (img == null) {
+				try {
+					InputStream stream = getClass().getResourceAsStream(e.getPathImage());
+					if (stream != null) {
+						img = ImageIO.read(stream);
+						cachedImages.put(e.getNameClass(), img);
+					}
+				} catch (IOException ex) {
+					System.err.println("draw | Error al leer imagen dinámica: " + e.getPathImage());
+				}
+			}
+			if (img != null) {
+				g2.drawImage(img, e.getPosX(), e.getPosY(), (int) e.getWidth(), (int) e.getHeight(), null);
+			}
+		}
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
-	    super.paintComponent(g);
-	    Graphics2D g2 = (Graphics2D) g;
-	    try {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		try {
 			draw(g2);
 		} catch (HardestGameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    g2.dispose();
+		g2.dispose();
 	}
-	
-	
 }

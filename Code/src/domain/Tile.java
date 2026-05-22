@@ -9,13 +9,13 @@ public abstract class Tile extends Element implements Serializable {
 	}
 	
 	@Override
-	public int getWidth() {
-		return 36;
+	public float getWidth() {
+		return 36.0f;
 	}
 
 	@Override
-	public int getHeight() {
-		return 36;
+	public float getHeight() {
+		return 36.0f;
 	}
 
 }

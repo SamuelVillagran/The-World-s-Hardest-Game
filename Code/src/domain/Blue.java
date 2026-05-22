@@ -10,17 +10,17 @@ public class Blue extends PlayerState implements Serializable {
 
 	@Override
 	public float getSpeed() {
-		return py.getBaseSpeed();
+		return py.getBaseSpeed()*1.5f;
 	}
 
 	@Override
-	public int getWidth() {
-		return 34;
+	public float getWidth() {
+		return 45.0f;
 	}
 
 	@Override
-	public int getHeight() {
-		return 34;
+	public float getHeight() {
+		return 45.0f;
 	}
 
 	@Override

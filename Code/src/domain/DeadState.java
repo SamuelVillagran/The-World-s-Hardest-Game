@@ -15,12 +15,12 @@ public class DeadState extends PlayerState implements Serializable {
 	}
 
 	@Override
-	public int getWidth() {
+	public float getWidth() {
 		return 18;
 	}
 
 	@Override
-	public int getHeight() {
+	public float getHeight() {
 		return 18;
 	}
 

@@ -2,6 +2,6 @@ package domain;
 
 public interface AutomaticMovement {
 
-	void move();
+	void move(CollisionChecker checker, Level level);
 	
 }
