@@ -55,7 +55,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		loadImages();
 	}
 
-	private void loadImages() throws IOException, HardestGameException {
+	private void loadImages() throws IOException, HardestGameException { // Help to make try/catch to GPT-4o
 		HashMap<String, String> paths = TheDOPOHardestGame.getGame().getElementsToDraw();
 		for (Entry<String, String> entry : paths.entrySet()) {
 			String path = entry.getValue();
@@ -128,7 +128,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 				});
 			}
 
-			try {
+			try {// Help to optimize by GPT-4o
 				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
