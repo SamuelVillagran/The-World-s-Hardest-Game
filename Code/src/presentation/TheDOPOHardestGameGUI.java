@@ -28,12 +28,14 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	private KeyHandler keyH;
 	private Thread gameThread;
 	private HashMap<String, BufferedImage> cachedImages;
+	private HashMap<String, String> lastKnownPath;
 	private InfoPanel infoPanel;
 
 	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
 		TheDOPOHardestGame.getGame().startGame(gameMode, 3);
 		cachedImages = new HashMap<>();
+		lastKnownPath = new HashMap<>();
 		prepareElements();
 		prepareActions();
 	}
@@ -176,22 +178,33 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	}
 
 	public void draw(Graphics2D g2) throws HardestGameException {
-		for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {
-			BufferedImage img = cachedImages.get(e.getNameClass());
-			if (img == null) {
-				try {
-					InputStream stream = getClass().getResourceAsStream(e.getPathImage());
-					if (stream != null) {
-						img = ImageIO.read(stream);
-						cachedImages.put(e.getNameClass(), img);
-					}
-				} catch (IOException ex) {
-					System.err.println("draw | Error al leer imagen dinámica: " + e.getPathImage());
-				}
-			}
-			if (img != null) {
-				g2.drawImage(img, (int) e.getPosX(), (int) e.getPosY(), (int) e.getWidth(), (int) e.getHeight(), null);
-			}
+		for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {// Ayudado a corregir con Claude Sonnet 4.6 IA
+			String nameClass = e.getNameClass();
+	        String currentPath = e.getPathImage();
+
+	        // Si el path cambió, invalida la imagen cacheada
+	        if (!currentPath.equals(lastKnownPath.get(nameClass))) {
+	            cachedImages.remove(nameClass);
+	            lastKnownPath.put(nameClass, currentPath);
+	        }
+
+	        BufferedImage img = cachedImages.get(nameClass);
+	        if (img == null) {
+	            try {
+	                InputStream stream = getClass().getResourceAsStream(currentPath);
+	                if (stream != null) {
+	                    img = ImageIO.read(stream);
+	                    cachedImages.put(nameClass, img);
+	                }
+	            } catch (IOException ex) {
+	                System.err.println("draw | Error: " + currentPath);
+	            }
+	        }
+
+	        if (img != null) {
+	            g2.drawImage(img, (int) e.getPosX(), (int) e.getPosY(),
+	                    (int) e.getWidth(), (int) e.getHeight(), null);
+	        }
 		}
 	}
 
