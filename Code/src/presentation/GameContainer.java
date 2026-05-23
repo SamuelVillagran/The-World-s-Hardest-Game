@@ -92,7 +92,7 @@ public class GameContainer extends JPanel {
 	public void startGame() throws IOException, HardestGameException {
 		GameMode gameMode = setup.build();
 		try {
-			launchGamePanel(new TheDOPOHardestGameGUI(gameMode, infoPanel));
+			launchGamePanel(new TheDOPOHardestGameGUI(gameMode, infoPanel, this));
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error al iniciar el juego: " + e.getMessage());
@@ -101,10 +101,30 @@ public class GameContainer extends JPanel {
 
 	public void resumeGame() {
 		try {
-			launchGamePanel(new TheDOPOHardestGameGUI(infoPanel));
+			launchGamePanel(new TheDOPOHardestGameGUI(infoPanel, this));
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error al reanudar el juego: " + e.getMessage());
+		}
+	}
+
+	public void goToMenu() {
+		if (activeGamePanel != null) {
+			activeGamePanel.stopThread();
+		}
+		infoPanel.setVisible(false);
+		showMode(MENU_MODE);
+	}
+
+	public void restartFromLevel1() {
+		if (activeGamePanel != null) {
+			activeGamePanel.stopThread();
+		}
+		try {
+			startGame();
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Error al reiniciar: " + e.getMessage());
 		}
 	}
 

@@ -12,40 +12,40 @@ class PlayerMovementTest {
     //Movimiento basico
 
     @Test
-    void redPlayerMovesRightWhenDirectionIsR() throws HardestGameException {
+   public void shouldRedPlayerMovesRightWhenDirectionIsR() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
-        int initialX = player.getPosX();
+        float initialX = player.getPosX();
         player.move('r');
         assertTrue(player.getPosX() > initialX);
     }
 
     @Test
-    void redPlayerMovesLeftWhenDirectionIsL() throws HardestGameException {
+    public void shouldRedPlayerMovesLeftWhenDirectionIsL() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
-        int initialX = player.getPosX();
+        float initialX = player.getPosX();
         player.move('l');
         assertTrue(player.getPosX() < initialX);
     }
 
     @Test
-    void redPlayerMovesDownWhenDirectionIsD() throws HardestGameException {
+    public void shouldRedPlayerMovesDownWhenDirectionIsD() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
-        int initialY = player.getPosY();
+        float initialY = player.getPosY();
         player.move('d');
         assertTrue(player.getPosY() > initialY);
     }
 
     @Test
-    void redPlayerMovesUpWhenDirectionIsU() throws HardestGameException {
+    public void shouldRedPlayerMovesUpWhenDirectionIsU() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
-        int initialY = player.getPosY();
+        float initialY = player.getPosY();
         player.move('u');
         assertTrue(player.getPosY() < initialY);
     }
 
     //Pruebas unitarias
     @Test
-    void bluePlayerIsLargerThanRedPlayer() throws HardestGameException {
+    public void shouldBluePlayerIsLargerThanRedPlayer() throws HardestGameException {
         Player red = new HumanPlayer(PlayerType.RED, "red");
         Player blue = new HumanPlayer(PlayerType.BLUE, "blue");
         assertTrue(blue.getWidth() > red.getWidth());
@@ -53,23 +53,23 @@ class PlayerMovementTest {
     }
 
     @Test
-    void redPlayerStartsWithOneLife() throws HardestGameException {
+    public void shouldRedPlayerStartsWithOneLife() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         assertEquals(1, player.getLifes());
     }
 
     @Test
-    void greenPlayerStartsWithTwoLives() throws HardestGameException {
+    public void shouldGreenPlayerStartsWithTwoLives() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.GREEN, "test");
         assertEquals(2, player.getLifes());
     }
 
     @Test
-    void deadPlayerCannotMove() throws HardestGameException {
+    public void shouldDeadPlayerCannotMove() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         player.onEnemyContact();
-        int x = player.getPosX();
-        int y = player.getPosY();
+        float x = player.getPosX();
+        float y = player.getPosY();
         player.move('r');
         player.move('l');
         player.move('u');
@@ -79,7 +79,7 @@ class PlayerMovementTest {
     }
 
     @Test
-    void deadPlayerReportsDeadState() throws HardestGameException {
+    public void shouldDeadPlayerReportsDeadState() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         assertFalse(player.isDead());
         player.onEnemyContact();
@@ -89,7 +89,7 @@ class PlayerMovementTest {
 
 
     @Test
-    void playerReturnsToRespawnPointAfterDeath() throws HardestGameException {
+    void shouldPlayerReturnsToRespawnPointAfterDeath() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         player.setRespawnPoint(200, 300);
         player.onEnemyContact();
@@ -99,7 +99,7 @@ class PlayerMovementTest {
     }
 
     @Test
-    void playerRestoresLifeAfterRespawn() throws HardestGameException {
+    void shouldPlayerRestoresLifeAfterRespawn() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         player.onEnemyContact();
         player.respawn();

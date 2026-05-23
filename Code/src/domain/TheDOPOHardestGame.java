@@ -149,7 +149,7 @@ public class TheDOPOHardestGame implements Serializable {
 			return;
 		}
 
-		if (currentLevel.isTimeUp() || gameMode.isGameOver(players, currentLevel)) {
+		if (currentLevel.isTimeUp() || (gameMode != null && gameMode.isGameOver(players, currentLevel))) {
 			endGame(false);
 		}
 	}

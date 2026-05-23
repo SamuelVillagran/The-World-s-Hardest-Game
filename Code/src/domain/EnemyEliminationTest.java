@@ -92,8 +92,8 @@ class EnemyEliminationTest {
 
         level.setPlayers(new ArrayList<>());
 
-        int initialX = level.getEnemies().get(0).getPosX();
-        int initialY = level.getEnemies().get(0).getPosY();
+        float initialX = level.getEnemies().get(0).getPosX();
+        float initialY = level.getEnemies().get(0).getPosY();
 
         // Ejecutar un solo frame
         level.update(checker);
