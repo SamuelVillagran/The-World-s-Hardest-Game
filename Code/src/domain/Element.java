@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 public abstract class Element implements Serializable {
 
-	protected int posX;
-	protected int posY;
+	protected float posX;
+	protected float posY;
 	
 	public abstract String getPathImage();
 	public abstract String getNameClass();
 	
 	
-	public int getPosX() {
+	public float getPosX() {
 		return posX;
 	}
-	public int getPosY() {
+	public float getPosY() {
 		return posY;
 	}
 	

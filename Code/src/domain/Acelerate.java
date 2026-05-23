@@ -13,8 +13,8 @@ public class Acelerate extends ColliderEnemy implements AutomaticMovement, Seria
 
 	@Override
 	public void move(CollisionChecker checker, Level level) {
-		int nextX = enemy.getPosX();
-	    int nextY = enemy.getPosY();
+		float nextX = enemy.getPosX();
+		float nextY = enemy.getPosY();
 	   
 		if (!checker.canMove(enemy, nextX, nextY, level)) {
 			if (enemy.getDirection() == 'r' || enemy.getDirection() == 'l') {

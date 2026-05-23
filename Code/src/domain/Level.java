@@ -19,8 +19,7 @@ public class Level implements CollisionContext, Serializable {
 
 	private int coinsRequired;
 	private LinkedHashMap<Integer, Element> elements;
-	private Map map;
-	private List<Player> players;
+	private static Map map;
 	private List<Zone> zones;
 	private int timeLimitSeconds;
 	private float timeRemaining;
@@ -38,7 +37,6 @@ public class Level implements CollisionContext, Serializable {
 		this.timeRemaining = timeLimitSeconds;
 		this.components = new ArrayList<>(definition.components());
 		this.elements = new LinkedHashMap<>();
-		this.players = new ArrayList<>();
 		this.zones = new ArrayList<>();
 		this.map = new Map(definition.mapNumber());
 		registerTiles();
@@ -94,6 +92,7 @@ public class Level implements CollisionContext, Serializable {
 	 */
 	private boolean allRequiredCoinsCollected() {
 		int totalCoinsCollected = 0;
+		List<Player> players = getPlayers();
 		for (Player player : players) {
 			totalCoinsCollected += player.getCollectedCoins();
 		}
@@ -105,6 +104,7 @@ public class Level implements CollisionContext, Serializable {
 	 * @return true if every players are in goal zone
 	 */
 	private boolean allPlayersInGoalZone() {
+		List<Player> players = getPlayers();
 		for (Player player : players) {
 			if (!isInsideGoalZone(player)) {
 				return false;
@@ -179,7 +179,6 @@ public class Level implements CollisionContext, Serializable {
 	 */
 	public void setPlayers(List<Player> players) {
 		removeCurrentPlayersFromElements();
-		this.players = players;
 		for (Player player : players) {
 			elements.put(nextElementId(), player);
 		}
@@ -214,20 +213,23 @@ public class Level implements CollisionContext, Serializable {
 	}
 
 	/**
-	 * 
-	 * @param checker
-	 * @throws HardestGameException
+	 * Make the interactions with diferents objects of level
+	 * @param checker checker is the checker of collisions 
+	 * @throws HardestGameException 
 	 */
 	public void update(CollisionChecker checker) throws HardestGameException {
-		for (Enemy enemy : getEnemies()) {
+		List<Enemy> enemies = getEnemies();
+		for (Enemy enemy : enemies) {
 			enemy.move(checker, this);
 		}
 
-		for (Bomb bomb : getBombs()) {
+		List<Bomb> bombs = getBombs();
+		for (Bomb bomb : bombs) {
 			bomb.action();
 			bomb.explodeIfPending(this);
 		}
-
+		
+		List<Player> players = getPlayers();
 		for (Player player : players) {
 			checker.checkContactsWithInteractable(player, this, this);
 			if (player.isDead()) {
@@ -257,8 +259,8 @@ public class Level implements CollisionContext, Serializable {
 				.filter(e -> overlapsArea(e, bx, by, width, height))
 				.map(e -> (Damageable) e)
 				.collect(Collectors.toCollection(ArrayList::new));
-
-		for (Player player : players) {
+		List<Player> players = getPlayers();
+		for (Player player : getPlayers()) {
 			if (!targets.contains(player) && overlapsArea(player, bx, by, width, height)) {
 				targets.add(player);
 			}
@@ -276,7 +278,7 @@ public class Level implements CollisionContext, Serializable {
 	 * @return true If elements is inside bounds of zone
 	 * 			false otherwise
 	 */
-	private boolean overlapsArea(Element e, float bx, float by, float width, float height) {
+	private boolean overlapsArea(Element e, float bx, float by, float width, float height) { // Helped to make with Claude Sonnet 4.6 IA
 		return e.getPosX() < bx + width
 				&& e.getPosX() + e.getWidth() > bx
 				&& e.getPosY() < by + height
@@ -297,7 +299,8 @@ public class Level implements CollisionContext, Serializable {
 	 * Make the funcionality of zones, make players a effect if player enters to some zone
 	 */
 	public void checkZones() {
-		for (Player player : players) {
+		List<Player> players = getPlayers();
+		for (Player player : getPlayers()) {
 			for (Zone zone : zones) {
 				if (zone.contains(player.getPosX(), player.getPosY())) {
 					zone.whenPlayerEnter(player);
@@ -333,6 +336,14 @@ public class Level implements CollisionContext, Serializable {
 		int offset = DimensionGame.TILESIZE / 4;
 		Coin coin = new Coin(col * DimensionGame.TILESIZEWIDTH + offset,
 				row * DimensionGame.TILESIZEHEIGHT + offset);
+		elements.put(nextElementId(), coin);
+	}
+	
+	void addCoin(int row, int col, String type) {
+		int offset = DimensionGame.TILESIZE / 4;
+		Coin coin = new Coin(col * DimensionGame.TILESIZEWIDTH + offset,
+				row * DimensionGame.TILESIZEHEIGHT + offset);
+		coin.setSkin(CoinFactory.createSkin(type, coin));
 		elements.put(nextElementId(), coin);
 	}
 
@@ -378,6 +389,13 @@ public class Level implements CollisionContext, Serializable {
 				.map(e -> (Interactable) e)
 				.collect(Collectors.toList());
 	}
+	
+	public List<Player> getPlayers() {
+		return elements.values().stream()
+				.filter(e -> e instanceof Player)
+				.map(e -> (Player) e)
+				.collect(Collectors.toList());
+	}
 
 	public Zone getInitialZone() {
 		for (Zone zone : zones) {
@@ -405,7 +423,6 @@ public class Level implements CollisionContext, Serializable {
 	
 	/**
 	 * Decrements the remaining time by the given delta, clamping the result to zero.
-	 *
 	 * @param delta The time elapsed since the last frame.
 	 */
 	public void tickTime(float delta) {

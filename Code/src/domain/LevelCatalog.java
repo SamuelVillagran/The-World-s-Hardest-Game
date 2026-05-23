@@ -127,7 +127,10 @@ public final class LevelCatalog {
 				.bomb(10, 17)
 				.bomb(6, 17)
 				.bomb(5, 23)
-				.bomb(9, 26);
+				.bomb(9, 26)
+				.coin(14, 3, "red")
+				.coin(14, 7, "blue")
+				.coin(3, 16, "green");
 
 		builder.zone("initial",
 				LevelBuilder.tilePoint(3, 2),

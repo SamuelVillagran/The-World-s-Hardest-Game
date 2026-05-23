@@ -29,8 +29,8 @@ public class Figure implements Serializable {
 	 * @param point point that going to verify if this is inside of this figure
 	 * @return true if point is inside of the figure, false if is out of this figure
 	 */
-	public boolean contains(int x, int y) {
-		return polygon.contains(x, y);
+	public boolean contains(float f, float g) {
+		return polygon.contains(f, g);
 	}
 	
 	public int getXCenter() {

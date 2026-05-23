@@ -5,12 +5,12 @@ import java.util.List;
 
 public class CollisionChecker implements Serializable {
 	
-	public boolean canMove(Element mover, int px, int py, CollisionContext context) {
+	public boolean canMove(Element mover, float nextX, float nextY, CollisionContext context) {
 		List<Solid> solidElements = context.getSolidElements();
 		boolean isOverlaps = false;
 		for (Solid solid : solidElements) {
             if (solid == mover) continue;
-            isOverlaps = overlaps(px, py, mover, (Element) solid);
+            isOverlaps = overlaps(nextX, nextY, mover, (Element) solid);
             if (isOverlaps) return false;
         }
         return true;
@@ -32,11 +32,11 @@ public class CollisionChecker implements Serializable {
 	}
 	
 	
-	private boolean overlaps(int px, int py, Element mover, Element other) {
-		 return px < ((Element) other).getPosX() + other.getWidth()
-         && px + mover.getWidth() > ((Element)other).getPosX()
-         && py < ((Element)other).getPosY() + other.getHeight()
-         && py + mover.getHeight() > ((Element)other).getPosY();
+	private boolean overlaps(float nextX, float nextY, Element mover, Element other) {
+		 return nextX < ((Element) other).getPosX() + other.getWidth()
+         && nextX + mover.getWidth() > ((Element)other).getPosX()
+         && nextY < ((Element)other).getPosY() + other.getHeight()
+         && nextY + mover.getHeight() > ((Element)other).getPosY();
 	}
 
 }
