@@ -9,7 +9,7 @@ import java.util.logging.Level;
  * 
  */
 public class Log {
-    public static String name="Fifa";
+    public static String name="HardestGame";
     
     public static void record(Exception e){
         try{

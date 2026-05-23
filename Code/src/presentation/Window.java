@@ -50,7 +50,7 @@ public class Window extends JFrame {
 		});
 	}
 
-	protected void saveAsAction() {
+	private void saveAsAction() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new FileNameExtensionFilter("DAT Files", "dat"));
 		int result = fileChooser.showSaveDialog(Window.this);

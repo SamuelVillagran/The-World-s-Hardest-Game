@@ -9,11 +9,6 @@ public class CoinSpawn extends SuperObjectSpawn implements LevelComponent {
 		this.type = type;
 	}
 
-//	@Override
-//	public void addTo(Level level, String type) {
-//		level.addCoin(row, col);
-//	}
-
 	public CoinSpawn(int row, int col) {
 		super(row, col);
 	}
