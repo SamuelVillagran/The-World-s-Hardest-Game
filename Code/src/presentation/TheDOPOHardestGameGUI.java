@@ -124,8 +124,13 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 				refreshTimer = 0;
 				SwingUtilities.invokeLater(() -> {
 					try {
-						TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-						infoPanel.refresh(game.getPlayer1(), game.getTimeRemaining());
+						
+						if (TheDOPOHardestGame.getGame().getPlayers().size() >= 2) {
+							infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), TheDOPOHardestGame.getGame().getPlayer2(), TheDOPOHardestGame.getGame().getTimeRemaining());
+						} else {
+							infoPanel.refresh(TheDOPOHardestGame.getGame().getPlayer1(), TheDOPOHardestGame.getGame().getTimeRemaining());
+						}
+						
 					} catch (HardestGameException e) {
 						e.printStackTrace();
 					}

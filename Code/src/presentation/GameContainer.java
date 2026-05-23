@@ -46,7 +46,6 @@ public class GameContainer extends JPanel {
 		cardPanel.setOpaque(false);
 
 		cardPanel.add(new MenuPanel(this), MENU_MODE);
-		cardPanel.add(new PlayerConfig(this), PLAYER_CONFIG_MODE);
 
 		infoPanel = new InfoPanel();
 		infoPanel.setVisible(false);
@@ -54,6 +53,8 @@ public class GameContainer extends JPanel {
 
 		cardLayout.show(cardPanel, MENU_MODE);
 		add(cardPanel, BorderLayout.CENTER);
+		
+		cardPanel.add(new PlayerConfig(this, setup.getMode()), PLAYER_CONFIG_MODE);
 	}
 
 	private void loadImages() {
@@ -81,11 +82,21 @@ public class GameContainer extends JPanel {
 
 	public void onModeSelected(ModeType mode) {
 		setup.setMode(mode);
+		cardPanel.add(new PlayerConfig(this, mode), PLAYER_CONFIG_MODE);
 		showMode(PLAYER_CONFIG_MODE);
 	}
 
 	public void onPlayerConfigConfirmed(PlayerType type, String name) throws IOException, HardestGameException {
 		setup.setPlayer(type, name);
+		startGame();
+	}
+	
+	public void onPlayerConfigConfirmed(PlayerType type, String name,
+        PlayerType type2, String name2) throws IOException, HardestGameException {
+		setup.setPlayer(type, name);
+		if (type2 != null) {
+			setup.setPlayer2(type2, name2);
+		}
 		startGame();
 	}
 

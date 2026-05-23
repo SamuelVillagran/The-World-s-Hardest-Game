@@ -3,6 +3,7 @@ package presentation;
 import domain.GameMode;
 import domain.ModePlayer;
 import domain.PlayerType;
+import domain.PlayerVsPlayerMode;
 
 /**
  * This class store information about the different configuration panels
@@ -43,13 +44,17 @@ public class GameSetup {
             case SINGLE_PLAYER:
                 return new ModePlayer(typeP1, nameP1);
             case PVP:
-                //return new PlayerVsPlayerMode(typeP1, nameP1, typeP2, nameP2);
+                return new PlayerVsPlayerMode(typeP1, nameP1, typeP2, nameP2);
             case PVM:
                 //return new PlayerVsMachineMode(typeP1, nameP1, typeP2, machineBehavior);
             default:
                 throw new IllegalStateException("Modo no configurado");
         }
     }
+
+	public ModeType getMode() {
+		return modeType;
+	}
     
 }
     

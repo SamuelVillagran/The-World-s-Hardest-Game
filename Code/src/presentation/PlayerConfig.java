@@ -2,6 +2,7 @@ package presentation;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -13,6 +14,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -35,14 +38,81 @@ public class PlayerConfig extends JPanel{
 	private BufferedImage backgroundImage;
 	private JButton startBtn;
 	private PlayerType selectedType = PlayerType.BLUE;
+	private PlayerType selectedType2 = PlayerType.RED;
+	private JTextField nameField2;
+	private JPanel player2Panel;
+	private ModeType mode;
 	
 	public PlayerConfig(GameContainer container) {
+		
 		loadImage();
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		prepareElements(container);
+		
 	}
 	
+	public PlayerConfig(GameContainer container, ModeType mode) {
+		this.mode = mode;
+	    loadImage();
+        setOpaque(false);
+        setLayout(new BorderLayout());
+        prepareElements(container);
+	}
+	
+	private JPanel buildPlayer2Section() { // Ayudado a hacer con Claude Sonnet 4.6
+		JPanel panel = new JPanel();
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	    panel.setOpaque(false);
+
+	    JLabel label = sectionLabel("Jugador 2 — Nombre");
+	    label.setForeground(Color.BLACK);
+	    label.setAlignmentX(LEFT_ALIGNMENT);
+
+	    nameField2 = new JTextField();
+	    nameField2.setFont(new Font("Arial", Font.PLAIN, 16));
+	    nameField2.setBackground(new Color(30, 30, 30));
+	    nameField2.setForeground(Color.WHITE);
+	    nameField2.setCaretColor(Color.WHITE);
+	    nameField2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34));
+	    nameField2.setAlignmentX(LEFT_ALIGNMENT);
+
+	    JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+	    buttons.setOpaque(false);
+	    buttons.add(colorColumn2(Color.BLUE,             "Azul",  PlayerType.BLUE));
+	    buttons.add(colorColumn2(Color.RED,              "Rojo",  PlayerType.RED));
+	    buttons.add(colorColumn2(new Color(30, 160, 30), "Verde", PlayerType.GREEN));
+
+	    panel.add(label);
+	    panel.add(Box.createVerticalStrut(4));
+	    panel.add(nameField2);
+	    panel.add(Box.createVerticalStrut(4));
+	    panel.add(buttons);
+	    return panel;
+	}
+
+	private JPanel colorColumn2(Color color, String labelText, PlayerType type) {
+	    JPanel col = new JPanel(new BorderLayout(0, 5));
+	    col.setOpaque(false);
+
+	    JButton btn = new JButton();
+	    btn.setBackground(color);
+	    btn.setPreferredSize(new Dimension(52, 52));
+	    btn.setBorderPainted(false);
+	    btn.setFocusPainted(false);
+	    btn.setOpaque(true);
+	    btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+	    JLabel lbl = new JLabel(labelText, JLabel.CENTER);
+	    lbl.setForeground(TEXT_COLOR);
+	    lbl.setFont(new Font("Arial", Font.BOLD, 13));
+
+	    col.add(btn, BorderLayout.CENTER);
+	    col.add(lbl, BorderLayout.SOUTH);
+	    btn.addActionListener(e -> selectedType2 = type);
+	    return col;
+	}
+
 	private void loadImage() {
 		try {
 			backgroundImage = ImageIO.read(getClass().getResourceAsStream("/background/playerConfig.png"));
@@ -59,15 +129,23 @@ public class PlayerConfig extends JPanel{
 		add(spacerW(300), BorderLayout.EAST);
 		
 		// Contenido Centro - GridLayout con 4 filas
-		JPanel content = new JPanel(new GridLayout(4, 1, 0, 18));
+		int rows = mode == ModeType.PVP ? 5 : 4;
+		JPanel content = new JPanel(new GridLayout(rows, 1, 0, 18));
 		content.setOpaque(false);
 
 		content.add(buildNameRow());
 		content.add(buildColorRow());
 		content.add(buildComboRow());
-		content.add(buildStartRow(container));
 
 		add(content, BorderLayout.CENTER);
+		
+		if (mode == ModeType.PVP) {
+            player2Panel = buildPlayer2Section();
+            content.add(player2Panel);
+        }
+
+		content.add(buildStartRow(container));
+        add(content, BorderLayout.CENTER);
 	}
 	
 	private JPanel buildNameRow() {
@@ -210,20 +288,28 @@ public class PlayerConfig extends JPanel{
 	
 	private void prepareActionStart(GameContainer container) {
 		startBtn.addActionListener(e -> {
-
-			String name = nameField.getText();
-			if(name.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Ingrese un nombre");
-				return;
-			}
-			try {
-				container.onPlayerConfigConfirmed(selectedType, name);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (HardestGameException e1) {
-				e1.printStackTrace();
-
-			}
+		String name = nameField.getText();
+		if(name.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Ingrese un nombre");
+			return;
+		}
+			
+		PlayerType type2 = null;
+	    String name2 = null;
+	    try {
+             if (mode == ModeType.PVP) {
+                  name2 = nameField2.getText();
+                  if (name2.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Ingrese nombre del jugador 2");
+                        return;
+                  }
+                  container.onPlayerConfigConfirmed(selectedType, name, selectedType2, name2);
+                } else {
+                  container.onPlayerConfigConfirmed(selectedType, name, null, null);
+                }
+            } catch (IOException | HardestGameException ex) {
+                ex.printStackTrace();
+            }
 		});
 	}
 }

@@ -1,5 +1,6 @@
 package domain;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TheDOPOHardestGame implements Serializable {
 
@@ -246,5 +248,9 @@ public class TheDOPOHardestGame implements Serializable {
 
 	public boolean isPaused() {
 		return paused;
+	}
+
+	public List<Player> getPlayers() {
+		return players;
 	}
 }
