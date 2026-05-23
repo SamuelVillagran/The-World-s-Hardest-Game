@@ -178,9 +178,11 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	}
 
 	public void draw(Graphics2D g2) throws HardestGameException {
+		String nameClass;
+        String currentPath;
 		for (Element e : TheDOPOHardestGame.getGame().getElements().values()) {// Ayudado a corregir con Claude Sonnet 4.6 IA
-			String nameClass = e.getNameClass();
-	        String currentPath = e.getPathImage();
+			nameClass = e.getNameClass();
+	        currentPath = e.getPathImage();
 
 	        // Si el path cambió, invalida la imagen cacheada
 	        if (!currentPath.equals(lastKnownPath.get(nameClass))) {
