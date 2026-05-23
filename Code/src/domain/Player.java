@@ -86,6 +86,7 @@ public abstract class Player extends Entity implements Damageable, Serializable 
 	 * @param statePY the new state wished: it could be Slowed or Dead.
 	 */
 	public void setState(PlayerState statePY) {
+		System.out.println("Estado cambiado a: " + statePY.getClass().getSimpleName());
 		this.state = statePY;
 	}
 
@@ -254,5 +255,4 @@ public abstract class Player extends Entity implements Damageable, Serializable 
 	public String getPathImage() {
 		return "/"+getNameClass()+"/"+getNameState()+".png";		
 	}
-	
 }

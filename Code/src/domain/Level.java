@@ -204,9 +204,9 @@ public class Level implements CollisionContext, Serializable {
 	}
 
 	/**
-	 * 
-	 * @param checker
-	 * @throws HardestGameException
+	 * Make the interactions with diferents objects of level
+	 * @param checker checker is the checker of collisions 
+	 * @throws HardestGameException 
 	 */
 	public void update(CollisionChecker checker) throws HardestGameException {
 		List<Enemy> enemies = getEnemies();
@@ -269,7 +269,7 @@ public class Level implements CollisionContext, Serializable {
 	 * @return true If elements is inside bounds of zone
 	 * 			false otherwise
 	 */
-	private boolean overlapsArea(Element e, float bx, float by, float width, float height) {
+	private boolean overlapsArea(Element e, float bx, float by, float width, float height) { // Helped to make with Claude Sonnet 4.6 IA
 		return e.getPosX() < bx + width
 				&& e.getPosX() + e.getWidth() > bx
 				&& e.getPosY() < by + height
@@ -327,6 +327,14 @@ public class Level implements CollisionContext, Serializable {
 		int offset = DimensionGame.TILESIZE / 4;
 		Coin coin = new Coin(col * DimensionGame.TILESIZEWIDTH + offset,
 				row * DimensionGame.TILESIZEHEIGHT + offset);
+		elements.put(nextElementId(), coin);
+	}
+	
+	void addCoin(int row, int col, String type) {
+		int offset = DimensionGame.TILESIZE / 4;
+		Coin coin = new Coin(col * DimensionGame.TILESIZEWIDTH + offset,
+				row * DimensionGame.TILESIZEHEIGHT + offset);
+		coin.setSkin(CoinFactory.createSkin(type, coin));
 		elements.put(nextElementId(), coin);
 	}
 
@@ -406,7 +414,6 @@ public class Level implements CollisionContext, Serializable {
 	
 	/**
 	 * Decrements the remaining time by the given delta, clamping the result to zero.
-	 *
 	 * @param delta The time elapsed since the last frame.
 	 */
 	public void tickTime(float delta) {

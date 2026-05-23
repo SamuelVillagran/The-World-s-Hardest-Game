@@ -32,6 +32,11 @@ public class Map implements Serializable {
 		return "/level/level"+currentLevel+".txt";
 	}
 
+	/**
+	 * Make the text of numbers a integer matrix to presentation charge correctly the map
+	 * @param currentLevel currentLevel is the number od level that going to charge
+	 * @return
+	 */
 	public int[][] loadMap(int currentLevel) {
 		try {
 			String filePathMap = getPathLevel(currentLevel);

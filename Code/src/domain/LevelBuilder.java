@@ -81,7 +81,18 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * This build a coin
+	 * This build a coin with skin
+	 * @param row row where coin will be 
+	 * @param col col where coin will be 
+	 * @return this level builder
+	 */
+	public LevelBuilder coin(int row, int col, String type) {
+		components.add(new CoinSpawn(row, col, type));
+		return this;
+	}
+
+	/**
+	 * This build a normal coin 
 	 * @param row row where coin will be 
 	 * @param col col where coin will be 
 	 * @return this level builder
@@ -90,7 +101,7 @@ public class LevelBuilder {
 		components.add(new CoinSpawn(row, col));
 		return this;
 	}
-
+	
 	/**
 	 * This build a bomb
 	 * @param row row where bomb will be 
@@ -152,4 +163,6 @@ public class LevelBuilder {
 		}
 		return coinCount;
 	}
+
+	
 }
