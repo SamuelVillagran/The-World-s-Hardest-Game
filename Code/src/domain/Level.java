@@ -184,7 +184,16 @@ public class Level implements CollisionContext, Serializable {
 			elements.put(nextElementId(), player);
 		}
 	}
-
+	
+	/**
+	 * Insert a wall directly in the given pixel coordinates.
+	 * @param posX horizontal pixel position.
+	 * @param posY vertical pixel position.
+	 */
+	public void addWall(int posX, int posY) {
+		elements.put(nextElementId(), new Wall(posX, posY));
+	}
+	
 	/*
 	 * 
 	 */
@@ -291,7 +300,7 @@ public class Level implements CollisionContext, Serializable {
 		for (Player player : players) {
 			for (Zone zone : zones) {
 				if (zone.contains(player.getPosX(), player.getPosY())) {
-					zone.whenPlayerEnter(player, this);
+					zone.whenPlayerEnter(player);
 				}
 			}
 		}
