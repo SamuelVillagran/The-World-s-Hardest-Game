@@ -18,6 +18,7 @@ public class GameSetup {
     private PlayerType typeP2;
     private String nameP2;
     
+    @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
     public GameSetup setMode(ModeType mode){
     	this.modeType = mode;
     	return this;

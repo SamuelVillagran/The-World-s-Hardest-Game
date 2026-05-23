@@ -9,10 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import domain.DimensionGame;
 import domain.HardestGameException;
 import domain.Player;
-import domain.PlayerType;
 import domain.TheDOPOHardestGame;
 
 public class InfoPanel extends JPanel{
@@ -32,7 +30,12 @@ public class InfoPanel extends JPanel{
     private JLabel coinsLabel2;
     private JLabel separator;
 	
+    
 	public InfoPanel() throws HardestGameException {
+		initializePanel();
+	}
+	
+	private final void initializePanel() throws HardestGameException {
 		setPreferredSize(new Dimension(TheDOPOHardestGame.getGame().getScreenWidth(), TheDOPOHardestGame.getGame().getTileSizeHeight()));
 		setBackground(new Color(20, 20, 20));
 		setLayout(new FlowLayout(FlowLayout.LEFT, 22, 18));
@@ -77,7 +80,6 @@ public class InfoPanel extends JPanel{
 		add(deathsLabel2);
 		add(coinsLabel2);
 	}
-	
 	
 	private JLabel makeLabel(String text, Color color) {// Ayudado con Claude Sonnet 4.6
 		JLabel label = new JLabel(text);

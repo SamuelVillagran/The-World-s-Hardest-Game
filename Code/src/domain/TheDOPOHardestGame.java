@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TheDOPOHardestGame implements Serializable {
+public final class TheDOPOHardestGame implements Serializable {
 
 	private boolean paused = false;
 	private boolean gameOver = false;

@@ -29,13 +29,13 @@ public class Window extends JFrame {
 	private JMenuItem optionExit;
 	private GameContainer gameContainer;
 
+	
 	public Window() throws HardestGameException {
-		setScreen();
 		prepareElements();
 		prepareActions();
 	}
 
-	private void prepareActions() {
+	private final void prepareActions() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		optionSaveAs.addActionListener(new ActionListener() {
@@ -84,11 +84,12 @@ public class Window extends JFrame {
 		}
 	}
 
-	private void prepareElements() {
+	private final void prepareElements() throws HardestGameException {
+		setScreen();
 		prepareElementsMenu();
 	}
 
-	private void prepareElementsMenu() {
+	private final void prepareElementsMenu() {
 		menuBar = new JMenuBar();
 		menu = new JMenu("Archivo");
 		optionNew = new JMenuItem("Nuevo");
@@ -112,7 +113,7 @@ public class Window extends JFrame {
 		setJMenuBar(menuBar);
 	}
 
-	private void setScreen() throws HardestGameException {
+	private final void setScreen() throws HardestGameException {
 		setResizable(false);
 		setTitle("The DOPO Hardest Game");
 		prepareElementsMenu();

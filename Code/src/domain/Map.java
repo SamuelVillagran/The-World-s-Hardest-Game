@@ -18,17 +18,13 @@ public class Map implements Serializable {
 	private TileFactory tileFactory; //Clase creadora de Tiles.
 	
 	public Map(int level) {
-		this(level, new DefaultTileFactory());
-	}
-	
-	public Map(int level ,TileFactory factory) {
 		mapTileNum = new int[DimensionGame.MAXWORLDROW][DimensionGame.MAXWORLDCOL];
 		tiles = new ArrayList<>();
-		this.tileFactory = factory;
+		this.tileFactory = new DefaultTileFactory();
 		loadMap(level);
 	}
 	
-	public String getPathLevel(int currentLevel) {
+	public final String getPathLevel(int currentLevel) {
 		return "/level/level"+currentLevel+".txt";
 	}
 
@@ -37,7 +33,7 @@ public class Map implements Serializable {
 	 * @param currentLevel currentLevel is the number od level that going to charge
 	 * @return
 	 */
-	public int[][] loadMap(int currentLevel) {
+	public final int[][] loadMap(int currentLevel) {
 		try {
 			String filePathMap = getPathLevel(currentLevel);
 			InputStream is = getClass().getResourceAsStream(filePathMap);

@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class Acelerate extends ColliderEnemy implements AutomaticMovement, Serializable {
 
-	
+	@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 	public Acelerate(Enemy enemy) {
 		this.enemy = enemy;
-		setInitialDirection();
 		enemy.setSpeed(enemy.getSpeed()*2);
+		setInitialDirection();
 	}
 
 	@Override

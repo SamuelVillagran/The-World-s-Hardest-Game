@@ -30,11 +30,12 @@ public class GameContainer extends JPanel {
 	public static final String PLAYER_CONFIG_MODE = "playerConfig";
 	public static final String GAME_MODE = "game";
 
+	
 	public GameContainer() throws HardestGameException {
 		prepareElements();
 	}
 
-	private void prepareElements() throws HardestGameException {
+	private final void prepareElements() throws HardestGameException {
 		setup = new GameSetup();
 		loadImages();
 		setLayout(new BorderLayout());

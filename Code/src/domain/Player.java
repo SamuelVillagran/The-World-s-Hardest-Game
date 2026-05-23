@@ -20,14 +20,13 @@ public abstract class Player extends Entity implements Damageable, Serializable 
 	protected PlayerState state;
 	
 	/**
-	 * 
+	 * Constructor of player
 	 * @param type
 	 * @throws HardestGameException
 	 */
 	public Player(PlayerType type, String name) throws HardestGameException {
 		deaths = 0;
 		collectedCoins = 0;
-		setAttributesPlayer(75, 75);
 		this.name = name;
 		speed = 3;
 		lifes = INITIAL_LIFES;
@@ -50,20 +49,18 @@ public abstract class Player extends Entity implements Damageable, Serializable 
 	public Player(int x, int y) {
 		deaths = 0;
 		collectedCoins = 0;
-		setAttributesPlayer(x, y);
 		lifes = INITIAL_LIFES;
 		state = new Red(this);
-		setRespawnPoint(x,y);
 		width = 20.0f;
 		height = 20.0f;
 		speed = 3;
-	}
-	
-
-	public void setRespawnPoint(int x, int y) {
+		posX = x;
+		posY = y;
 		respawnX = x;
 		respawnY = y;
 	}
+	
+
 	
 	public void respawn() throws HardestGameException {
 		this.posX = respawnX;
@@ -253,5 +250,10 @@ public abstract class Player extends Entity implements Damageable, Serializable 
 
 	public String getPathImage() {
 		return "/"+getNameClass()+"/"+getNameState()+".png";		
+	}
+
+	public void setRespawnPoint(int spawnX, int spawnY) {
+		respawnX = spawnX;
+		respawnY = spawnY;
 	}
 }

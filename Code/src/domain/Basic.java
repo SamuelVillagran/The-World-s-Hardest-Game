@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Basic extends ColliderEnemy implements AutomaticMovement, Serializable {
 
-	
+	@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 	public Basic(Enemy enemy) {
 		this.enemy = enemy;
 		setInitialDirection();

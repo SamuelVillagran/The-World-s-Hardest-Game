@@ -18,14 +18,14 @@ public class MenuPanel extends JPanel{
 	private JButton btnPlayer, btnPvP, btnVsMachine;
 	
 	public MenuPanel(GameContainer container) {
-		setOpaque(false);
-		setLayout(new GridBagLayout());
 		prepareElements();
 		prepareActions(container);
 		
 	}
 
-	private void prepareElements() {
+	private final void prepareElements() {
+		setOpaque(false);
+		setLayout(new GridBagLayout());
 		gridBag = new GridBagConstraints();
 		gridBag.gridx = 0;
 		gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -43,7 +43,7 @@ public class MenuPanel extends JPanel{
 		add(btnVsMachine, gridBag);
 	}
 	
-	private void prepareActions(GameContainer container) {
+	private final void prepareActions(GameContainer container) {
 		
 		btnPlayer.addActionListener(
 				new ActionListener() {

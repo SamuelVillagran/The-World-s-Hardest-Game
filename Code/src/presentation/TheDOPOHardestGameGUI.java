@@ -33,7 +33,7 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 
 	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
-		TheDOPOHardestGame.getGame().startGame(gameMode, 3);
+		TheDOPOHardestGame.getGame().startGame(gameMode, 1);
 		cachedImages = new HashMap<>();
 		lastKnownPath = new HashMap<>();
 		prepareElements();
@@ -47,12 +47,12 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		prepareActions();
 	}
 
-	private void prepareActions() {
+	private final void prepareActions() {
 		keyH = new KeyHandler();
 		addKeyListener(keyH);
 	}
 
-	private void prepareElements() throws IOException, HardestGameException {
+	private final void prepareElements() throws IOException, HardestGameException {
 		setScreen();
 		loadImages();
 	}

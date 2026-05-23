@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 public class Vertical extends ColliderEnemy implements AutomaticMovement, Serializable {
 	
+	@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 	public Vertical(Enemy enemy) {
 		this.enemy = enemy;
 		setInitialDirection();

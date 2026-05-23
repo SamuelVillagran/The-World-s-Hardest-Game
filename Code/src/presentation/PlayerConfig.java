@@ -44,10 +44,7 @@ public class PlayerConfig extends JPanel{
 	private ModeType mode;
 	
 	public PlayerConfig(GameContainer container) {
-		
 		loadImage();
-		setOpaque(false);
-		setLayout(new BorderLayout());
 		prepareElements(container);
 		
 	}
@@ -55,8 +52,6 @@ public class PlayerConfig extends JPanel{
 	public PlayerConfig(GameContainer container, ModeType mode) {
 		this.mode = mode;
 	    loadImage();
-        setOpaque(false);
-        setLayout(new BorderLayout());
         prepareElements(container);
 	}
 	
@@ -113,7 +108,7 @@ public class PlayerConfig extends JPanel{
 	    return col;
 	}
 
-	private void loadImage() {
+	private final void loadImage() {
 		try {
 			backgroundImage = ImageIO.read(getClass().getResourceAsStream("/background/playerConfig.png"));
 		} catch (IOException e) {
@@ -121,7 +116,10 @@ public class PlayerConfig extends JPanel{
 		}
 	}
 	
-	private void prepareElements(GameContainer container) {
+	private final void prepareElements(GameContainer container) {
+		setOpaque(false);
+		setLayout(new BorderLayout());
+		
 		// Paneles para rellenar laterales y parte superior
 		add(spacerH(175),  BorderLayout.NORTH);
 		add(spacerH(40),  BorderLayout.SOUTH);
