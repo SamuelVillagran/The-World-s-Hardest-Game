@@ -10,7 +10,7 @@ import java.util.List;
 class CoinInteractions {
 	
 	@Test
-	void shouldRedCoinDoesNotChangeStateOfRedPlayer() throws HardestGameException {
+	public void shouldRedCoinDoesNotChangeStateOfRedPlayer() throws HardestGameException {
 	    Player player = new HumanPlayer(PlayerType.RED, "test");
 
 	    Coin coin = new Coin();
@@ -20,7 +20,7 @@ class CoinInteractions {
 	}
 	
 	@Test
-	void shouldGreenCoinChangesRedPlayerToGreenStateAndAddsLife() throws HardestGameException {
+	public void shouldGreenCoinChangesRedPlayerToGreenStateAndAddsLife() throws HardestGameException {
 	    Player player = new HumanPlayer(PlayerType.RED, "test");
 	    assertEquals(1, player.getLifes());
 	    GreenCoin greenCoin = new GreenCoin(new Coin());
@@ -30,7 +30,7 @@ class CoinInteractions {
 	}
 	
 	@Test
-	void shouldBlueCoinChangesRedPlayerToBlueState() throws HardestGameException {
+	public void shouldBlueCoinChangesRedPlayerToBlueState() throws HardestGameException {
 	    Player player = new HumanPlayer(PlayerType.RED, "test");
 	    float velocidadAntes = player.getSpeed();
 	    BlueCoin blueCoin = (BlueCoin) CoinFactory.createSkin("blue", new Coin());
@@ -40,7 +40,7 @@ class CoinInteractions {
 	}
 	
 	@Test
-	void shouldRedCoinChangesGreenPlayerToRedState() throws HardestGameException { // Preuba apoyada de Chat-GPT
+	public void shouldRedCoinChangesGreenPlayerToRedState() throws HardestGameException { // Preuba apoyada de Chat-GPT
 	    Player player = new HumanPlayer(PlayerType.GREEN, "test");
 	    Level level = Level.builder(1).time(60).build();
 	    level.initialize();

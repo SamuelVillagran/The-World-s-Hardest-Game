@@ -18,13 +18,13 @@ class CoinCollectionTest {
 
 
     @Test
-    void playerCoinCounterStartsAtZero() throws HardestGameException {
+    public void shouldPlayerCoinCounterStartsAtZero() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         assertEquals(0, player.getCollectedCoins());
     }
 
     @Test
-    void playerCollectsCoinWhenOverlapping() throws HardestGameException {
+    public void shouldPlayerCollectsCoinWhenOverlapping() throws HardestGameException {
         Level level = buildLevelWithCoin();
         CollisionChecker checker = new CollisionChecker();
 
@@ -38,7 +38,7 @@ class CoinCollectionTest {
     }
 
     @Test
-    void coinIsRemovedFromLevelAfterCollection() throws HardestGameException {
+    public void shouldCoinIsRemovedFromLevelAfterCollection() throws HardestGameException {
         Level level = buildLevelWithCoin();
         CollisionChecker checker = new CollisionChecker();
 
@@ -55,7 +55,7 @@ class CoinCollectionTest {
     }
 
     @Test
-    void playerFarFromCoinDoesNotCollectIt() throws HardestGameException {
+    public void shouldPlayerFarFromCoinDoesNotCollectIt() throws HardestGameException {
         Level level = buildLevelWithCoin();
         CollisionChecker checker = new CollisionChecker();
 
@@ -69,7 +69,7 @@ class CoinCollectionTest {
     }
 
     @Test
-    void eachCoinIncreasesCounterByOne() throws HardestGameException {
+    public void shouldEachCoinIncreasesCounterByOne() throws HardestGameException {
         Player player = new HumanPlayer(PlayerType.RED, "test");
         player.addCoin();
         player.addCoin();
@@ -78,7 +78,7 @@ class CoinCollectionTest {
     }
 
     @Test
-    void levelHasCorrectCoinsRequired() throws HardestGameException {
+    public void shouldLevelHasCorrectCoinsRequired() throws HardestGameException {
         Level level = Level.builder(1)
                 .coin(1, 1)
                 .coin(2, 2)
@@ -95,7 +95,50 @@ class CoinCollectionTest {
         assertTrue(level.playerHasAllCoins(player));
     }
 
-
+    //Verificación niveles:
+    
+    @Test
+    public void levelOneLoadsCorrectEnemiesAndCoins() throws HardestGameException {
+        Level level = LevelCatalog.create(1);
+        level.initialize();
+        
+        var elements = level.getElements().values();
+        long enemies = elements.stream().filter(e -> e instanceof Enemy).count();
+        long coins   = elements.stream().filter(e -> e instanceof Coin).count();
+        long bombs   = elements.stream().filter(e -> e instanceof Bomb).count();
+        
+        assertEquals(4, enemies);
+        assertEquals(2, coins);
+        assertEquals(0, bombs);
+        assertEquals(90, level.getLevelTime());
+    }
+    
+    @Test
+    public void levelTwoLoadsEighteenEnemies() throws HardestGameException {
+        Level level = LevelCatalog.create(2);
+        level.initialize();
+        
+        var elements = level.getElements().values();
+        long enemies = elements.stream().filter(e -> e instanceof Enemy).count();
+        long coins   = elements.stream().filter(e -> e instanceof Coin).count();
+        
+        assertEquals(18, enemies);
+        assertEquals(4, coins);
+    }
+    
+    @Test
+    public void levelThreeHasBombsAndSkinCoins() throws HardestGameException {
+        Level level = LevelCatalog.create(3);
+        level.initialize();
+        
+        var elements = level.getElements().values();
+        long enemies = elements.stream().filter(e -> e instanceof Enemy).count();
+        long bombs   = elements.stream().filter(e -> e instanceof Bomb).count();
+        
+        assertEquals(5, enemies);
+        assertEquals(8, bombs);
+    }
+    
     private long countCoins(Level level) {
         return level.getElements().values().stream()
                 .filter(e -> e instanceof Coin)
