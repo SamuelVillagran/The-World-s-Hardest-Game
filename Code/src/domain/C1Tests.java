@@ -56,7 +56,7 @@ class C1Tests {
 		// Jugador en un área libre
 		player.setPosition(400, 324);
 		
-		int initialYPos = player.getPosY(); // 324
+		float initialYPos = player.getPosY(); // 324
 		game.movePlayer1('d'); // 327
 		game.movePlayer1('d'); // 330
 		game.movePlayer1('d'); // 333
@@ -99,7 +99,7 @@ class C1Tests {
 		int respawnXZone = checkPoint.getSpawnX();
 		int respawnYZone = checkPoint.getSpawnY();
 		
-		//Jugador estaria fuera del checkPoint
+		// Jugador estaria fuera de la zona checkPoint
 		player.setPosition(160, 160);
 		checkPoint.whenPlayerEnter(player);
 		assertNotEquals(respawnXZone, player.getRespawnY());
@@ -112,5 +112,35 @@ class C1Tests {
 		assertEquals(respawnYZone, player.getRespawnY());
 	}
 	
+	
+	@Test
+	public void shouldLifeSourceAddsOneLifeToPlayer() throws HardestGameException {
+	    Player player = new HumanPlayer(PlayerType.RED, "test");
+	    Level level = Level.builder(1).time(60).build();
+	    
+	    int lifesBefore = player.getLifes();
+	    level.initialize();
+	    
+	    LifeSource lifeSource = new LifeSource(75, 75);
+	    level.getElements().put(9999, lifeSource);
+	    level.setPlayers(new ArrayList<>(List.of(player)));
+	    
+	    player.setPosition(75, 75); //mismo lugar que la fuente
+	    new CollisionChecker().checkContactsWithInteractable(player, level, level);
+	    assertEquals(lifesBefore + 1, player.getLifes());
+	}
+	
+	@Test
+	public void lifeSourceIsRemovedFromLevelAfterContact() throws HardestGameException {
+	    Player player = new HumanPlayer(PlayerType.RED, "test");
+	    Level level = Level.builder(1).time(60).build();
+	    level.initialize();
+	    LifeSource lifeSource = new LifeSource(75, 75);
+	    level.getElements().put(9999, lifeSource);
+	    level.setPlayers(new ArrayList<>(List.of(player)));
+	    player.setPosition(75, 75);
+	    new CollisionChecker().checkContactsWithInteractable(player, level, level);
+	    assertFalse(level.getElements().containsValue(lifeSource));
+	}
 
 }
