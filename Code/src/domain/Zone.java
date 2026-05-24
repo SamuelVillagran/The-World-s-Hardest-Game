@@ -38,5 +38,5 @@ public abstract class Zone implements Serializable {
 	public int getSpawnY() {
 		return figure.getYCenter();
 	}
-	public abstract void whenPlayerEnter(Player player, Level level);
+	public abstract void whenPlayerEnter(Player player);
 }

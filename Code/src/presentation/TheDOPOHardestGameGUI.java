@@ -26,13 +26,16 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 	private static final int FPS = 60;
 
 	private KeyHandler keyH;
-	private Thread gameThread;
+	private volatile Thread gameThread;
 	private HashMap<String, BufferedImage> cachedImages;
 	private HashMap<String, String> lastKnownPath;
 	private InfoPanel infoPanel;
+	private GameContainer gameContainer;
 
-	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel) throws IOException, HardestGameException {
+	public TheDOPOHardestGameGUI(GameMode gameMode, InfoPanel infoPanel, GameContainer container)
+			throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
+		this.gameContainer = container;
 		TheDOPOHardestGame.getGame().startGame(gameMode, 1);
 		cachedImages = new HashMap<>();
 		lastKnownPath = new HashMap<>();
@@ -40,8 +43,10 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 		prepareActions();
 	}
 
-	public TheDOPOHardestGameGUI(InfoPanel infoPanel) throws IOException, HardestGameException {
+	public TheDOPOHardestGameGUI(InfoPanel infoPanel, GameContainer container)
+			throws IOException, HardestGameException {
 		this.infoPanel = infoPanel;
+		this.gameContainer = container;
 		cachedImages = new HashMap<>();
 		prepareElements();
 		prepareActions();
@@ -147,31 +152,69 @@ public class TheDOPOHardestGameGUI extends JPanel implements Runnable {
 
 	private void update(float deltaTime) throws HardestGameException {
 		TheDOPOHardestGame game = TheDOPOHardestGame.getGame();
-		if (keyH.getW()) {
-			game.movePlayer1('u');
+
+		if (keyH.consumeEscToggle()) {
+			game.pauseGame();
+			SwingUtilities.invokeLater(this::showEscapeMenu);
 		}
-		if (keyH.getS()) {
-			game.movePlayer1('d');
+
+		if (!game.isPaused()) {
+			if (keyH.getW()) {
+				game.movePlayer1('u');
+			}
+			if (keyH.getS()) {
+				game.movePlayer1('d');
+			}
+			if (keyH.getA()) {
+				game.movePlayer1('l');
+			}
+			if (keyH.getD()) {
+				game.movePlayer1('r');
+			}
+			if (keyH.getUp()) {
+				game.movePlayer2('u');
+			}
+			if (keyH.getDown()) {
+				game.movePlayer2('d');
+			}
+			if (keyH.getLeft()) {
+				game.movePlayer2('l');
+			}
+			if (keyH.getRigth()) {
+				game.movePlayer2('r');
+			}
 		}
-		if (keyH.getA()) {
-			game.movePlayer1('l');
-		}
-		if (keyH.getD()) {
-			game.movePlayer1('r');
-		}
-		if (keyH.getUp()) {
-			game.movePlayer2('u');
-		}
-		if (keyH.getDown()) {
-			game.movePlayer2('d');
-		}
-		if (keyH.getLeft()) {
-			game.movePlayer2('l');
-		}
-		if (keyH.getRigth()) {
-			game.movePlayer2('r');
-		}
+
 		game.update(deltaTime);
+	}
+
+	private void showEscapeMenu() {
+		String[] options = { "Volver al menú", "Reiniciar desde nivel 1", "Continuar" };
+		int choice = JOptionPane.showOptionDialog(
+				this,
+				"¿Qué deseas hacer?",
+				"Juego pausado",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				options,
+				options[2]);
+
+		switch (choice) {
+			case 0 -> gameContainer.goToMenu();
+			case 1 -> gameContainer.restartFromLevel1();
+			default -> {
+				try {
+					TheDOPOHardestGame.getGame().resumeGame();
+				} catch (HardestGameException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void stopThread() {
+		gameThread = null;
 	}
 
 	public void startGameThread() {

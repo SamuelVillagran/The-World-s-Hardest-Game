@@ -9,7 +9,7 @@ public class InitialZone extends Zone implements Serializable {
 	}
 
 	@Override
-	public void whenPlayerEnter(Player player, Level level) {
+	public void whenPlayerEnter(Player player) {
 		//No hace nada
 	}
 

@@ -14,6 +14,7 @@ public class KeyHandler extends KeyAdapter {
 	private boolean a;
 	private boolean d;
 	private boolean esc;
+	private boolean escToggle;
 
 	public KeyHandler() {
 		up = false;
@@ -24,6 +25,7 @@ public class KeyHandler extends KeyAdapter {
 		s = false;
 		d = false;
 		w = false;
+		escToggle = false;
 	}
 	
 	@Override
@@ -90,6 +92,7 @@ public class KeyHandler extends KeyAdapter {
 		}
 		if (code == KeyEvent.VK_ESCAPE) {
 			esc = false;
+			escToggle = true;
 		}
 	}
 
@@ -161,5 +164,15 @@ public class KeyHandler extends KeyAdapter {
 	
 	public boolean getEsc() {
 		return esc;
+	}
+
+	/**
+	 * Devuelve true una sola vez cuando Escape fue soltado y lo consume.
+	 * Usar para toggle de pausa sin repetir en cada frame mientras se sostiene la tecla.
+	 */
+	public boolean consumeEscToggle() {
+		boolean fired = escToggle;
+		escToggle = false;
+		return fired;
 	}
 }

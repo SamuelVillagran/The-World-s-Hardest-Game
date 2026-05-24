@@ -26,6 +26,7 @@ public final class TheDOPOHardestGame implements Serializable {
 	private CollisionChecker cChecker;
 	private static TheDOPOHardestGame game;
 
+	
 	private TheDOPOHardestGame() throws HardestGameException {
 		cChecker = new CollisionChecker();
 	}
@@ -60,6 +61,23 @@ public final class TheDOPOHardestGame implements Serializable {
 
 	public HashMap<String, String> getElementsToDraw() throws IOException {
 		return currentLevel.getElementsToDraw();
+	}
+	
+	/**
+	 * Resets the singleton instance.
+	 * Exclusive use for tests.
+	 */
+	public static void resetForTesting() {
+		game = null;
+	}
+	
+	/**
+	 * Set up the game with a custom level and player list
+	 * @return
+	 */
+	public void loadTestLevel(Level level, List<Player> players) {
+		this.players = new ArrayList<Player>(players);
+		loadLevel(level);
 	}
 
 	public Player getPlayer1() {
@@ -132,7 +150,7 @@ public final class TheDOPOHardestGame implements Serializable {
 			return;
 		}
 
-		if (currentLevel.isTimeUp() || gameMode.isGameOver(players, currentLevel)) {
+		if (currentLevel.isTimeUp() || (gameMode != null && gameMode.isGameOver(players, currentLevel))) {
 			endGame(false);
 		}
 	}
@@ -217,10 +235,6 @@ public final class TheDOPOHardestGame implements Serializable {
 			throw new HardestGameException(HardestGameException.FILE_NO_FOUND);
 		}
 
-		if (game != null) {
-			game.stopGame();
-		}
-
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
 			game = (TheDOPOHardestGame) in.readObject();
 		} catch (ClassNotFoundException | IOException e) {
@@ -230,7 +244,6 @@ public final class TheDOPOHardestGame implements Serializable {
 	}
 
 	public void saveAs(File file) throws HardestGameException, FileNotFoundException, IOException {
-		stopGame();
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
 			out.writeObject(this);
 		} catch (IOException e) {
@@ -238,9 +251,6 @@ public final class TheDOPOHardestGame implements Serializable {
 		}
 	}
 
-	public void stopGame() {
-		paused = true;
-	}
 
 	public GameMode getGameMode() {
 		return gameMode;

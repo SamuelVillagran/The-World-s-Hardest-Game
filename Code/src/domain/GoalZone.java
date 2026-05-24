@@ -9,8 +9,10 @@ public class GoalZone extends Zone implements Serializable {
 	}
 
 	@Override
-	public void whenPlayerEnter(Player player, Level level) {
+	public void whenPlayerEnter(Player player) {
+		if(contains(player.getPosX(), player.getPosY())) {
 			player.markGoalCompleted();
+		}
 	}
 
 }

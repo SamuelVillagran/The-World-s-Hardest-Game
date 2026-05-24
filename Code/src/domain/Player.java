@@ -69,6 +69,14 @@ public abstract class Player extends Entity implements Damageable, Serializable 
 		this.state = createInitialState(playerType);
 	}
 	
+	public int getRespawnX() {
+		return respawnX;
+	}
+	
+	public int getRespawnY() {
+		return respawnY;
+	}
+	
 	public float getSpeed() {
 		return speed*state.getSpeedMultiplier();
 	}

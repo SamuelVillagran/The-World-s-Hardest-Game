@@ -10,8 +10,8 @@ public class CheckPoint extends Zone implements Serializable {
 	}
 
 	@Override
-	public void whenPlayerEnter(Player player, Level level) {
-		if(isActive) {
+	public void whenPlayerEnter(Player player) {
+		if(isActive && contains(player.getPosX(), player.getPosY())) {
 			player.setRespawnPoint(getRespawnX(), getRespawnY());
 			isActive = false;
 		}
