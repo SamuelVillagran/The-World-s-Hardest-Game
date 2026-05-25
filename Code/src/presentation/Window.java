@@ -30,7 +30,7 @@ public class Window extends JFrame {
 	private GameContainer gameContainer;
 
 	
-	public Window() throws HardestGameException {
+	public Window()  {
 		prepareElements();
 		prepareActions();
 	}
@@ -84,7 +84,7 @@ public class Window extends JFrame {
 		}
 	}
 
-	private final void prepareElements() throws HardestGameException {
+	private final void prepareElements(){
 		setScreen();
 		prepareElementsMenu();
 	}
@@ -113,18 +113,20 @@ public class Window extends JFrame {
 		setJMenuBar(menuBar);
 	}
 
-	private final void setScreen() throws HardestGameException {
+	private final void setScreen(){
 		setResizable(false);
 		setTitle("The DOPO Hardest Game");
 		prepareElementsMenu();
 		gameContainer = new GameContainer();
+		
 		add(gameContainer);
 		pack();
 		setLocationRelativeTo(null);
 	}
 
-	public static void main(String[] args) throws HardestGameException {
+	public static void main(String[] args){
 		window = new Window();
 		window.setVisible(true);
 	}
+	
 }

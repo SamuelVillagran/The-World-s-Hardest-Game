@@ -11,14 +11,14 @@ import java.util.logging.Level;
 public class Log {
     public static String name="HardestGame";
     
-    public static void record(Exception e){
+    public static void record(String string){
         try{
             Logger logger = Logger.getLogger(name);
             logger.setUseParentHandlers(false);
             FileHandler file=new FileHandler(name+".log",true);
             file.setFormatter(new SimpleFormatter());
             logger.addHandler(file);
-            logger.log(Level.SEVERE,e.toString(),e);
+            logger.log(Level.SEVERE,string.toString(),string);
             file.close();
         }catch (Exception oe){
             oe.printStackTrace();

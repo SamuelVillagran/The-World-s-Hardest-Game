@@ -31,17 +31,19 @@ public class GameContainer extends JPanel {
 	public static final String GAME_MODE = "game";
 
 	
-	public GameContainer() throws HardestGameException {
+	public GameContainer(){
 		prepareElements();
 	}
 
-	private final void prepareElements() throws HardestGameException {
+	private final void prepareElements() {
+		try {
 		setup = new GameSetup();
+		
 		loadImages();
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(TheDOPOHardestGame.getGame().getScreenWidth(),
 				TheDOPOHardestGame.getGame().getScreenHeight()));
-
+		
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
 		cardPanel.setOpaque(false);
@@ -56,6 +58,9 @@ public class GameContainer extends JPanel {
 		add(cardPanel, BorderLayout.CENTER);
 		
 		cardPanel.add(new PlayerConfig(this, setup.getMode()), PLAYER_CONFIG_MODE);
+		}catch(HardestGameException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Advertencia!", JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	private void loadImages() {
@@ -101,13 +106,13 @@ public class GameContainer extends JPanel {
 		startGame();
 	}
 
-	public void startGame() throws IOException, HardestGameException {
-		GameMode gameMode = setup.build();
+	public void startGame() throws IOException {
 		try {
+			GameMode gameMode = setup.build();
 			launchGamePanel(new TheDOPOHardestGameGUI(gameMode, infoPanel, this));
 		} catch (Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Error al iniciar el juego: " + e.getMessage());
+			//e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error al cargar el juego", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 

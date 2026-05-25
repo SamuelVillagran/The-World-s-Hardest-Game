@@ -1,9 +1,13 @@
 package presentation;
 
+import javax.swing.JOptionPane;
+
 import domain.GameMode;
+import domain.HardestGameException;
 import domain.ModePlayer;
 import domain.PlayerType;
 import domain.PlayerVsPlayerMode;
+import domain.PlayerVsMachineMode;
 
 /**
  * This class store information about the different configuration panels
@@ -40,16 +44,16 @@ public class GameSetup {
      * Build the game mode with the specific type players and their names.
      * @return GameMode instance.
      */
-    public GameMode build() {
+    public GameMode build() throws HardestGameException{
         switch (modeType) {
             case SINGLE_PLAYER:
                 return new ModePlayer(typeP1, nameP1);
             case PVP:
                 return new PlayerVsPlayerMode(typeP1, nameP1, typeP2, nameP2);
             case PVM:
-                //return new PlayerVsMachineMode(typeP1, nameP1, typeP2, machineBehavior);
+				return new PlayerVsMachineMode(typeP1, nameP1, typeP2);
             default:
-                throw new IllegalStateException("Modo no configurado");
+                throw new HardestGameException("Modo no configurado");
         }
     }
 
